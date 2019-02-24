@@ -14,7 +14,7 @@ CREATE TABLE review(
 	reviewer_netid text, 
 	reviewed_netid text, 
 	review_text text, 
-	overall_rating NOT NULL real, 
+	overall_rating real NOT NULL, 
 	cleanliness real, 
 	friendliness real, 
 	conscientiousness real, 
@@ -40,11 +40,11 @@ CREATE TABLE recommend(
 -- recommender - A, recommendee - B, recommended C. So A recommends C to B
 CREATE TABLE questions(
 	qid integer PRIMARY KEY,
-	question_content NOT NULL text);
+	question_content text NOT NULL);
 CREATE TABLE answer_text(
 	qid integer, 
 	answer_id integer, 
-	answer_content NOT NULL text, 
+	answer_content text NOT NULL, 
 	PRIMARY KEY (qid, answer_id),
 	FOREIGN KEY (qid) REFERENCES questions(qid));
 -- choices related to a question
