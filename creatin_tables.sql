@@ -1,5 +1,6 @@
 CREATE TABLE users(
 	netid text PRIMARY KEY, 
+	name text,
 	profpic text);
 CREATE TABLE ratings(
 	netid text PRIMARY KEY, 
@@ -27,15 +28,15 @@ CREATE TABLE recommend(
 	recommendee_netid text, 
 	recommended_netid text, 
 	reason text, 
-	PRIMARY KEY(recommender_netid,recommendee_netid,recommended_netid));
+	PRIMARY KEY(recommender_netid, recommendee_netid, recommended_netid));
 -- recommender - A, recommendee - B, recommended C. So A recommends C to B
 CREATE TABLE questions(
 	qid integer PRIMARY KEY,
-	question_content text);
+	question_content NOT NULL text);
 CREATE TABLE answer_text(
 	qid integer, 
 	answer_id integer, 
-	answer_content text, 
+	answer_content NOT NULL text, 
 	PRIMARY KEY(qid, answer_id));
 -- choices related to a question
 CREATE TABLE answer(
