@@ -1,8 +1,8 @@
 import sqlite3
 
 conn = sqlite3.connect('fakedata.db')
-conn.execute('''
-	CREATE TABLE users(netid varchar(16) PRIMARY KEY, profpic varchar(255));
-	''')
+tablecreatin = open('creatin_tables.sql')
+tablecreatin = tablecreatin.read()
+conn.executescript(tablecreatin)
 conn.commit()
 conn.close()
