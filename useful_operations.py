@@ -7,6 +7,11 @@ def new_user(conn, netid, name, profpic):
 	conn.commit()
 	cursor.close()
 
+#def report_user() 
+#def recommend_user()
+#def 
+
 if __name__ == '__main__':
 	conn = sqlite3.connect('fakedata.db')
 	new_user(conn, "rjf19", "Ryan", "lolidk.png")
+
