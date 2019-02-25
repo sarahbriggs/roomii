@@ -1,0 +1,10 @@
+What year would you prefer your roommate to be?
+Preferred location?
+Bedtime?
+Preferences for alcohol use?
+Smoking?
+Noise tolerance?
+Allergies?
+Introvert/extrover?
+Guest policy?
+Where do you work?
