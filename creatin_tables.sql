@@ -4,20 +4,20 @@ CREATE TABLE users(
 	profpic text);
 CREATE TABLE ratings(
 	netid text PRIMARY KEY, 
-	cleanliness real, 
-	friendliness real, 
-	conscientiousness real, 
-	self_report_accuracy real,
-	number_of_reports integer,
+	cleanliness real CHECK(cleanliness >= 0 AND cleanliness <= 5), 
+	friendliness real CHECK(friendliness >= 0 AND friendliness <= 5), 
+	conscientiousness real CHECK(conscientiousness >= 0 AND conscientiousness <= 5), 
+	self_report_accuracy real CHECK(self_report_accuracy >= 0 AND self_report_accuracy <= 5),
+	number_of_reports integer NOT NULL CHECK(number_of_reports >= 0),
 	FOREIGN KEY (netid) REFERENCES users(netid));
 CREATE TABLE review(
 	reviewer_netid text, 
 	reviewed_netid text, 
 	review_text text, 
-	overall_rating real NOT NULL, 
-	cleanliness real, 
-	friendliness real, 
-	conscientiousness real, 
+	overall_rating real NOT NULL CHECK(overall_rating >= 0 AND overall_rating <= 5), 
+	cleanliness real CHECK(cleanliness >= 0 AND cleanliness <= 5), 
+	friendliness real CHECK(friendliness >= 0 AND friendliness <= 5), 
+	conscientiousness real CHECK(conscientiousness >= 0 AND conscientiousness <= 5), 
 	PRIMARY KEY (reviewer_netid, reviewed_netid),
 	FOREIGN KEY (reviewer_netid) REFERENCES users(netid),
 	FOREIGN KEY (reviewed_netid) REFERENCES users(netid));
@@ -43,7 +43,7 @@ CREATE TABLE questions(
 	question_content text NOT NULL);
 CREATE TABLE answer_text(
 	qid integer, 
-	answer_id integer, 
+	answer_id integer CHECK(answer_id >= 0), 
 	answer_content text NOT NULL, 
 	PRIMARY KEY (qid, answer_id),
 	FOREIGN KEY (qid) REFERENCES questions(qid));
@@ -51,8 +51,8 @@ CREATE TABLE answer_text(
 CREATE TABLE answer(
 	netid text, 
 	qid integer, 
-	answer_id integer, 
-	weight real, 
+	answer_id integer CHECK(answer_id >= 0), 
+	weight real CHECK(weight >= -5 AND weight <= 5), 
 	PRIMARY KEY (netid, qid),
 	FOREIGN KEY (netid) REFERENCES users(netid),
 	FOREIGN KEY (qid) REFERENCES questions(qid));
