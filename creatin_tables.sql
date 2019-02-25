@@ -2,6 +2,11 @@ CREATE TABLE users(
 	netid text PRIMARY KEY, 
 	name text,
 	profpic text);
+CREATE TABLE passwords(
+	netid text,
+	salt text,
+	password text,
+	FOREIGN KEY (netid) REFERENCES users(netid));
 CREATE TABLE ratings(
 	netid text PRIMARY KEY, 
 	cleanliness real CHECK(cleanliness >= 0 AND cleanliness <= 5), 
