@@ -6,8 +6,8 @@ def weiter(conn, query, tup):
 	conn.commit()
 	cursor.close()
 
-def new_user(conn, netid, name, profpic):
-	tup = (netid, name, profpic)
+def new_user(conn, netid, given_name, family_name, profpic, description):
+	tup = (netid, netid, given_name, family_name, profpic, description)
 	query = "INSERT INTO users VALUES (?, ?, ?);"
 	weiter(conn, query, tup)
 
@@ -51,6 +51,20 @@ def create_rating(conn, netid, avg_overall, avg_cleanliness, avg_friendliness, a
 		avg_conscientiousness, self_report_accuracy, number_of_reports) 
 	query = "INSERT INTO ratings VALUES (?, ?, ?, ?, ?, ?, ?);"
 	weiter(conn, query, tup)
+
+def friend_request(conn, sender, recipient):
+	tup = (sender, recipient, 0)
+	query = "INSERT INTO friends VALUES (?,?,?);"
+	weiter(conn,query,tup)
+
+def request_accepted(conn, sender, recipient):
+	tup1 = (1, sender, recipient)
+	tup2 = (recipient, sender, 1)
+	query = "UPDATE friends SET status = ? WHERE netid1 = ? AND netid2 = ?"
+	weiter(conn,query, tup1)
+	query = "INSERT INTO friends VALUES (?,?,?);"
+	weiter(conn,query, tup2)
+
 
 if __name__ == '__main__':
 	conn = sqlite3.connect('fakedata.db')
