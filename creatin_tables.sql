@@ -1,12 +1,25 @@
 CREATE TABLE users(
 	netid text PRIMARY KEY, 
-	name text,
-	profpic text);
+	given_name text,
+	family_name text,
+	profpic text,
+	description text);
+CREATE TABLE contact(
+	netid text,
+	phone text,
+	email text,
+	FOREIGN KEY (netid) REFERENCES users(netid));
 CREATE TABLE passwords(
 	netid text,
 	salt text,
 	password text,
-	FOREIGN KEY (netid) REFERENCES users(netid));
+	FOREIGN KEY (netid) REFERENCES users(netid));  -- we might not actually end up using this, but hey
+CREATE TABLE friends(
+	netid1 text,
+	netid2 text,
+	status integer,
+	FOREIGN KEY (netid1) REFERENCES users(netid),
+	FOREIGN KEY (netid2) REFERENCES users(netid));
 CREATE TABLE ratings(
 	netid text PRIMARY KEY, 
 	cleanliness real CHECK(cleanliness >= 0 AND cleanliness <= 5), 
