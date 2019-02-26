@@ -1,6 +1,13 @@
 #import statements
 import xml.etree.ElementTree as ET
 import random
+
+
+def select_random_from_file(filename):
+	myfile = open(filename, "r")
+	lines = myfile.readlines()
+	return lines[random.randint(0,len(lines))]
+
 ################
 #Name Generation
 ################
@@ -100,7 +107,7 @@ for id_initials in netids:
 		while(reviewer == reviewed): #so we dont get person reviewing themselves
 			randindex = random.randint(0, len(netids)-1)
 			reviewed = netids[randindex][0] + str(random.randint(1,netids[randindex][1]))
-		text = "replace with random text function"
+		text = select_random_from_file("reviewtxt.txt")
 		#generate cleanliness
 		cleanliness = random.randint(0, 6)
 		#generate friendliness
@@ -119,21 +126,25 @@ for id_initials in netids:
 		reviewed_element.text = reviewed
 		review_element.insert(1, reviewed_element)
 
+		text_element = ET.Element("text")
+		text_element.text = text
+		review_element.insert(2, text_element)
+
 		overall_element = ET.Element("overall_rating")
 		overall_element.text = str(overall)
-		review_element.insert(2, overall_element)
+		review_element.insert(3, overall_element)
 
 		cleanliness_element = ET.Element("cleanliness")
 		cleanliness_element.text = str(cleanliness)
-		review_element.insert(3, cleanliness_element)
+		review_element.insert(4, cleanliness_element)
 
 		friendliness_element = ET.Element("friendliness")
 		friendliness_element.text = str(friendliness)
-		review_element.insert(4, friendliness_element)
+		review_element.insert(5, friendliness_element)
 
 		conscientiousness_element = ET.Element("conscientiousness")
 		conscientiousness_element.text = str(conscientiousness)
-		review_element.insert(5, conscientiousness_element)
+		review_element.insert(6, conscientiousness_element)
 reviews_tree = ET.ElementTree(reviews_root)
 reviews_tree.write("reviews.xml")
 
@@ -151,7 +162,7 @@ for i in range(0, 1000):
 	reported_initials = netids[reported_index][0]
 	reporter = reporter_initials + str(range(1,netids[reporter_index][1]))
 	reported = reported_initials + str(range(1,netids[reported_index][1]))
-	reason = "generate reason text here"
+	reason = select_random_from_file("reportreasons.txt")
 	report_element = ET.Element("report")
 	reports_root.insert(i, report_element)
 
@@ -183,7 +194,7 @@ for i in range(0, 1000):
 	recommended_initials = netids[recommended_index][0]
 	recommender = recommender_initials + str(range(1,netids[recommender_index][1]))
 	recommended = recommended_initials + str(range(1,netids[recommended_index][1]))
-	reason = "generate reason text here"
+	reason = select_random_from_file("recommendreasons.txt")
 	recommend_element = ET.Element("recommend")
 	recommends_root.insert(i, report_element)
 
