@@ -1,7 +1,6 @@
 import sqlite3
 
 def weiter(conn, query, tup):
-	#
 	cursor = conn.cursor()
 	cursor.execute(query, tup)
 	conn.commit()
@@ -14,7 +13,7 @@ User creation and editing
 '''
 
 def new_user(conn, netid, given_name = None, family_name = None, profpic = None, description = None):
-	tup = (netid, given_name, family_name, profpic, description)
+	tup = (netid, given_name, family_name, profpic, description, False) #last one is false because you don't start out banned
 	query = "INSERT INTO users VALUES (?, ?, ?, ?, ?);"
 	weiter(conn, query, tup)
 
