@@ -12,9 +12,9 @@ User creation and editing
 -------------------------------
 '''
 
-def new_user(conn, netid, given_name = None, family_name = None, profpic = None, description = None):
-	tup = (netid, given_name, family_name, profpic, description, False) #last one is false because you don't start out banned
-	query = "INSERT INTO users VALUES (?, ?, ?, ?, ?);"
+def new_user(conn, netid, given_name = None, family_name = None, profpic = None, description = None, status = True):
+	tup = (netid, given_name, family_name, profpic, description, status) #last one is false because you don't start out banned
+	query = "INSERT INTO users VALUES (?, ?, ?, ?, ?, ?);"
 	weiter(conn, query, tup)
 
 #def ban_user
@@ -94,7 +94,7 @@ def answer_question(conn, netid, qid, answer_id, weight):
 
 if __name__ == '__main__':
 	conn = sqlite3.connect('fakedata.db')
-	new_user(conn, "rjf19", "Ryan", "Ferner", "lolidk.png", "i'm just tryna find a roomie lol")
+	new_user(conn, "rjf19", "Ryan", "Ferner", "lolidk.png", "i'm just tryna find a roomie lol", True)
 	# new_user(conn, "seb103", "Sarah", profpic = "same.png")
 	# report_user(conn,"rjf19","seb103","my code is sinful and i deserve to be reported")
 	new_question(conn, 0, "from time to time, when it's really cold outside, do you or do you not want to breathe really heavily and pretend that you're a train?")

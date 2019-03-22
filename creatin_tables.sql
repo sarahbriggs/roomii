@@ -3,13 +3,8 @@ CREATE TABLE users(
 	given_name text,
 	family_name text,
 	profpic text,
-<<<<<<< HEAD
 	description text, 
 	status boolean);
-=======
-	description text,
-	banned boolean);
->>>>>>> 56f83d14d842ca8b0967849ded7fb61851ace981
 CREATE TABLE contact( -- contact info to be shared with friends
 	netid text,
 	phone text,

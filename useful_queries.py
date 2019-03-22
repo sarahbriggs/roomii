@@ -6,11 +6,11 @@ def zurueck(conn, query, tup):
 	cursor = conn.cursor()
 	cursor.execute(query, tup)
 	conn.commit()
-	cursor.close()
 	results = []
 	for line in cursor:
-		responses.append(line)
+		results.append(line)
 	return results
+	cursor.close()
 
 """
 -------------------------------
