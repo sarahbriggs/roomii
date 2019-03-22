@@ -3,7 +3,8 @@ CREATE TABLE users(
 	given_name text,
 	family_name text,
 	profpic text,
-	description text);
+	description text, 
+	status boolean);
 CREATE TABLE contact( -- contact info to be shared with friends
 	netid text,
 	phone text,
