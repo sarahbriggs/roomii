@@ -3,8 +3,13 @@ CREATE TABLE users(
 	given_name text,
 	family_name text,
 	profpic text,
+<<<<<<< HEAD
 	description text, 
 	status boolean);
+=======
+	description text,
+	banned boolean);
+>>>>>>> 56f83d14d842ca8b0967849ded7fb61851ace981
 CREATE TABLE contact( -- contact info to be shared with friends
 	netid text,
 	phone text,
@@ -14,7 +19,6 @@ CREATE TABLE passwords( -- we might not actually end up using this, but hey
 	netid text,
 	salt text,
 	password text,
-	banned boolean,
 	FOREIGN KEY (netid) REFERENCES users(netid));  
 CREATE TABLE friends( -- netid1 and netid2 are friends, status is 0 if friend is requested, 1 if friend is accepted, and -1 if request was blocked
 	netid1 text,
