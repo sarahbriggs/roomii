@@ -49,16 +49,19 @@ def get_similarities(conn, netid1, netid2):
 	tup = (netid1, netid2,)
 	query = "SELECT * FROM answer a1, answer a2 WHERE a1.netid = ? AND a2.netid = ? AND a1.qid = a2.qid AND a1.answer_id = a2.answer_id"
 	result = execute_query(conn, query, tup)
+	print(result)
 
 def get_differences(conn, netid1, netid2):
 	tup = (netid1, netid2, )
 	query = "SELECT * FROM answer a1, answer a2 WHERE a1.netid = ? AND a2.netid = ? AND a1.qid = a2.qid AND a1.answer_id <> a2.answer_id"
 	result = execute_query(conn, query, tup)
+	print(result)
 
 def get_answer(conn, netid):
 	tup = (netid,)
-	query = "SELECT * FROM answers WHERE netid = ?"
+	query = "SELECT * FROM answer WHERE netid = ?"
 	result = execute_query(conn, query, tup)
+	print(result)
 
 """
 -------------------------------
@@ -107,6 +110,7 @@ Questions and answers -user-specific
 
 if __name__ == '__main__':
 	conn = sqlite3.connect('fakedata.db')
-	get_user_info_general(conn, "rjf19")
-	get_review(conn, "zz105", "rjf19")
+	get_similarities(conn, "rjf19", "zz105")
+	get_differences(conn, "dummy", "rjf19")
+	get_answer(conn, "dummy")
 

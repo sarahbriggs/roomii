@@ -74,9 +74,9 @@ def request_accepted(conn, sender, recipient):
 Questions and answers
 -------------------------------
 '''
-def new_question(conn, qid, question_content):
-	tup = (qid, question_content)
-	query = "INSERT INTO questions VALUES (?, ?);"
+def new_question(conn, qid, category_number, question_content):
+	tup = (qid, category_number, question_content)
+	query = "INSERT INTO questions VALUES (?, ?, ?);"
 	weiter(conn, query, tup)
 
 def new_answer_text(conn, qid, answer_id, text):
@@ -98,10 +98,13 @@ if __name__ == '__main__':
 	# new_user(conn, "seb103", "Sarah", profpic = "same.png")
 	# report_user(conn,"rjf19","seb103","my code is sinful and i deserve to be reported")
 	new_user(conn, "zz105", "Zhiyuan", "Zhou", "haha", "haha", True)
-	new_question(conn, 0, "from time to time, when it's really cold outside, do you or do you not want to breathe really heavily and pretend that you're a train?")
+	new_user(conn, "dummy", "Im", "Dummy", "dum", "dum", True)
+	new_question(conn, 0, 0, "from time to time, when it's really cold outside, do you or do you not want to breathe really heavily and pretend that you're a train?")
 	new_answer_text(conn, 0, 0, "absolutely")
 	new_answer_text(conn, 0, 1, "lolno why")
 	answer_question(conn, "rjf19", 0, 1, 5)
+	answer_question(conn, "zz105", 0, 1, 5)
+	answer_question(conn, "dummy", 0, 2, 5)
 	new_review(conn, "zz105", "rjf19", "good!", 5, 5, 5, 5)
 	new_review(conn, "rjf19", "zz105", "good!", 5, 5, 5, 5)
 
