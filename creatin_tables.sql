@@ -59,6 +59,7 @@ CREATE TABLE recommend(
 -- recommender - A, recommendee - B, recommended C. So A recommends C to B
 CREATE TABLE questions(
 	qid integer PRIMARY KEY,
+	category_number integer NOT NULL CHECK(category_number >= 0),
 	question_content text NOT NULL);
 CREATE TABLE answer_text(
 	qid integer, 

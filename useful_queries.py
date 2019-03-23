@@ -18,11 +18,47 @@ Questions and answers -general
 -------------------------------
 """
 
-def get_question(conn, qid):
+def get_question_text(conn, qid):
 	tup = (qid,)
 	query = "SELECT * FROM questions WHERE qid = ?"
 	result = execute_query(conn, query, tup)
 	print(result)
+
+def get_answer_text(conn, qid, answer_id):
+	tup = (qid, answer_id, )
+	query = "SELECT * FROM answer_text WHERE qid = ? AND answer_id = ?"
+	result = execute_query(conn, query, tup)
+
+def get_questions_for_category(conn, category_number):
+	tup = (category_number,)
+	query = "SELECT * FROM questions WHERE category_number = ?"
+	result = execute_query(conn, query, tup)
+
+"""
+-------------------------------
+Questions and answers -user response
+-------------------------------
+"""
+
+def get_user_answer_for_question(conn, netid, qid):
+	tup = (netid, qid, )
+	query = "SELECT * FROM answer WHERE nedid = ? AND qid = ?"
+	result = execute_query(conn, query, tup)
+
+def get_similarities(conn, netid1, netid2):
+	tup = (netid1, netid2,)
+	query = "SELECT * FROM answer a1, answer a2 WHERE a1.netid = ? AND a2.netid = ? AND a1.qid = a2.qid AND a1.answer_id = a2.answer_id"
+	result = execute_query(conn, query, tup)
+
+def get_differences(conn, netid1, netid2):
+	tup = (netid1, netid2, )
+	query = "SELECT * FROM answer a1, answer a2 WHERE a1.netid = ? AND a2.netid = ? AND a1.qid = a2.qid AND a1.answer_id <> a2.answer_id"
+	result = execute_query(conn, query, tup)
+
+def get_answer(conn, netid):
+	tup = (netid,)
+	query = "SELECT * FROM answers WHERE netid = ?"
+	result = execute_query(conn, query, tup)
 
 """
 -------------------------------
