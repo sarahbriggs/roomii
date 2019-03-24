@@ -18,20 +18,20 @@ Questions and answers -general
 -------------------------------
 """
 
-def get_question_text(conn, qid):
+def get_question_text(conn, qid): # return (qid, category_number, question_content)
 	tup = (qid,)
 	query = "SELECT * FROM questions WHERE qid = ?"
 	result = execute_query(conn, query, tup)
 	print(result)
 
-def get_answer_text(conn, qid, answer_id):
+def get_answer_text(conn, qid, answer_id): # return (answer_content)
 	tup = (qid, answer_id, )
-	query = "SELECT * FROM answer_text WHERE qid = ? AND answer_id = ?"
+	query = "SELECT answer_content FROM answer_text WHERE qid = ? AND answer_id = ?"
 	result = execute_query(conn, query, tup)
 
-def get_questions_for_category(conn, category_number):
+def get_questions_for_category(conn, category_number): # return (qid, question_content)
 	tup = (category_number,)
-	query = "SELECT * FROM questions WHERE category_number = ?"
+	query = "SELECT qid, question_content FROM questions WHERE category_number = ?"
 	result = execute_query(conn, query, tup)
 
 """
@@ -40,26 +40,26 @@ Questions and answers -user response
 -------------------------------
 """
 
-def get_user_answer_for_question(conn, netid, qid):
+def get_user_answer_for_question(conn, netid, qid): # return (answer_id, weight)
 	tup = (netid, qid, )
-	query = "SELECT * FROM answer WHERE nedid = ? AND qid = ?"
+	query = "SELECT answer_id, weight FROM answer WHERE nedid = ? AND qid = ?"
 	result = execute_query(conn, query, tup)
 
-def get_similarities(conn, netid1, netid2):
+def get_similarities(conn, netid1, netid2): # return (qid, a1.answer_id, a1.weight, a2.weight)
 	tup = (netid1, netid2,)
-	query = "SELECT * FROM answer a1, answer a2 WHERE a1.netid = ? AND a2.netid = ? AND a1.qid = a2.qid AND a1.answer_id = a2.answer_id"
+	query = "SELECT a1.qid, a1.answer_id, a1.weight, a2.weight FROM answer a1, answer a2 WHERE a1.netid = ? AND a2.netid = ? AND a1.qid = a2.qid AND a1.answer_id = a2.answer_id"
 	result = execute_query(conn, query, tup)
 	print(result)
 
-def get_differences(conn, netid1, netid2):
+def get_differences(conn, netid1, netid2): # return (qid, a1.answer_id, a1.weight, a2.answer_id, a2.weight)
 	tup = (netid1, netid2, )
-	query = "SELECT * FROM answer a1, answer a2 WHERE a1.netid = ? AND a2.netid = ? AND a1.qid = a2.qid AND a1.answer_id <> a2.answer_id"
+	query = "SELECT a1.qid, a1.answer_id, a1.weight, a2.answer_id, a2.weight FROM answer a1, answer a2 WHERE a1.netid = ? AND a2.netid = ? AND a1.qid = a2.qid AND a1.answer_id <> a2.answer_id"
 	result = execute_query(conn, query, tup)
 	print(result)
 
-def get_answer(conn, netid):
+def get_answer(conn, netid): # return (qid, answer_id, weight)
 	tup = (netid,)
-	query = "SELECT * FROM answer WHERE netid = ?"
+	query = "SELECT qid, answer_id, weight FROM answer WHERE netid = ?"
 	result = execute_query(conn, query, tup)
 	print(result)
 
@@ -69,19 +69,19 @@ User Information
 -------------------------------
 """
 
-def get_user_info_friends(conn, netid):
+def get_user_info_friends(conn, netid): # return (netid, given_name, family_name, profpic, description, status, phone, email)
 	tup = (netid, )
-	query = "SELECT * FROM users LEFT OUTER JOIN contact ON users.netid = contact.netid AND users.netid = ?"
+	query = "SELECT netid, given_name, family_name, profpic, description, status, phone, email FROM users LEFT OUTER JOIN contact ON users.netid = contact.netid AND users.netid = ?"
 	result = execute_query(conn, query, tup)
 	print(result)
 
-def get_user_info_general(conn, netid):
+def get_user_info_general(conn, netid): # return (netid, given_name, family_name, profpic, description, status)
 	tup = (netid, )
 	query = "SELECT * FROM users WHERE netid = ?"
 	result = execute_query(conn, query, tup)
 	print(result)
 
-def get_user_rating(conn, netid):
+def get_user_rating(conn, netid): # return (netid, clealiness, friendliness, conscientiousness, self_report_accuracy, number_of_reports)
 	tup = (netid, )
 	query = "SELECT * FROM ratings WHERE netid = ?"
 	result = execute_query(conn, query, tup)
@@ -92,7 +92,7 @@ Review
 -------------------------------
 """
 
-def get_review(conn, netid1, netid2):
+def get_review(conn, netid1, netid2): # return (reviewer_netid, reviewed_netid, review_text, overall_rating, cleanliness, friendliness, conscientiousness)
 	tup = (netid1, netid2, )
 	query = "SELECT * FROM review WHERE reviewer_netid = ? AND reviewed_netid = ?"
 	result = execute_query(conn, query, tup)
