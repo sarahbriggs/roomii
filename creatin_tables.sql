@@ -44,7 +44,7 @@ CREATE TABLE report(
 	reporter_netid text, 
 	reported_netid text,
 	reason text, 
-	PRIMARY KEY (reported_netid, reported_netid),
+	PRIMARY KEY (reporter_netid, reported_netid),
 	FOREIGN KEY (reporter_netid) REFERENCES users(netid),
 	FOREIGN KEY (reported_netid) REFERENCES users(netid));
 CREATE TABLE recommend(
