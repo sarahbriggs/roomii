@@ -20,19 +20,21 @@ Questions and answers -general
 
 def get_question_text(conn, qid): # return (qid, category_number, question_content)
 	tup = (qid,)
-	query = "SELECT * FROM questions WHERE qid = ?"
-	result = execute_query(conn, query, tup)
-	print(result)
+	query = "SELECT question_content FROM questions WHERE qid = ?"
+	result = execute_query(conn, query, tup) #execute query will return a list of matching rows
+	return result[0][0] #since only 1 row should be matched, pick the first one and 
 
 def get_answer_text(conn, qid, answer_id): # return (answer_content)
 	tup = (qid, answer_id, )
 	query = "SELECT answer_content FROM answer_text WHERE qid = ? AND answer_id = ?"
 	result = execute_query(conn, query, tup)
+	return result[0][0]
 
 def get_questions_for_category(conn, category_number): # return (qid, question_content)
 	tup = (category_number,)
 	query = "SELECT qid, question_content FROM questions WHERE category_number = ?"
 	result = execute_query(conn, query, tup)
+	return result
 
 """
 -------------------------------
@@ -113,4 +115,7 @@ if __name__ == '__main__':
 	get_similarities(conn, "rjf19", "zz105")
 	get_differences(conn, "dummy", "rjf19")
 	get_answer(conn, "dummy")
+	print(get_question_text(conn,0))
+	print(get_answer_text(conn, 0, 0))
+	get_questions_for_category(conn,0)
 
