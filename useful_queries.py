@@ -18,7 +18,7 @@ Questions and answers -general
 -------------------------------
 """
 
-def get_question_text(conn, qid): # return (qid, category_number, question_content)
+def get_question_text(conn, qid): # return (question_content)
 	tup = (qid,)
 	query = "SELECT question_content FROM questions WHERE qid = ?"
 	result = execute_query(conn, query, tup) #execute query will return a list of matching rows
