@@ -12,7 +12,7 @@ User creation and editing
 -------------------------------
 '''
 
-def new_user(conn, netid, given_name = None, family_name = None, profpic = None, description = None, status = True):
+def new_user(conn, netid, given_name = None, family_name = None, profpic = None, description = None, status = False):
 	tup = (netid, given_name, family_name, profpic, description, status) #last one is false because you don't start out banned
 	query = "INSERT INTO users VALUES (?, ?, ?, ?, ?, ?);"
 	weiter(conn, query, tup)
@@ -66,7 +66,13 @@ def request_accepted(conn, sender, recipient):
 	weiter(conn,query, tup1)
 	query = "INSERT INTO friends VALUES (?,?,?);"
 	weiter(conn,query, tup2)
-#def request_rejected
+def request_rejected(conn,sender,recipient):
+	tup1 = (-1, sender, recipient)
+	tup2 = (recipient, sender, -1)
+	query = "UPDATE friends SET status = ? WHERE netid1 = ? AND netid2 = ?"
+	weiter(conn,query, tup1)
+	query = "INSERT INTO friends VALUES (?,?,?);"
+	weiter(conn,query, tup2)
 
 
 '''
