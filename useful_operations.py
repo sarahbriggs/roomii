@@ -12,8 +12,8 @@ User creation and editing
 -------------------------------
 '''
 
-def new_user(conn, netid, given_name = None, family_name = None, profpic = None, description = None, status = False):
-	tup = (netid, given_name, family_name, profpic, description, status) #last one is false because you don't start out banned
+def new_user(conn, netid, given_name = None, family_name = None, profpic = None, description = None, status = True):
+	tup = (netid, given_name, family_name, profpic, description, status) #last one is true because you don't start out banned
 	query = "INSERT INTO users VALUES (?, ?, ?, ?, ?, ?);"
 	weiter(conn, query, tup)
 

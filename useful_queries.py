@@ -22,13 +22,13 @@ def get_question_text(conn, qid): # return (question_content)
 	tup = (qid,)
 	query = "SELECT question_content FROM questions WHERE qid = ?"
 	result = execute_query(conn, query, tup) #execute query will return a list of matching rows
-	return result[0][0] #since only 1 row should be matched, pick the first one and 
+	return result
 
 def get_answer_text(conn, qid, answer_id): # return (answer_content)
 	tup = (qid, answer_id, )
 	query = "SELECT answer_content FROM answer_text WHERE qid = ? AND answer_id = ?"
 	result = execute_query(conn, query, tup)
-	return result[0][0]
+	return result
 
 def get_questions_for_category(conn, category_number): # return (qid, question_content)
 	tup = (category_number,)
@@ -46,24 +46,28 @@ def get_user_answer_for_question(conn, netid, qid): # return (answer_id, weight)
 	tup = (netid, qid, )
 	query = "SELECT answer_id, weight FROM answer WHERE nedid = ? AND qid = ?"
 	result = execute_query(conn, query, tup)
+	return result
 
 def get_similarities(conn, netid1, netid2): # return (qid, a1.answer_id, a1.weight, a2.weight)
 	tup = (netid1, netid2,)
 	query = "SELECT a1.qid, a1.answer_id, a1.weight, a2.weight FROM answer a1, answer a2 WHERE a1.netid = ? AND a2.netid = ? AND a1.qid = a2.qid AND a1.answer_id = a2.answer_id"
 	result = execute_query(conn, query, tup)
 	print(result)
+	return result
 
 def get_differences(conn, netid1, netid2): # return (qid, a1.answer_id, a1.weight, a2.answer_id, a2.weight)
 	tup = (netid1, netid2, )
 	query = "SELECT a1.qid, a1.answer_id, a1.weight, a2.answer_id, a2.weight FROM answer a1, answer a2 WHERE a1.netid = ? AND a2.netid = ? AND a1.qid = a2.qid AND a1.answer_id <> a2.answer_id"
 	result = execute_query(conn, query, tup)
 	print(result)
+	return result
 
 def get_answer(conn, netid): # return (qid, answer_id, weight)
 	tup = (netid,)
 	query = "SELECT qid, answer_id, weight FROM answer WHERE netid = ?"
 	result = execute_query(conn, query, tup)
 	print(result)
+	return result
 
 """
 -------------------------------
@@ -76,17 +80,20 @@ def get_user_info_friends(conn, netid): # return (netid, given_name, family_name
 	query = "SELECT netid, given_name, family_name, profpic, description, status, phone, email FROM users LEFT OUTER JOIN contact ON users.netid = contact.netid AND users.netid = ?"
 	result = execute_query(conn, query, tup)
 	print(result)
+	return result
 
 def get_user_info_general(conn, netid): # return (netid, given_name, family_name, profpic, description, status)
 	tup = (netid, )
 	query = "SELECT * FROM users WHERE netid = ?"
 	result = execute_query(conn, query, tup)
 	print(result)
+	return result
 
 def get_user_rating(conn, netid): # return (netid, clealiness, friendliness, conscientiousness, self_report_accuracy, number_of_reports)
 	tup = (netid, )
 	query = "SELECT * FROM ratings WHERE netid = ?"
 	result = execute_query(conn, query, tup)
+	return result
 
 """
 -------------------------------
@@ -99,6 +106,7 @@ def get_review(conn, netid1, netid2): # return (reviewer_netid, reviewed_netid, 
 	query = "SELECT * FROM review WHERE reviewer_netid = ? AND reviewed_netid = ?"
 	result = execute_query(conn, query, tup)
 	print(result)
+	return result
 
 #def get_question_answers(conn,qid):
 

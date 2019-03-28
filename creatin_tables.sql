@@ -13,8 +13,9 @@ CREATE TABLE contact( -- contact info to be shared with friends
 CREATE TABLE matchups(
 	netid1 text,
 	netid2 text,
-	matchRating real
-);
+	matchRating real,
+	FOREIGN KEY (netid1) REFERENCES users(netid),
+	FOREIGN KEY (netid2) REFERENCES users(netid));
 CREATE TABLE passwords( -- we might not actually end up using this, but hey
 	netid text,
 	salt text,
