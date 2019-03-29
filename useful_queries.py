@@ -115,9 +115,6 @@ def get_number_of_reviews_of_user(conn, netid):
 	# print(result[0][0])
 	return result[0][0]
 
-#def get_question_answers(conn,qid):
-
-#def 
 
 """
 -------------------------------

@@ -1,5 +1,5 @@
 from flask import Flask, render_template
-from roomii import useful_operations, useful_queries
+import useful_operations, useful_queries
 import sqlite3
 
 app = Flask(__name__)
@@ -14,4 +14,5 @@ def questions():
 	question = useful_queries.get_question_text(conn,0)
 	return render_template("questions.html", question = question)
 
-app.run()
+def launch():
+	app.run()
