@@ -1,5 +1,5 @@
 import sqlite3
-import useful_queries
+
 
 def weiter(conn, query, tup):
 	cursor = conn.cursor()
@@ -132,6 +132,7 @@ def answer_question(conn, netid, qid, answer_id, weight):
 
 
 if __name__ == '__main__':
+	import useful_queries
 	conn = sqlite3.connect('fakedata.db')
 	conn.execute("PRAGMA foreign_keys = 1")
 	new_user(conn, "rjf19", "Ryan", "Ferner", "lolidk.png", "i'm just tryna find a roomie lol", True)
