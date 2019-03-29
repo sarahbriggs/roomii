@@ -1,4 +1,7 @@
 <!doctype html>
 <body>
-	{%question%}
+	<p>Question 1: {{question}}
+	{%for id, answer in answers%}
+		<p>{{id, answer}}
+	{%endfor%}
 </body>

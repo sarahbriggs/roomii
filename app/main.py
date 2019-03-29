@@ -11,9 +11,11 @@ def hello():
 
 @app.route("/questions")
 def questions():
-	conn = sqlite3.connect("fakedata.db")
-	question = uq.get_question_text(conn,0)
-	return render_template("questions.html", question = question)
+	conn = sqlite3.connect("db_related/fakedata.db")
+	question = uq.get_question_text(conn,0)[0][0]
+	answer = uq.get_all_answer_text(conn,0)
+
+	return render_template("questions.html", question = question, answers = answer)
 
 if __name__ == '__main__':
 	app.run()

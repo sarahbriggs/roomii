@@ -24,9 +24,20 @@ def get_question_text(conn, qid): # return (question_content)
 	result = execute_query(conn, query, tup) #execute query will return a list of matching rows
 	return result
 
+def get_all_qid(conn): # return a list of all qid
+	tup = (None)
+	query = "SELECT qid FROM questions"
+	result = execute_query(conn, query, tup) #execute query will return a list of matching rows
+	return result
+
 def get_answer_text(conn, qid, answer_id): # return (answer_content)
 	tup = (qid, answer_id, )
 	query = "SELECT answer_content FROM answer_text WHERE qid = ? AND answer_id = ?"
+	result = execute_query(conn, query, tup)
+	return result
+def get_all_answer_text(conn, qid):
+	tup = (qid,)
+	query = "SELECT answer_id, answer_content FROM answer_text WHERE qid = ?"
 	result = execute_query(conn, query, tup)
 	return result
 
