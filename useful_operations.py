@@ -1,4 +1,5 @@
 import sqlite3
+import useful_queries
 
 def weiter(conn, query, tup):
 	cursor = conn.cursor()
@@ -17,10 +18,18 @@ def new_user(conn, netid, given_name = None, family_name = None, profpic = None,
 	query = "INSERT INTO users VALUES (?, ?, ?, ?, ?, ?);"
 	weiter(conn, query, tup)
 
-#def ban_user
+def ban_user(conn, netid):
+	tup = (netid, )
+	query = "UPDATE users SET status = False WHERE netid = ?"
+	weiter(conn, query, tup)
 
-#def edit_user
+def edit_user(conn, netid, status, given_name = None, family_name = None, profpic = None, description = None):
+	tup = (given_name, family_name, profpic, description, status, netid)
+	query = """UPDATE users SET given_name = ?, family_name = ?, profpic = ?, description = ?, status = ?
+	WHERE netid = ?"""
+	weiter(conn, query, tup)
 
+# 
 #def change_password
 
 '''
@@ -28,10 +37,22 @@ def new_user(conn, netid, given_name = None, family_name = None, profpic = None,
 social functions
 -------------------------------
 '''
+def update_rating(conn, netid, avg_overall, avg_cleanliness, avg_friendliness, avg_conscientiousness,
+	self_report_accuracy, number_of_reports):
+	tup = (avg_overall, avg_cleanliness, avg_friendliness, avg_conscientiousness, self_report_accuracy, number_of_reports, netid)
+	query = """UPDATE ratings SET avg_overall = ?, cleanliness = ?, friendliness = ?,
+	conscientiousness = ?, self_report_accuracy = ?, number_of_reports = ? WHERE netid = ?"""
+	weiter(conn, query, tup)
+
 def report_user(conn, reporter_netid, reported_netid, reason):
 	tup = (reporter_netid, reported_netid, reason)
 	query = "INSERT INTO report VALUES (?, ?, ?);"
 	weiter(conn, query, tup)
+	current_rating = useful_queries.get_user_rating(conn, reported_netid)
+	print(current_rating)
+	update_rating(conn, current_rating[0], current_rating[1], current_rating[2], current_rating[3],
+		current_rating[4], current_rating[5], current_rating[6] + 1)
+
 
 def recommend_user(conn, recommender_netid, recommendee_netid, recommended__netid, reason):
 	tup = (recommender_netid, recommendee_netid, recommended__netid, reason)
@@ -40,14 +61,28 @@ def recommend_user(conn, recommender_netid, recommendee_netid, recommended__neti
 
 
 def new_review(conn, reviewer_netid, reviewed_netid, text, overall_rating, cleanliness, 
-	friendliness, conscientiousness):
+	friendliness, conscientiousness, self_report_accuracy):
 	tup = (reviewer_netid, reviewed_netid, text, overall_rating, cleanliness, 
-	friendliness, conscientiousness)
-	query = "INSERT INTO review VALUES (?, ?, ?, ?, ?, ?, ?);"
+	friendliness, conscientiousness, self_report_accuracy)
+	query = "INSERT INTO review VALUES (?, ?, ?, ?, ?, ?, ?, ?);"
+	number_of_reviews = useful_queries.get_number_of_reviews_of_user(conn, reviewed_netid)
 	weiter(conn, query, tup)
+	print(number_of_reviews)
+	if number_of_reviews == 0:
+		create_rating(conn, reviewed_netid, overall_rating, cleanliness, friendliness, 
+			conscientiousness, self_report_accuracy, 0)
+	else:
+		current_rating = useful_queries.get_user_rating(conn, reviewed_netid)
+		new_overall = (current_rating[1] * number_of_reviews + overall_rating) / (number_of_reviews + 1)
+		new_cleanliness = (current_rating[2] * number_of_reviews + cleanliness) / (number_of_reviews + 1)
+		new_friendliness = (current_rating[3] * number_of_reviews + friendliness) / (number_of_reviews + 1)
+		new_cons = (current_rating[4] * number_of_reviews + conscientiousness) / (number_of_reviews + 1)
+		new_self_report = (current_rating[5] * number_of_reviews + self_report_accuracy) / (number_of_reviews + 1)
+		update_rating(conn, current_rating[0], new_overall, new_cleanliness, new_friendliness,
+			new_cons, new_self_report, current_rating[6])
 
 def create_rating(conn, netid, avg_overall, avg_cleanliness, avg_friendliness, avg_conscientiousness, 
-	self_report_accuracy, number_of_reports):
+	self_report_accuracy, number_of_reports): # do we need this? isn't this included in new review?
 	#todo: when this is called, reaggregate rating
 	tup = (netid, avg_overall, avg_cleanliness, avg_friendliness, 
 		avg_conscientiousness, self_report_accuracy, number_of_reports) 
@@ -103,7 +138,7 @@ if __name__ == '__main__':
 	new_user(conn, "rjf19", "Ryan", "Ferner", "lolidk.png", "i'm just tryna find a roomie lol", True)
 	# new_user(conn, "seb103", "Sarah", profpic = "same.png")
 	# report_user(conn,"rjf19","seb103","my code is sinful and i deserve to be reported")
-	new_user(conn, "zz105", "Zhiyuan", "Zhou", "haha", "haha", True)
+	new_user(conn, "zz105", "Zhiyuan", None, "haha", "haha", True)
 	new_user(conn, "dummy", "Im", "Dummy", "dum", "dum", True)
 	new_question(conn, 0, 0, "from time to time, when it's really cold outside, do you or do you not want to breathe really heavily and pretend that you're a train?")
 	new_answer_text(conn, 0, 0, "absolutely")
@@ -111,6 +146,7 @@ if __name__ == '__main__':
 	answer_question(conn, "rjf19", 0, 1, 5)
 	answer_question(conn, "zz105", 0, 1, 5)
 	answer_question(conn, "dummy", 0, 2, 5)
-	new_review(conn, "zz105", "rjf19", "good!", 5, 5, 5, 5)
-	new_review(conn, "rjf19", "zz105", "good!", 5, 5, 5, 5)
+	new_review(conn, "zz105", "rjf19", "good!", 5, 5, 5, 5, 5)
+	new_review(conn, "rjf19", "zz105", "good!", 5, 5, 5, 5, 5)
+	new_review(conn, "dummy", "zz105", "bad", 0, 0, 0, 0, 0)
 

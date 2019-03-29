@@ -29,6 +29,7 @@ CREATE TABLE friends( -- netid1 and netid2 are friends, status is 0 if friend is
 	FOREIGN KEY (netid2) REFERENCES users(netid));
 CREATE TABLE ratings(
 	netid text PRIMARY KEY, 
+	avg_overall real CHECK(avg_overall >= 0 AND avg_overall <= 5),
 	cleanliness real CHECK(cleanliness >= 0 AND cleanliness <= 5), 
 	friendliness real CHECK(friendliness >= 0 AND friendliness <= 5), 
 	conscientiousness real CHECK(conscientiousness >= 0 AND conscientiousness <= 5), 
@@ -43,6 +44,7 @@ CREATE TABLE review(
 	cleanliness real CHECK(cleanliness >= 0 AND cleanliness <= 5), 
 	friendliness real CHECK(friendliness >= 0 AND friendliness <= 5), 
 	conscientiousness real CHECK(conscientiousness >= 0 AND conscientiousness <= 5), 
+	self_report_accuracy real CHECK(self_report_accuracy >= 0 AND self_report_accuracy <= 5),
 	PRIMARY KEY (reviewer_netid, reviewed_netid),
 	FOREIGN KEY (reviewer_netid) REFERENCES users(netid),
 	FOREIGN KEY (reviewed_netid) REFERENCES users(netid));

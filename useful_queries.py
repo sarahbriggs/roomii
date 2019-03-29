@@ -89,11 +89,11 @@ def get_user_info_general(conn, netid): # return (netid, given_name, family_name
 	print(result)
 	return result
 
-def get_user_rating(conn, netid): # return (netid, clealiness, friendliness, conscientiousness, self_report_accuracy, number_of_reports)
+def get_user_rating(conn, netid): # return (netid, overall_rating, clealiness, friendliness, conscientiousness, self_report_accuracy, number_of_reports)
 	tup = (netid, )
 	query = "SELECT * FROM ratings WHERE netid = ?"
 	result = execute_query(conn, query, tup)
-	return result
+	return result[0]
 
 """
 -------------------------------
@@ -105,8 +105,15 @@ def get_review(conn, netid1, netid2): # return (reviewer_netid, reviewed_netid, 
 	tup = (netid1, netid2, )
 	query = "SELECT * FROM review WHERE reviewer_netid = ? AND reviewed_netid = ?"
 	result = execute_query(conn, query, tup)
-	print(result)
+	# print(result)
 	return result
+
+def get_number_of_reviews_of_user(conn, netid):
+	tup = (netid, )
+	query = "SELECT COUNT(*) FROM review WHERE reviewed_netid = ?"
+	result = execute_query(conn, query, tup)
+	# print(result[0][0])
+	return result[0][0]
 
 #def get_question_answers(conn,qid):
 
