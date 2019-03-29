@@ -16,11 +16,6 @@ CREATE TABLE matchups(
 	matchRating real,
 	FOREIGN KEY (netid1) REFERENCES users(netid),
 	FOREIGN KEY (netid2) REFERENCES users(netid));
-CREATE TABLE passwords( -- we might not actually end up using this, but hey
-	netid text,
-	salt text,
-	password text,
-	FOREIGN KEY (netid) REFERENCES users(netid));  
 CREATE TABLE friends( -- netid1 and netid2 are friends, status is 0 if friend is requested, 1 if friend is accepted, and -1 if request was blocked
 	netid1 text,
 	netid2 text,
