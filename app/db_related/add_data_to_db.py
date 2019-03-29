@@ -24,7 +24,20 @@ for question in questionsroot.iter(tag = "question"):
 	category_number = question.find("category_number").text
 	question_content = question.find("question_content").text
 	useful_operations.new_question(conn, qid, category_number, question_content)
-#getting integrity check, not sure why
+
+
+userstree = ET.parse('../../data/users.xml')
+usersroot = userstree.getroot()
+for user in usersroot.iter(tag = "user"):
+	netid = user.find("netid").text
+	given_name = user.find("given_name").text
+	family_name = user.find("family_name").text
+	prof_pic = user.find("prof_pic").text
+	description = user.find("description").text
+	#no status since just set to true
+	useful_operations.new_user(conn, netid, given_name, family_name, prof_pic, description)
+
+#getting integrity check, probably because of foreign key contraint for users, so ahve to make users first
 ''' 
 answerstree = ET.parse('../../data/user_answers.xml')
 answersroot = answerstree.getroot()

@@ -27,4 +27,4 @@
 9.2 Occasionally
 9.3 No
 10.1 In the room
-1.2 Outside the room
+10.2 Outside the room

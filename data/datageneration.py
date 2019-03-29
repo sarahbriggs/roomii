@@ -2,11 +2,13 @@
 import xml.etree.ElementTree as ET
 import random
 
+print("beginning")
 
 def select_random_from_file(filename):
 	myfile = open(filename, "r")
 	lines = myfile.readlines()
-	return lines[random.randint(0,len(lines))]
+	myfile.close()
+	return lines[random.randint(0,len(lines)-1)]
 
 ################
 #Name Generation
@@ -26,13 +28,17 @@ first.close()
 last.close()
 
 ########################
-#creating ratings relation
+#creating ratings relation and users
 ########################
+print("ratings and user")
+
 
 names = open("nameslist.txt", "r")
 nameslist = names.readlines()
 names.close()
 ratings_root = ET.Element("ratings")
+
+users_root = ET.Element("users")
 #netids will include initials plus number so we can create list of tuples where we record current number
 netids = []
 for i in range(0, len(nameslist)):
@@ -47,9 +53,41 @@ for i in range(0, len(nameslist)):
 			num = n_id[1] + 1
 			n_id[1] = num
 			initialExists = True
-	netid += str(num)
 	if (not initialExists):
 		netids.append([netid, 1])
+	netid += str(num)
+
+	#generate users relation here
+	user = ET.Element("user")
+	users_root.insert(i, user)
+
+	netid_element = ET.Element("netid")
+	netid_element.text = netid
+	user.insert(0, netid_element)
+
+	given_name_element = ET.Element("given_name")
+	given_name_element.text = name.split()[0]
+	user.insert(1, given_name_element)
+
+	family_name_element = ET.Element("family_name")
+	family_name_element.text = name.split()[1]
+	user.insert(2, family_name_element)
+
+	prof_pic_element = ET.Element("prof_pic")
+	prof_pic_element.text = "placeholder"
+	user.insert(3, prof_pic_element)
+
+	description_element = ET.Element("description")
+	description_element.text = "placeholder1"
+	user.insert(4, description_element)
+
+	status_element = ET.Element("status")
+	#status_element.text =  automatically set to true
+	user.insert(5, status_element)
+
+
+
+
 	#create subelement = one for each person
 	ET.SubElement(ratings_root, netid)	
 	#generate cleanliness
@@ -92,9 +130,14 @@ for i in range(0, len(nameslist)):
 ratings_tree = ET.ElementTree(ratings_root)
 ratings_tree.write("ratings.xml")
 
+users_tree = ET.ElementTree(users_root)
+users_tree.write("users.xml")
+
 ####################
 #Reviewer Generation
 ####################
+
+print("reviewer")
 
 reviews_root = ET.Element("reviews")
 for id_initials in netids:
@@ -152,6 +195,8 @@ reviews_tree.write("reviews.xml")
 ##################
 #Report Generation
 ##################
+
+print("report")
 reports_root = ET.Element("reports")
 for i in range(0, 1000):
 	reporter_index = random.randint(0, len(netids)-1)
@@ -184,6 +229,8 @@ reports_tree.write("reports.xml")
 ################
 #generate recommend
 ################
+
+print("recommmend")
 recommends_root = ET.Element("recommends")
 for i in range(0, 1000):
 	recommender_index = random.randint(0, len(netids)-1)
@@ -196,7 +243,7 @@ for i in range(0, 1000):
 	recommended = recommended_initials + str(range(1,netids[recommended_index][1]))
 	reason = select_random_from_file("recommendreasons.txt")
 	recommend_element = ET.Element("recommend")
-	recommends_root.insert(i, report_element)
+	recommends_root.insert(i, recommend_element)
 
 	recommender_element = ET.Element("recommender_netid")
 	recommender_element.text = recommender
@@ -217,6 +264,7 @@ recommends_tree.write("recommends.xml")
 ###################
 #generate questions
 ###################
+print("questions")
 
 question_file = open("question.txt")
 questions = question_file.readlines()
@@ -225,9 +273,21 @@ question_file.close()
 questions_root = ET.Element("questions")
 
 for i in range(0, len(questions)):
-	question_element = ET.Element(str(i))
-	question_element.text = questions[i]
+	question_element = ET.Element("question")
 	questions_root.insert(i, question_element)
+
+	qid = ET.Element("qid")
+	qid.text = str(i)
+	question_element.insert(0, qid)
+
+	category = ET.Element("category_number")
+	category.text = "1"
+	question_element.insert(1, category)
+
+	question_content = ET.Element("question_content")
+	question_content.text = questions[i]
+	question_element.insert(2, question_content)
+
 
 questions_tree = ET.ElementTree(questions_root)
 questions_tree.write("questions.xml")
@@ -235,7 +295,7 @@ questions_tree.write("questions.xml")
 ##################
 #answer textx generation
 ##################
-
+print("text")
 
 answers_file = open("answers.txt")
 answers = answers_file.readlines()
@@ -276,6 +336,8 @@ answers_tree.write("answers.xml")
 #########################
 #answer generation
 ########################
+
+print("answer")
 user_answers_root = ET.Element("answers")
 
 #each netid needs a set of answers
