@@ -1,5 +1,6 @@
 from flask import Flask, render_template
-import useful_operations, useful_queries
+import db_related.useful_operations as uo
+import db_related.useful_queries as uq
 import sqlite3
 
 app = Flask(__name__)
@@ -11,8 +12,9 @@ def hello():
 @app.route("/questions")
 def questions():
 	conn = sqlite3.connect("fakedata.db")
-	question = useful_queries.get_question_text(conn,0)
+	question = uq.get_question_text(conn,0)
 	return render_template("questions.html", question = question)
 
-def launch():
+if __name__ == '__main__':
 	app.run()
+
