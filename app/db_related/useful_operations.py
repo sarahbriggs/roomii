@@ -49,7 +49,6 @@ def report_user(conn, reporter_netid, reported_netid, reason):
 	query = "INSERT INTO report VALUES (?, ?, ?);"
 	weiter(conn, query, tup)
 	current_rating = useful_queries.get_user_rating(conn, reported_netid)
-	print(current_rating)
 	update_rating(conn, current_rating[0], current_rating[1], current_rating[2], current_rating[3],
 		current_rating[4], current_rating[5], current_rating[6] + 1)
 
@@ -67,7 +66,6 @@ def new_review(conn, reviewer_netid, reviewed_netid, text, overall_rating, clean
 	query = "INSERT INTO review VALUES (?, ?, ?, ?, ?, ?, ?, ?);"
 	number_of_reviews = useful_queries.get_number_of_reviews_of_user(conn, reviewed_netid)
 	weiter(conn, query, tup)
-	print(number_of_reviews)
 	if number_of_reviews == 0:
 		create_rating(conn, reviewed_netid, overall_rating, cleanliness, friendliness, 
 			conscientiousness, self_report_accuracy, 0)
@@ -78,7 +76,7 @@ def new_review(conn, reviewer_netid, reviewed_netid, text, overall_rating, clean
 		new_friendliness = (current_rating[3] * number_of_reviews + friendliness) / (number_of_reviews + 1)
 		new_cons = (current_rating[4] * number_of_reviews + conscientiousness) / (number_of_reviews + 1)
 		new_self_report = (current_rating[5] * number_of_reviews + self_report_accuracy) / (number_of_reviews + 1)
-		update_rating(conn, current_rating[0], new_overall, new_cleanliness, new_friendliness,
+		update_rating(conn, reviewed_netid, new_overall, new_cleanliness, new_friendliness,
 			new_cons, new_self_report, current_rating[6])
 
 def create_rating(conn, netid, avg_overall, avg_cleanliness, avg_friendliness, avg_conscientiousness, 
@@ -92,7 +90,7 @@ def create_rating(conn, netid, avg_overall, avg_cleanliness, avg_friendliness, a
 def friend_request(conn, sender, recipient):
 	tup = (sender, recipient, 0)
 	query = "INSERT INTO friends VALUES (?,?,?);"
-	weiter(conn,query,tup)
+	weiter(conn, query, tup)
 
 def request_accepted(conn, sender, recipient):
 	tup1 = (1, sender, recipient)
@@ -135,6 +133,7 @@ def answer_question(conn, netid, qid, answer_id, weight):
 
 if __name__ == '__main__':
 	conn = sqlite3.connect('fakedata.db')
+	conn.execute("PRAGMA foreign_keys = 1")
 	new_user(conn, "rjf19", "Ryan", "Ferner", "lolidk.png", "i'm just tryna find a roomie lol", True)
 	# new_user(conn, "seb103", "Sarah", profpic = "same.png")
 	# report_user(conn,"rjf19","seb103","my code is sinful and i deserve to be reported")

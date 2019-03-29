@@ -52,21 +52,18 @@ def get_similarities(conn, netid1, netid2): # return (qid, a1.answer_id, a1.weig
 	tup = (netid1, netid2,)
 	query = "SELECT a1.qid, a1.answer_id, a1.weight, a2.weight FROM answer a1, answer a2 WHERE a1.netid = ? AND a2.netid = ? AND a1.qid = a2.qid AND a1.answer_id = a2.answer_id"
 	result = execute_query(conn, query, tup)
-	print(result)
 	return result
 
 def get_differences(conn, netid1, netid2): # return (qid, a1.answer_id, a1.weight, a2.answer_id, a2.weight)
 	tup = (netid1, netid2, )
 	query = "SELECT a1.qid, a1.answer_id, a1.weight, a2.answer_id, a2.weight FROM answer a1, answer a2 WHERE a1.netid = ? AND a2.netid = ? AND a1.qid = a2.qid AND a1.answer_id <> a2.answer_id"
 	result = execute_query(conn, query, tup)
-	print(result)
 	return result
 
 def get_answer(conn, netid): # return (qid, answer_id, weight)
 	tup = (netid,)
 	query = "SELECT qid, answer_id, weight FROM answer WHERE netid = ?"
 	result = execute_query(conn, query, tup)
-	print(result)
 	return result
 
 """
@@ -79,14 +76,12 @@ def get_user_info_friends(conn, netid): # return (netid, given_name, family_name
 	tup = (netid, )
 	query = "SELECT netid, given_name, family_name, profpic, description, status, phone, email FROM users LEFT OUTER JOIN contact ON users.netid = contact.netid AND users.netid = ?"
 	result = execute_query(conn, query, tup)
-	print(result)
 	return result
 
 def get_user_info_general(conn, netid): # return (netid, given_name, family_name, profpic, description, status)
 	tup = (netid, )
 	query = "SELECT * FROM users WHERE netid = ?"
 	result = execute_query(conn, query, tup)
-	print(result)
 	return result
 
 def get_user_rating(conn, netid): # return (netid, overall_rating, clealiness, friendliness, conscientiousness, self_report_accuracy, number_of_reports)
@@ -105,14 +100,12 @@ def get_review(conn, netid1, netid2): # return (reviewer_netid, reviewed_netid, 
 	tup = (netid1, netid2, )
 	query = "SELECT * FROM review WHERE reviewer_netid = ? AND reviewed_netid = ?"
 	result = execute_query(conn, query, tup)
-	# print(result)
 	return result
 
 def get_number_of_reviews_of_user(conn, netid):
 	tup = (netid, )
 	query = "SELECT COUNT(*) FROM review WHERE reviewed_netid = ?"
 	result = execute_query(conn, query, tup)
-	# print(result[0][0])
 	return result[0][0]
 
 
@@ -124,10 +117,9 @@ Questions and answers -user-specific
 
 if __name__ == '__main__':
 	conn = sqlite3.connect('fakedata.db')
+	conn.execute("PRAGMA foreign_keys = 1")
 	get_similarities(conn, "rjf19", "zz105")
 	get_differences(conn, "dummy", "rjf19")
 	get_answer(conn, "dummy")
-	print(get_question_text(conn,0))
-	print(get_answer_text(conn, 0, 0))
 	get_questions_for_category(conn,0)
 

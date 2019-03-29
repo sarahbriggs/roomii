@@ -24,7 +24,8 @@ CREATE TABLE passwords( -- we might not actually end up using this, but hey
 CREATE TABLE friends( -- netid1 and netid2 are friends, status is 0 if friend is requested, 1 if friend is accepted, and -1 if request was blocked
 	netid1 text,
 	netid2 text,
-	status integer,
+	status integer CHECK(status = 0 OR status = 1 OR status = -1),
+	-- PRIMARY KEY (netid1, netid2),
 	FOREIGN KEY (netid1) REFERENCES users(netid),
 	FOREIGN KEY (netid2) REFERENCES users(netid));
 CREATE TABLE ratings(
