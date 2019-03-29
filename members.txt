@@ -6,6 +6,7 @@ Work as of MS1:
 		Started on Flask backend and some wrapper code
 		Worked on some important queries
 		Started the sql for initializing the tables
+		Compiled MS1
 	Eric Fu
 		Worked on creating the fake data we'll end up using
 		Working on transferring it to our database once we're done with the queries
@@ -13,4 +14,16 @@ Work as of MS1:
 		Came up with idea
 		Finished the sql for initializing the tables
 
-as much as I'd like to tattle on my fellow group members for not pulling their weight, everybody really did quite an excellent job on getting their work done this time around. -Ryan
+Work as of MS2:
+	Sarah Briggs
+		ER diagram v2
+		Important_operations
+	Ryan Ferner
+		Did some more Flask backend, some of the basic HTML
+		some Important_operations
+		some Important_queries
+		Compiled MS2
+	Eric Fu
+		Adapted his fake data generator to work with sqlite (more work than it sounds)
+	Steven Zhou
+		Honestly loads, did most of useful_queries and quite a bit of _operations, as well as working on testing both
