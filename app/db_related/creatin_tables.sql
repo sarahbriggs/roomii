@@ -6,12 +6,12 @@ CREATE TABLE users(
 	description text, 
 	status boolean);
 CREATE TABLE password(
-	netid text,
+	netid text PRIMARY KEY,
 	pass text,
 	salt text,
 	FOREIGN KEY (netid) REFERENCES users(netid));
 CREATE TABLE contact( -- contact info to be shared with friends
-	netid text,
+	netid text PRIMARY KEY,
 	phone text,
 	email text,
 	FOREIGN KEY (netid) REFERENCES users(netid));
