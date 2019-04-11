@@ -1,9 +1,12 @@
 from flask import Flask, render_template
+from flask_login import LoginManager
 import db_related.useful_operations as uo
 import db_related.useful_queries as uq
+import db_related.cheapSecurity as sec
 import sqlite3
 
 app = Flask(__name__)
+login = LoginManager(app)
 
 @app.route("/")
 def hello():
