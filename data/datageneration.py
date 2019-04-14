@@ -1,8 +1,9 @@
 #import statements
+print("start")
 import xml.etree.ElementTree as ET
 import random
 
-print("beginning")
+
 
 def select_random_from_file(filename):
 	myfile = open(filename, "r")
@@ -13,6 +14,7 @@ def select_random_from_file(filename):
 ################
 #Name Generation
 ################
+print("hello")
 names = open("nameslist.txt", "w")
 first = open("firstnamelist.txt", "r")
 last = open("lastnamelist.txt", "r")
@@ -30,8 +32,6 @@ last.close()
 ########################
 #creating ratings relation and users
 ########################
-print("ratings and user")
-
 
 names = open("nameslist.txt", "r")
 nameslist = names.readlines()
@@ -56,7 +56,6 @@ for i in range(0, len(nameslist)):
 	if (not initialExists):
 		netids.append([netid, 1])
 	netid += str(num)
-
 	#generate users relation here
 	user = ET.Element("user")
 	users_root.insert(i, user)
@@ -82,14 +81,15 @@ for i in range(0, len(nameslist)):
 	user.insert(4, description_element)
 
 	status_element = ET.Element("status")
-	#status_element.text =  automatically set to true
+	#status_element.text =  automatically set to ttrue
 	user.insert(5, status_element)
 
 
 
 
 	#create subelement = one for each person
-	ET.SubElement(ratings_root, netid)	
+	person = ET.Element("rating")
+	ratings_root.insert(i, person)
 	#generate cleanliness
 	cleanliness = random.randint(0, 6)
 	#generate friendliness
@@ -101,31 +101,34 @@ for i in range(0, len(nameslist)):
 	times_reported = 0
 	#overall rating
 	overall = round((cleanliness + friendliness + conscientiousness)/3, 2)
-	person = ET.SubElement(ratings_root, netid)
+
+	netid_element = ET.Element("netid")
+	netid_element.text = netid
+	person.insert(0, netid_element)
 
 	overall_element = ET.Element("overall_rating")
 	overall_element.text = str(overall)
-	person.insert(0, overall_element)
+	person.insert(1, overall_element)
 
 	cleanliness_element = ET.Element("cleanliness")
 	cleanliness_element.text = str(cleanliness)
-	person.insert(1, cleanliness_element)
+	person.insert(2, cleanliness_element)
 
 	friendliness_element = ET.Element("friendliness")
 	friendliness_element.text = str(friendliness)
-	person.insert(2, friendliness_element)
+	person.insert(3, friendliness_element)
 
 	conscientiousness_element = ET.Element("conscientiousness")
 	conscientiousness_element.text = str(conscientiousness)
-	person.insert(3, conscientiousness_element)
+	person.insert(4, conscientiousness_element)
 
 	accuracy_element = ET.Element("self_report_accuracy")
 	accuracy_element.text = str(accuracy)
-	person.insert(4, accuracy_element)
+	person.insert(5, accuracy_element)
 
 	times_reported_element = ET.Element("number_of_reports")
 	times_reported_element.text = str(times_reported)
-	person.insert(5, times_reported_element)
+	person.insert(6, times_reported_element)
 
 ratings_tree = ET.ElementTree(ratings_root)
 ratings_tree.write("ratings.xml")
@@ -136,8 +139,6 @@ users_tree.write("users.xml")
 ####################
 #Reviewer Generation
 ####################
-
-print("reviewer")
 
 reviews_root = ET.Element("reviews")
 for id_initials in netids:
@@ -195,8 +196,6 @@ reviews_tree.write("reviews.xml")
 ##################
 #Report Generation
 ##################
-
-print("report")
 reports_root = ET.Element("reports")
 for i in range(0, 1000):
 	reporter_index = random.randint(0, len(netids)-1)
@@ -229,18 +228,22 @@ reports_tree.write("reports.xml")
 ################
 #generate recommend
 ################
-
-print("recommmend")
 recommends_root = ET.Element("recommends")
-for i in range(0, 1000):
+for i in range(0, 100):
+	#just make it simple so that they can't have same initials
 	recommender_index = random.randint(0, len(netids)-1)
 	recommended_index = random.randint(0, len(netids)-1) 
+	recommendee_index = random.randint(0, len(netids)-1)
 	while(recommender_index == recommended_index):
-		reported_index = random.randint(0, len(netids)-1) 
+		recommended_index = random.randint(0, len(netids)-1) 
+	while((recommender_index == recommendee_index) or (recommended_index == recommendee_index)):
+		recommendee_index = random.randint(0, len(netids)-1)
 	recommender_initials = netids[recommender_index][0]
 	recommended_initials = netids[recommended_index][0]
+	recommendee_initials = netids[recommendee_index][0]
 	recommender = recommender_initials + str(range(1,netids[recommender_index][1]))
 	recommended = recommended_initials + str(range(1,netids[recommended_index][1]))
+	recommendee = recommendee_initials + str(range(1, netids[recommendee_index][1]))
 	reason = select_random_from_file("recommendreasons.txt")
 	recommend_element = ET.Element("recommend")
 	recommends_root.insert(i, recommend_element)
@@ -249,13 +252,17 @@ for i in range(0, 1000):
 	recommender_element.text = recommender
 	recommend_element.insert(0, recommender_element)
 
-	recommended_element = ET.Element("reported_netid")
+	recommendee_element = ET.Element("recommendee_netid")
+	recommendee_element.text = recommendee
+	recommend_element.insert(1, recommendee_element)
+
+	recommended_element = ET.Element("recommended_netid")
 	recommended_element.text = recommended
-	recommend_element.insert(1, recommended_element)
+	recommend_element.insert(2, recommended_element)
 
 	reason_element = ET.Element("reason")
 	reason_element.text = reason
-	report_element.insert(2, reason_element)
+	report_element.insert(3, reason_element)
 
 recommends_tree = ET.ElementTree(recommends_root)
 recommends_tree.write("recommends.xml")
@@ -264,7 +271,6 @@ recommends_tree.write("recommends.xml")
 ###################
 #generate questions
 ###################
-print("questions")
 
 question_file = open("question.txt")
 questions = question_file.readlines()
@@ -295,7 +301,7 @@ questions_tree.write("questions.xml")
 ##################
 #answer textx generation
 ##################
-print("text")
+
 
 answers_file = open("answers.txt")
 answers = answers_file.readlines()
@@ -336,8 +342,6 @@ answers_tree.write("answers.xml")
 #########################
 #answer generation
 ########################
-
-print("answer")
 user_answers_root = ET.Element("answers")
 
 #each netid needs a set of answers
@@ -350,6 +354,7 @@ for id_initials in netids:
 			max_a_id = 0
 			for element in questions_list_tuples:
 				if element[0] == j and element[1] > max_a_id:
+					print(max_a_id)
 					max_a_id = element[1]
 			user_answer_element = ET.Element("answer")
 			user_answers_root.append(user_answer_element)
@@ -367,7 +372,7 @@ for id_initials in netids:
 			user_answer_element.insert(2, answer_id_element)
 
 			weight_element = ET.Element("weight")
-			weight_element.text = str(random.randint(-5, 6))
+			weight_element.text = str(random.randint(-5, 5))
 			user_answer_element.insert(3, weight_element)
 
 user_answers_tree = ET.ElementTree(user_answers_root)
