@@ -1,0 +1,32 @@
+{% extends "material/base.html" %}
+{% import "material/utils.html" as util %}
+{% import "material/wtf.html" as wtf %}
+
+
+{% block content %}
+<!-- sign up-->
+<div id="sign_up" class="modal">
+  <span onclick="document.getElementById('sign_up').style.display='none'" class="close" title="Close Modal">&times;</span>
+  <form class="modal-content" action="">
+    <div class="container blue lighten-4" style="display: inline-block; padding: 24px 24px 24px 24px; border: 1px solid #EEE;">
+      <h1>Welcome to Roomii</h1>
+      <p>We are so excited to help you find your dream roommate. Please sign up so we can get started!</p>
+      <hr>
+      <label for="email"><b>Email</b></label>
+      <input type="text" placeholder="Enter Email" name="email" required>
+
+      <label for="psw"><b>Password</b></label>
+      <input type="password" placeholder="Enter Password" name="psw" required>
+
+      <label for="psw-repeat"><b>Repeat Password</b></label>
+      <input type="password" placeholder="Please re-enter your password." name="psw-repeat" required>
+    
+
+      <div class="clearfix">
+        <button type="submit" class="signupbtn">Sign Up</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+{% endblock %}
