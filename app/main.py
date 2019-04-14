@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 from flask_login import LoginManager
 from flask_materialize import Material  
 import db_related.useful_operations as uo
@@ -16,12 +16,30 @@ def hello():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+	if(request.method == 'GET'):
+		return redirect(url_for('regform'))
+	#return render_template("register.html");
+	'''
 	#form is requested
 	if(request.method == 'GET'):
 		return render_template("register.html")
-
+	#form is submitted
 	if(request.method == 'POST'):
-		return render_template("index.html")
+		return redirect(url_for('survey'))
+		#return render_template("survey.html")
+	'''
+@app.route('/regform', methods=['GET', 'POST'])
+def regform():
+	return render_template("register.html")
+
+@app.route('/survey', methods=['GET', 'POST'])
+def survey():
+	if(request.method == 'GET'):
+		return redirect(url_for('displaySurvey'))
+
+@app.route('/displaySurvey')
+def displaySurvey():
+	return render_template("survey.html")
 
 @app.route('/questions')
 def questions():
@@ -32,4 +50,3 @@ def questions():
 
 if __name__ == '__main__':
 	app.run()
-
