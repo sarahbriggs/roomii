@@ -61,7 +61,7 @@ def still_has_questions(conn, netid): #true if netid still has unanswered questi
 	num = num_questions(conn)
 	tup = (netid,)
 	query = "SELECT * FROM answer WHERE netid = ?"
-	print(query,tup)
+	print()
 	result = execute_query(conn,query,tup)
 	return num != len(result)
 
