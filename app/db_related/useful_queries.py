@@ -1,5 +1,4 @@
 import sqlite3
-
 #so wheras useful_operations.py has lots of insertions n stuff, this one will be used to get info
 
 def execute_query(conn, query, tup): 
@@ -46,6 +45,14 @@ def get_questions_for_category(conn, category_number): # return (qid, question_c
 	query = "SELECT qid, question_content FROM questions WHERE category_number = ?"
 	result = execute_query(conn, query, tup)
 	return result
+
+def num_questions(conn):
+	query = "SELECT qid FROM questions;"
+	cursor.execute(query)
+	ct = 0
+	for line in cursor:
+		ct+=1
+	return ct
 
 """
 -------------------------------

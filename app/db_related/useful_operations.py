@@ -1,4 +1,5 @@
 import sqlite3
+from useful_queries import execute_query
 
 
 def weiter(conn, query, tup):
@@ -99,6 +100,7 @@ def request_accepted(conn, sender, recipient):
 	weiter(conn,query, tup1)
 	query = "INSERT INTO friends VALUES (?,?,?);"
 	weiter(conn,query, tup2)
+
 def request_rejected(conn,sender,recipient):
 	tup1 = (-1, sender, recipient)
 	tup2 = (recipient, sender, -1)
@@ -106,6 +108,16 @@ def request_rejected(conn,sender,recipient):
 	weiter(conn,query, tup1)
 	query = "INSERT INTO friends VALUES (?,?,?);"
 	weiter(conn,query, tup2)
+
+def calculate_matchup(conn, matcher, matchee):
+	tup1 = (matcher,)
+	tup2 = (matchee,)
+	query = "SELECT * FROM answers WHERE netid = ?;"
+	res1 = execute_query(conn,query,tup1)
+	res2 = execute_query(conn,query,tup2)
+	return (res1, res2)
+
+
 
 
 '''
