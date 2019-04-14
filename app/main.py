@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_login import LoginManager
 from flask_materialize import Material  
-# import db_related.useful_operations as uo
+import db_related.useful_operations as uo
 import db_related.useful_queries as uq
 import db_related.cheapSecurity as sec
 import sqlite3
@@ -16,8 +16,9 @@ def hello():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-	if(request.method == 'GET'):
+	if (request.method == 'GET'):
 		return redirect(url_for('regform'))
+
 	#return render_template("register.html");
 	'''
 	#form is requested
@@ -36,6 +37,23 @@ def regform():
 def survey():
 	if(request.method == 'GET'):
 		return redirect(url_for('displaySurvey'))
+	if (request.method == 'POST'):
+		try:
+			first_name = request.form['first_name']
+			last_name = request.form['last_name']
+			netid = request.form['netid']
+			password = request.form['password']
+			conn = sqlite3.connect("db_related/fakedata.db")
+			cur = conn.cursor()
+			uo.new_user(conn, netid, first_name, last_name)
+			print("Record successfully added")
+		except:
+			conn.rollback()
+			print("error in insert operation")
+		finally:
+			return redirect(url_for('displaySurvey'))
+			conn.close()
+
 
 @app.route('/displaySurvey')
 def displaySurvey():
