@@ -39,7 +39,12 @@ def survey():
 
 @app.route('/displaySurvey')
 def displaySurvey():
-	return render_template("survey.html")
+	conn = sqlite3.connect("db_related/fakedata.db")
+	numQuestions = uq.num_questions(conn)
+	for i in range(numQuestions):
+		question = uq.get_question_text(conn,i)
+		answers = uq.get_all_answer_text(conn,i)
+		return render_template("displayQuestion.html")
 
 @app.route('/questions')
 def questions():
