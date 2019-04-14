@@ -1,6 +1,6 @@
 import datetime,sqlite3
 import werkzeug.security as ws
-def make(password): #i really wanted to make 
+def make(password):
 	password = str(password)
 	salt = str(datetime.datetime.now())
 	phrase = ws.generate_password_hash(salt + password)
