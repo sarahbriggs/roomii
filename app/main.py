@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_login import LoginManager
 from flask_materialize import Material  
-import db_related.useful_operations as uo
+# import db_related.useful_operations as uo
 import db_related.useful_queries as uq
 import db_related.cheapSecurity as sec
 import sqlite3

@@ -2,6 +2,7 @@ import sqlite3
 from useful_queries import execute_query
 
 
+
 def weiter(conn, query, tup):
 	cursor = conn.cursor()
 	cursor.execute(query, tup)
