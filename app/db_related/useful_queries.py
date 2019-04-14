@@ -1,9 +1,12 @@
 import sqlite3
 #so wheras useful_operations.py has lots of insertions n stuff, this one will be used to get info
 
-def execute_query(conn, query, tup): 
+def execute_query(conn, query, tup = None): 
 	cursor = conn.cursor()
-	cursor.execute(query, tup)
+	if tup:
+		cursor.execute(query, tup)
+	else:
+		cursor.execute(query)
 	conn.commit()
 	results = []
 	for line in cursor:
@@ -48,15 +51,20 @@ def get_questions_for_category(conn, category_number): # return (qid, question_c
 
 def num_questions(conn):
 	query = "SELECT qid FROM questions;"
-	cursor = conn.cursor()
-	cursor.execute(query)
+	results = execute_query(conn,query)
 	ct = 0
-	for line in cursor:
+	for line in results:
 		ct+=1
-	cursor.close()
 	return ct
 
-# def still_has_questions
+def still_has_questions(conn, netid): #true if netid still has unanswered questions
+	num = num_questions(conn)
+	tup = (netid,)
+	query = "SELECT * FROM answer WHERE netid = ?"
+	print(query,tup)
+	result = execute_query(conn,query,tup)
+	return num != len(result)
+
 
 """
 -------------------------------
@@ -66,7 +74,7 @@ Questions and answers -user response
 
 def get_user_answer_for_question(conn, netid, qid): # return (answer_id, weight)
 	tup = (netid, qid, )
-	query = "SELECT answer_id, weight FROM answer WHERE nedid = ? AND qid = ?"
+	query = "SELECT answer_id, weight FROM answer WHERE netid = ? AND qid = ?"
 	result = execute_query(conn, query, tup)
 	return result
 
@@ -145,4 +153,5 @@ if __name__ == '__main__':
 	get_answer(conn, "dummy")
 	get_questions_for_category(conn,0)
 	print(num_questions(conn))
+	print(still_has_questions(conn,"rjf19"))
 
