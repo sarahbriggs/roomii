@@ -1,32 +1,57 @@
 {% extends "material/base.html" %}
 {% import "material/utils.html" as util %}
-{% import "material/wtf.html" as wtf %}
 
+{% block title %}Roomii{% endblock %}
 
 {% block content %}
+<!-- nav bar -->
+<nav class="yellow darken-1" role="navigation">
+  <div class = "nav-wrapper yellow darken-1">
+    <a href = "#" class = "brand-logo left">Roomii</a>
+    <ul id = "nav-mobile" class = "right hide-on-med-and-down">
+      <li><a href = "#">Nav1</a></li>
+      <li><a href = "#">Nav2</a></li>
+      <li><a href = "#">Nav3</a></li>
+    </ul>
+  </div>
+</nav>
+
 <!-- sign up-->
-<div id="sign_up" class="modal">
-  <span onclick="document.getElementById('sign_up').style.display='none'" class="close" title="Close Modal">&times;</span>
-  <form class="modal-content" action="">
-    <div class="container blue lighten-4" style="display: inline-block; padding: 24px 24px 24px 24px; border: 1px solid #EEE;">
-      <h1>Welcome to Roomii</h1>
-      <p>We are so excited to help you find your dream roommate. Please sign up so we can get started!</p>
-      <hr>
-      <label for="email"><b>Email</b></label>
-      <input type="text" placeholder="Enter Email" name="email" required>
-
-      <label for="psw"><b>Password</b></label>
-      <input type="password" placeholder="Enter Password" name="psw" required>
-
-      <label for="psw-repeat"><b>Repeat Password</b></label>
-      <input type="password" placeholder="Please re-enter your password." name="psw-repeat" required>
-    
-
-      <div class="clearfix">
-        <button type="submit" class="signupbtn">Sign Up</button>
+<div class="container"> 
+  <div class="row" id="sign_up">
+   <form class="col s12" id="reg-form">
+    <div class="row">
+      <div class="input-field col s6">
+        <input id="first_name" type="text" class="validate" required>
+        <label for="first_name">First Name</label>
+      </div>
+      <div class="input-field col s6">
+        <input id="last_name" type="text" class="validate" required>
+        <label for="last_name">Last Name</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="input-field col s12">
+        <input id="email" type="email" class="validate" required>
+        <label for="email">Email</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="input-field col s12">
+        <input id="password" type="password" class="validate" minlength="6" required>
+        <label for="password">Password</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="input-field col s6">
+        <button class="btn btn-large btn-register waves-effect waves-light" type="submit" name="action">Register
+          <i class="material-icons right">done</i>
+        </button>
       </div>
     </div>
   </form>
+
+</div>
 </div>
 
 {% endblock %}

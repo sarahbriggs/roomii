@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from flask_login import LoginManager
 from flask_materialize import Material  
 import db_related.useful_operations as uo
@@ -10,16 +10,20 @@ app = Flask(__name__)
 login = LoginManager(app)
 Material(app)
 
-@app.route("/")
+@app.route('/')
 def hello():
-    return render_template("base.html")
+    return render_template("index.html")
 
-@app.route("/register")
+@app.route('/register', methods=['GET', 'POST'])
 def register():
-	conn = sqlite3.connect("db_related/fakedata.db")
-	return render_template("register.html")
+	#form is requested
+	if(request.method == 'GET'):
+		return render_template("register.html")
 
-@app.route("/questions")
+	if(request.method == 'POST'):
+		return render_template("index.html")
+
+@app.route('/questions')
 def questions():
 	conn = sqlite3.connect("db_related/fakedata.db")
 	question = uq.get_question_text(conn,0)[0][0]
