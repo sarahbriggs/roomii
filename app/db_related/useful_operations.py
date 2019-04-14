@@ -25,7 +25,7 @@ def still_has_questions(conn, netid): #true if netid still has unanswered questi
 	num = num_questions(conn)
 	tup = (netid,)
 	query = "SELECT * FROM answer WHERE netid = ?"
-	print(query,tup)
+	# print(query,tup)
 	result = execute_query(conn,query,tup)
 	return num != len(result)
 
@@ -152,13 +152,32 @@ def calculate_matchup(conn, matcher, matchee):
 		ans1 = res1[i][0]
 		ans2 = res2[i][0]
 		imp = res1[i][1]
-		total += ans1*ans2*imp
+		b = 0
+		if ans1 == ans2:
+			b = 1
+		else:
+			b = -1
+		total += b*imp
 	return total
 
-
-		
-
-
+def all_matchups(conn,netid):
+	tup1 = (netid,)
+	query = "SELECT netid FROM users WHERE netid != ?;"
+	query2 = "INSERT INTO matchups VALUES (?, ?, ?);"
+	cursor = conn.cursor(); #we're going to do this one-at-a-time
+	cursor2 = conn.cursor()
+	cursor.execute(query,tup1)
+	tk = 0
+	for user in cursor:
+		matchup = calculate_matchup(conn, netid, user[0])
+		tup2 = (netid, user[0], matchup)
+		cursor2.execute(query2, tup2)
+		print (tup2)
+		tk += 1
+	cursor.close()
+	cursor2.close()
+	conn.commit()
+	return tk
 
 
 '''
@@ -205,4 +224,4 @@ if __name__ == '__main__':
 		new_review(conn, "dummy", "zz105", "bad", 0, 0, 0, 0, 0)
 	except:
 		pass
-	print(calculate_matchup(conn,"rjf19","zz105"))
+	print(all_matchups(conn, "rjf19"))
