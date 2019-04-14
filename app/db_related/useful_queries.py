@@ -48,11 +48,15 @@ def get_questions_for_category(conn, category_number): # return (qid, question_c
 
 def num_questions(conn):
 	query = "SELECT qid FROM questions;"
+	cursor = conn.cursor()
 	cursor.execute(query)
 	ct = 0
 	for line in cursor:
 		ct+=1
+	cursor.close()
 	return ct
+
+# def still_has_questions
 
 """
 -------------------------------
@@ -140,4 +144,5 @@ if __name__ == '__main__':
 	get_differences(conn, "dummy", "rjf19")
 	get_answer(conn, "dummy")
 	get_questions_for_category(conn,0)
+	print(num_questions(conn))
 
