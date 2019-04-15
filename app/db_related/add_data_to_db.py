@@ -39,7 +39,7 @@ for user in usersroot.iter(tag = "user"):
 	#no status since just set to true
 	useful_operations.new_user(conn, netid, given_name, family_name, prof_pic, description)
 
-#getting integrity check,
+#all answers are 1???
 answerstree = ET.parse('../../data/user_answers.xml')
 answersroot = answerstree.getroot()
 for answer in answersroot.iter(tag = "answer"):
@@ -49,8 +49,9 @@ for answer in answersroot.iter(tag = "answer"):
 	weight = answer.find("weight").text
 	useful_operations.answer_question(conn, netid, qid, aid, weight)
 
+'''
 ratingstree = ET.parse('../../data/ratings.xml')
-ratingsroot = ratingstree.getroot()
+ratingsroot = ratingstree.getroot()2
 for rating in ratingsroot.iter(tag = "rating"):
 	netid = rating.find("netid").text
 	overall_rating = rating.find("overall_rating").text
@@ -59,35 +60,50 @@ for rating in ratingsroot.iter(tag = "rating"):
 	conscientiousness = rating.find ("conscientiousness").text
 	accuracy = rating.find ("self_report_accuracy").text
 	times = rating.find("number_of_reports").text
-	useful_operations.create_rating(netid, overall_rating, cleanliness, conscientiousness, accuracy, times)
-
+	print(netid)
+	print(overall_rating)
+	print(cleanliness)
+	print(friendliness)
+	print(conscientiousness)
+	print(accuracy)
+	print(times)
+	useful_operations.create_rating(conn, netid, overall_rating, cleanliness, friendliness, conscientiousness, accuracy, times)
+'''
 
 recommendtree = ET.parse('../../data/recommends.xml')
 recommendroot = recommendtree.getroot()
 for recommend in recommendroot.iter(tag = "recommend"):
-	recommender = recommend.find("recommender_netid")
-	recommendee = recommend.find("recommendee_netid")
-	recommended = recommend.find("recommended_netid")
-	reason = recommend.find("reason")
-	useful_operations.recommend_user(recommender, recommendee, recommended, reason)
+	recommender = recommend.find("recommender_netid").text
+	recommendee = recommend.find("recommendee_netid").text
+	recommended = recommend.find("recommended_netid").text
+	reason = recommend.find("reason").text
+	print(recommender)
+	print(recommendee)
+	print(recommended)
+	print(reason)
+	useful_operations.recommend_user(conn, recommender, recommendee, recommended, reason)
 
+
+#inserting should be working, but not sure about the useful queries reference in useful_operations
+'''
 reporttree = ET.parse('../../data/reports.xml')
 reportroot = reporttree.getroot()
 for report in reportroot.iter(tag = "report"):
-	reporter = report.find("reporter_netid")
-	reported = report.find("reported_netid")
-	reason = report.find("reason")
-	useful_operations.report_user(reporter, reported, reason)
-
+	reporter = report.find("reporter_netid").text
+	reported = report.find("reported_netid").text
+	reason = report.find("reason").text
+	useful_operations.report_user(conn, reporter, reported, reason)
+'''
 reviewtree = ET.parse('../../data/reviews.xml')
 reviewroot = reviewtree.getroot()
 for review in reviewroot.iter(tag = "review"):
-	reviewer = review.find("reviewer_netid_")
-	reviewed = review.find("reviewed_netid")
-	text = review.find("text")
-	overall = review.find("overall_rating")
-	cleanliness = review.find("cleanliness")
-	friendliness = review.find("friendliness")
-	conscientiousness = review.find("conscientiousness")
+	reviewer = review.find("reviewer_netid").text
+	reviewed = review.find("reviewed_netid").text
+	text = review.find("text").text
+	overall = review.find("overall_rating").text
+	cleanliness = review.find("cleanliness").text
+	friendliness = review.find("friendliness").text
+	conscientiousness = review.find("conscientiousness").text
+	useful_operations.new_review(conn, reviewer, reviewed, text, overall, cleanliness, friendliness, conscientiousness, "0") #0 is placeholder for self report accuray-prob shoudln't be tehre
 
 print("done")
