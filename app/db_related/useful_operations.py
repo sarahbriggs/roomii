@@ -1,5 +1,6 @@
 import sqlite3
-from useful_queries import execute_query
+# from useful_queries import execute_query, still_has_questions
+
 
 
 def weiter(conn, query, tup):
@@ -7,6 +8,35 @@ def weiter(conn, query, tup):
 	cursor.execute(query, tup)
 	conn.commit()
 	cursor.close()
+
+def execute_query(conn, query, tup = None): 
+	cursor = conn.cursor()
+	if tup:
+		cursor.execute(query, tup)
+	else:
+		cursor.execute(query)
+	conn.commit()
+	results = []
+	for line in cursor:
+		results.append(line)
+	cursor.close()
+	return results
+
+def still_has_questions(conn, netid): #true if netid still has unanswered questions
+	num = num_questions(conn)
+	tup = (netid,)
+	query = "SELECT * FROM answer WHERE netid = ?"
+	# print(query,tup)
+	result = execute_query(conn,query,tup)
+	return num != len(result)
+
+def num_questions(conn):
+	query = "SELECT qid FROM questions;"
+	results = execute_query(conn,query)
+	ct = 0
+	for line in results:
+		ct+=1
+	return ct
 
 '''
 -------------------------------
@@ -112,12 +142,43 @@ def request_rejected(conn,sender,recipient):
 def calculate_matchup(conn, matcher, matchee):
 	tup1 = (matcher,)
 	tup2 = (matchee,)
-	query = "SELECT * FROM answers WHERE netid = ?;"
+	query = "SELECT answer_id,weight FROM answer WHERE netid = ?;"
+
 	res1 = execute_query(conn,query,tup1)
 	res2 = execute_query(conn,query,tup2)
-	return (res1, res2)
+	if still_has_questions(conn,matchee):
+		return None
+	total = 0
+	for i in range(len(res1)):
+		ans1 = res1[i][0]
+		ans2 = res2[i][0]
+		imp = res1[i][1]
+		b = 0
+		if ans1 == ans2:
+			b = 1
+		else:
+			b = -1
+		total += b*imp
+	return total
 
-
+def all_matchups(conn,netid):
+	tup1 = (netid,)
+	query = "SELECT netid FROM users WHERE netid != ?;"
+	query2 = "INSERT INTO matchups VALUES (?, ?, ?);"
+	cursor = conn.cursor(); #we're going to do this one-at-a-time
+	cursor2 = conn.cursor()
+	cursor.execute(query,tup1)
+	tk = 0
+	for user in cursor:
+		matchup = calculate_matchup(conn, netid, user[0])
+		tup2 = (netid, user[0], matchup)
+		cursor2.execute(query2, tup2)
+		print (tup2)
+		tk += 1
+	cursor.close()
+	cursor2.close()
+	conn.commit()
+	return tk
 
 
 '''
@@ -147,18 +208,21 @@ if __name__ == '__main__':
 	import useful_queries
 	conn = sqlite3.connect('fakedata.db')
 	conn.execute("PRAGMA foreign_keys = 1")
-	new_user(conn, "rjf19", "Ryan", "Ferner", "lolidk.png", "i'm just tryna find a roomie lol", True)
-	# new_user(conn, "seb103", "Sarah", profpic = "same.png")
-	# report_user(conn,"rjf19","seb103","my code is sinful and i deserve to be reported")
-	new_user(conn, "zz105", "Zhiyuan", None, "haha", "haha", True)
-	new_user(conn, "dummy", "Im", "Dummy", "dum", "dum", True)
-	new_question(conn, 0, 0, "from time to time, when it's really cold outside, do you or do you not want to breathe really heavily and pretend that you're a train?")
-	new_answer_text(conn, 0, 0, "absolutely")
-	new_answer_text(conn, 0, 1, "lolno why")
-	answer_question(conn, "rjf19", 0, 1, 5)
-	answer_question(conn, "zz105", 0, 1, 5)
-	answer_question(conn, "dummy", 0, 2, 5)
-	new_review(conn, "zz105", "rjf19", "good!", 5, 5, 5, 5, 5)
-	new_review(conn, "rjf19", "zz105", "good!", 5, 5, 5, 5, 5)
-	new_review(conn, "dummy", "zz105", "bad", 0, 0, 0, 0, 0)
-
+	try:
+		new_user(conn, "rjf19", "Ryan", "Ferner", "lolidk.png", "i'm just tryna find a roomie lol", True)
+		# new_user(conn, "seb103", "Sarah", profpic = "same.png")
+		# report_user(conn,"rjf19","seb103","my code is sinful and i deserve to be reported")
+		new_user(conn, "zz105", "Zhiyuan", None, "haha", "haha", True)
+		new_user(conn, "dummy", "Im", "Dummy", "dum", "dum", True)
+		new_question(conn, 0, 0, "from time to time, when it's really cold outside, do you or do you not want to breathe really heavily and pretend that you're a train?")
+		new_answer_text(conn, 0, 0, "absolutely")
+		new_answer_text(conn, 0, 1, "lolno why")
+		answer_question(conn, "rjf19", 0, 1, 5)
+		answer_question(conn, "zz105", 0, 1, 5)
+		answer_question(conn, "dummy", 0, 2, 5)
+		new_review(conn, "zz105", "rjf19", "good!", 5, 5, 5, 5, 5)
+		new_review(conn, "rjf19", "zz105", "good!", 5, 5, 5, 5, 5)
+		new_review(conn, "dummy", "zz105", "bad", 0, 0, 0, 0, 0)
+	except:
+		pass
+	print(all_matchups(conn, "rjf19"))

@@ -16,8 +16,9 @@ def hello():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-	if(request.method == 'GET'):
+	if (request.method == 'GET'):
 		return redirect(url_for('regform'))
+
 	#return render_template("register.html");
 	'''
 	#form is requested
@@ -36,10 +37,32 @@ def regform():
 def survey():
 	if(request.method == 'GET'):
 		return redirect(url_for('displaySurvey'))
+	if (request.method == 'POST'):
+		try:
+			first_name = request.form['first_name']
+			last_name = request.form['last_name']
+			netid = request.form['netid']
+			password = request.form['password']
+			conn = sqlite3.connect("db_related/fakedata.db")
+			cur = conn.cursor()
+			uo.new_user(conn, netid, first_name, last_name)
+			print("Record successfully added")
+		except:
+			conn.rollback()
+			print("error in insert operation")
+		finally:
+			return redirect(url_for('displaySurvey'))
+			conn.close()
+
 
 @app.route('/displaySurvey')
 def displaySurvey():
-	return render_template("survey.html")
+	conn = sqlite3.connect("db_related/fakedata.db")
+	numQuestions = uq.num_questions(conn)
+	for i in range(numQuestions):
+		question = uq.get_question_text(conn,i)
+		answers = uq.get_all_answer_text(conn,i)
+		return render_template("displayQuestion.html")
 
 @app.route('/questions')
 def questions():

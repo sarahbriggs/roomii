@@ -19,26 +19,26 @@
 <!-- sign up-->
 <div class="container" id="regForm"> 
   <div class="row" id="sign_up">
-   <form class="col s12" id="reg-form" action="/survey" method="get">
+   <form class="col s12" id="reg-form" action="/survey" method="POST">
     <div class="row">
       <div class="input-field col s6">
-        <input id="first_name" type="text" class="validate" required>
+        <input id="first_name" name="first_name" type="text" class="validate" required>
         <label for="first_name">First Name</label>
       </div>
       <div class="input-field col s6">
-        <input id="last_name" type="text" class="validate" required>
+        <input id="last_name" name="last_name" type="text" class="validate" required>
         <label for="last_name">Last Name</label>
       </div>
     </div>
     <div class="row">
       <div class="input-field col s12">
-        <input id="netid" type="netid" class="validate" required>
+        <input id="netid" name="netid" type="netid" class="validate" required>
         <label for="netid">NetID</label>
       </div>
     </div>
     <div class="row">
       <div class="input-field col s12">
-        <input id="password" type="password" class="validate" minlength="6" required>
+        <input id="password" name="password" type="password" class="validate" minlength="6" required>
         <label for="password">Password</label>
       </div>
     </div>
