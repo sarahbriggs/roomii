@@ -54,7 +54,24 @@ def register():
 	'''
 @app.route('/regform', methods=['GET', 'POST'])
 def regform():
-	return render_template("register.html")
+	if (request.method == 'GET'):
+		return render_template("register.html", display_error = 0)
+	else:
+		first_name = request.form['first_name']
+		last_name = request.form['last_name']
+		netid = request.form['netid']
+		password = request.form['password']
+		conn = sqlite3.connect("db_related/fakedata.db")
+		cur = conn.cursor()
+		try:
+			uo.new_user(conn, netid, first_name, last_name)
+			uo.new_password(conn, netid, password)
+			return redirect(url_for('displaySurvey'))
+		except:
+			conn.rollback()
+			conn.close()
+			return render_template("register.html", display_error = 1)
+		conn.close()
 
 @app.route('/survey', methods=['GET', 'POST'])
 def survey():

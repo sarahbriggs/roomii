@@ -17,9 +17,13 @@
 </nav>
 
 <!-- sign up-->
+<div id="error_message" class="container red lighten-4" style ="height: 100%; display: none;">
+  User already exists!
+</div>
+
 <div class="container" id="regForm"> 
   <div class="row" id="sign_up">
-   <form class="col s12" id="reg-form" action="/survey" method="POST">
+   <form class="col s12" id="reg-form" action="/regform" method="POST">
     <div class="row">
       <div class="input-field col s6">
         <input id="first_name" name="first_name" type="text" class="validate" required>
@@ -53,8 +57,16 @@
 </div>
 
 <script type="text/javascript">
-  function regSubmit() {
-    $("html").load("/survey");
+  var show = {{display_error}}
+  // function regSubmit() {
+  //   $("html").load("/survey");
+  // }
+  window.onload = function() {
+    if (show == 1) {
+      document.getElementById("error_message").style.display = "";
+    } else {
+      document.getElementById("error_message").style.display = "hidden";
+    } // determine if the error message should be shown when page loads
   }
 </script>
 

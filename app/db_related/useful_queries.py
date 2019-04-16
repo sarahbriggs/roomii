@@ -125,7 +125,7 @@ def get_user_password(conn, netid):
 	query = "SELECT pass FROM password WHERE netid = ?"
 	result = execute_query(conn, query, tup)
 	if len(result) < 1:
-		return False
+		return False # return false when user does not exist
 	else:
 		return result[0][0]
 
