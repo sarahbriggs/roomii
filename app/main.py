@@ -12,7 +12,30 @@ Material(app)
 
 @app.route('/')
 def hello():
-    return render_template("index.html")
+    return render_template("index.html", display_error = 0) # 0 - not showing, 1 - showing
+
+@app.route('/login', methods = ['GET', 'POST'])
+def login():
+	if (request.method == 'POST'):
+		try:
+			conn = sqlite3.connect("db_related/fakedata.db")
+			cur = conn.cursor()
+			netid = request.form['netid']
+			password = request.form['password']
+			actual_password = uq.get_user_password(conn, netid)
+			print(password)
+			print(actual_password)
+			print("Get password successfully")
+			if (actual_password != False and password == actual_password):
+				return redirect(url_for('regform'))
+			else:
+				return render_template("index.html", display_error = 1)
+		except:
+			conn.rollback()
+			print("error in getting password")
+	else:
+		return redirect(url_for('index'), display_error = 0)
+				
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -46,6 +69,7 @@ def survey():
 			conn = sqlite3.connect("db_related/fakedata.db")
 			cur = conn.cursor()
 			uo.new_user(conn, netid, first_name, last_name)
+			uo.new_password(conn, netid, password)
 			print("Record successfully added")
 		except:
 			conn.rollback()

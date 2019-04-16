@@ -49,6 +49,11 @@ def new_user(conn, netid, given_name = None, family_name = None, profpic = None,
 	query = "INSERT INTO users VALUES (?, ?, ?, ?, ?, ?);"
 	weiter(conn, query, tup)
 
+def new_password(conn, netid, password, salt = None):
+	tup = (netid, password, salt,)
+	query = "INSERT INTO password VALUES (?, ?, ?)"
+	weiter(conn, query, tup)
+
 def ban_user(conn, netid):
 	tup = (netid, )
 	query = "UPDATE users SET status = False WHERE netid = ?"
