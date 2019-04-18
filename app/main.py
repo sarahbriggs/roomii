@@ -36,6 +36,9 @@ def login():
 	else:
 		return redirect(url_for('index'), display_error = 0)
 				
+@app.route('/homepage')
+def homepage():
+	return render_template("homepage.html")
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
