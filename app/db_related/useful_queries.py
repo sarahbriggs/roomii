@@ -120,6 +120,15 @@ def get_user_rating(conn, netid): # return (netid, overall_rating, clealiness, f
 	result = execute_query(conn, query, tup)
 	return result[0]
 
+def get_user_password(conn, netid):
+	tup = (netid, )
+	query = "SELECT pass FROM password WHERE netid = ?"
+	result = execute_query(conn, query, tup)
+	if len(result) < 1:
+		return False # return false when user does not exist
+	else:
+		return result[0][0]
+
 """
 -------------------------------
 Review

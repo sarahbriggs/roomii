@@ -12,7 +12,33 @@ Material(app)
 
 @app.route('/')
 def hello():
-    return render_template("index.html")
+    return render_template("index.html", display_error = 0) # 0 - not showing, 1 - showing
+
+@app.route('/login', methods = ['GET', 'POST'])
+def login():
+	if (request.method == 'POST'):
+		try:
+			conn = sqlite3.connect("db_related/fakedata.db")
+			cur = conn.cursor()
+			netid = request.form['netid']
+			password = request.form['password']
+			actual_password = uq.get_user_password(conn, netid)
+			print(password)
+			print(actual_password)
+			print("Get password successfully")
+			if (actual_password != False and password == actual_password):
+				return redirect(url_for('regform'))
+			else:
+				return render_template("index.html", display_error = 1)
+		except:
+			conn.rollback()
+			print("error in getting password")
+	else:
+		return redirect(url_for('index'), display_error = 0)
+				
+@app.route('/homepage')
+def homepage():
+	return render_template("homepage.html")
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -31,7 +57,24 @@ def register():
 	'''
 @app.route('/regform', methods=['GET', 'POST'])
 def regform():
-	return render_template("register.html")
+	if (request.method == 'GET'):
+		return render_template("register.html", display_error = 0)
+	else:
+		first_name = request.form['first_name']
+		last_name = request.form['last_name']
+		netid = request.form['netid']
+		password = request.form['password']
+		conn = sqlite3.connect("db_related/fakedata.db")
+		cur = conn.cursor()
+		try:
+			uo.new_user(conn, netid, first_name, last_name)
+			uo.new_password(conn, netid, password)
+			return redirect(url_for('displaySurvey'))
+		except:
+			conn.rollback()
+			conn.close()
+			return render_template("register.html", display_error = 1)
+		conn.close()
 
 @app.route('/survey', methods=['GET', 'POST'])
 def survey():
@@ -46,6 +89,7 @@ def survey():
 			conn = sqlite3.connect("db_related/fakedata.db")
 			cur = conn.cursor()
 			uo.new_user(conn, netid, first_name, last_name)
+			uo.new_password(conn, netid, password)
 			print("Record successfully added")
 		except:
 			conn.rollback()
