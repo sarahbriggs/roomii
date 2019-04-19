@@ -1,7 +1,5 @@
 import sqlite3
-# from useful_queries import execute_query, still_has_questions
-
-
+from useful_queries import execute_query, still_has_questions
 
 def weiter(conn, query, tup):
 	cursor = conn.cursor()
