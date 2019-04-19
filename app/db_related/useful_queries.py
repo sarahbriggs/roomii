@@ -104,9 +104,9 @@ User Information
 
 def get_user_info_friends(conn, netid): # return (netid, given_name, family_name, profpic, description, status, phone, email)
 	tup = (netid, )
-	query = "SELECT netid, given_name, family_name, profpic, description, status, phone, email FROM users LEFT OUTER JOIN contact ON users.netid = contact.netid AND users.netid = ?"
+	query = "SELECT users.netid, given_name, family_name, profpic, description, status, phone, email FROM users LEFT OUTER JOIN contact ON users.netid = contact.netid WHERE users.netid = ?"
 	result = execute_query(conn, query, tup)
-	return result
+	return result[0]
 
 def get_user_info_general(conn, netid): # return (netid, given_name, family_name, profpic, description, status)
 	tup = (netid, )

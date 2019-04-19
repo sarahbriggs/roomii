@@ -10,8 +10,6 @@ if __name__ == '__main__':
 	# q.get_number_of_reviews_of_user(conn, "zz105")
 	# o.friend_request(conn, "zz105", "dummy")
 	# o.recommend_user(conn, "zz105", "dummy", "rjf19", "dumbdumb")
-	o.new_password(conn, "zz105", "hellokitty")
-	print(q.get_user_password(conn, "zz105"))
-	print(q.get_user_password(conn, 'll'))
+	print(q.get_user_info_friends(conn, "zz105"))
 
 

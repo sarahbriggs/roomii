@@ -21,24 +21,50 @@ def login():
 			conn = sqlite3.connect("db_related/fakedata.db")
 			cur = conn.cursor()
 			netid = request.form['netid']
+			global currentNetid
+			currentNetid = netid
+			print(currentNetid)
 			password = request.form['password']
 			actual_password = uq.get_user_password(conn, netid)
 			print(password)
 			print(actual_password)
 			print("Get password successfully")
 			if (actual_password != False and password == actual_password):
-				return redirect(url_for('regform'))
+				conn.close()
+				print("redirecting\n")
+				return redirect(url_for('homepage'))
 			else:
 				return render_template("index.html", display_error = 1)
 		except:
 			conn.rollback()
 			print("error in getting password")
 	else:
-		return redirect(url_for('index'), display_error = 0)
+		return redirect(url_for('index'))
 				
-@app.route('/homepage')
+@app.route('/homepage', methods = ['GET', 'POST'])
 def homepage():
-	return render_template("homepage.html")
+	netid = currentNetid
+	conn = sqlite3.connect("db_related/fakedata.db")
+	cur = conn.cursor()
+	print("Current NetID is")
+	print(currentNetid)
+	info = uq.get_user_info_friends(conn, netid)
+	given_name = info[1]
+	family_name = info[2]
+	profpic = info[3]
+	description = info[4]
+	phone = info[6]
+	email = info[7]
+	print(given_name)
+	conn.close()
+	return render_template("homepage.html", netid = netid,
+		given_name = given_name,
+		family_name = family_name,
+		profpic = profpic,
+		description = description,
+		phone = phone,
+		email = email
+	)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -115,5 +141,8 @@ def questions():
 	answer = uq.get_all_answer_text(conn,0)
 	return render_template("questions.html", question = question, answers = answer)
 
+currentNetid = ""
+
 if __name__ == '__main__':
+	currentNetid = ""
 	app.run()

@@ -27,32 +27,20 @@
 			<div class="col s12 m6">
 					<div id="profile-details" class="section">
 						<h4>
-							Stephen Zhou					
+							{{given_name}} {{family_name}}					
 						</h4>
-						<p id="profile-groups">
-				Rounds		</p>
 						<table>
 							<tr>
 								<th>Email</th>
-								<td>zz105@duke.edu</td>
+								<td>{{email}}</td>
 							</tr>
 							<tr>
 								<th>Phone</th>
-								<td>919-564-8715</td>
+								<td>{{phone}}</td>
 							</tr>
 							<tr>
-								<th>Role</th>
-								<td> User</td>
-							</tr>
-							<tr>
-								<th>Net Hours</th>
-								<td>
-									<div class="dot dot-green"></div>
-									3				</td>
-							</tr>
-							<tr>
-								<th>Last login</th>
-								<td>8:13pm Wednesday, 4/17/2019</td>
+								<th>Self description</th>
+								<td>{{description}}</td>
 							</tr>
 						</table>
 <!-- 						<div class="icon-block">
@@ -66,5 +54,4 @@
 		</div>
 	</div>
 </div>
-
 {% endblock %}
