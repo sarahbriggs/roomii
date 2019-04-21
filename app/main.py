@@ -100,11 +100,14 @@ def regform():
 		last_name = request.form['last_name']
 		netid = request.form['netid']
 		password = request.form['password']
+		phone = request.form['phone']
+		email = request.form['email']
 		conn = sqlite3.connect("db_related/fakedata.db")
 		cur = conn.cursor()
 		try:
 			uo.new_user(conn, netid, first_name, last_name)
 			uo.new_password(conn, netid, password)
+			uo.new_contact(conn, netid, phone, email)
 			global currentNetid
 			currentNetid = netid
 			print(netid)

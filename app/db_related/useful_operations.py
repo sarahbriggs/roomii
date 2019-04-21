@@ -63,6 +63,11 @@ def edit_user(conn, netid, status, given_name = None, family_name = None, profpi
 	WHERE netid = ?"""
 	weiter(conn, query, tup)
 
+def new_contact(conn, netid, phone, email):
+	tup = (netid, phone, email,)
+	query = "INSERT INTO contact VALUES (?, ?, ?)"
+	weiter(conn, query, tup)
+
 # 
 #def change_password
 
