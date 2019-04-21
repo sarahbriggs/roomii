@@ -16,6 +16,8 @@ def hello():
 
 @app.route('/login', methods = ['GET', 'POST'])
 def login():
+	ip = request.environ['REMOTE_ADDR'] #maybe we can use this to only allow the correct user
+	# print(ip)
 	if (request.method == 'POST'):
 		try:
 			conn = sqlite3.connect("db_related/fakedata.db")
@@ -23,7 +25,7 @@ def login():
 			netid = request.form['netid']
 			global currentNetid
 			currentNetid = netid
-			print(currentNetid)
+			# print(currentNetid)
 			password = request.form['password']
 			
 			if (sec.validate(conn,netid,password)):
@@ -168,5 +170,6 @@ def check_if_answered_questions(netid):
 currentNetid = ""
 
 if __name__ == '__main__':
+	currentNetids = {}
 	currentNetid = ""
 	app.run()
