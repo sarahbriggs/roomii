@@ -25,11 +25,9 @@ def login():
 			currentNetid = netid
 			print(currentNetid)
 			password = request.form['password']
-			actual_password = uq.get_user_password(conn, netid)
-			print(password)
-			print(actual_password)
-			print("Get password successfully")
-			if (actual_password != False and password == actual_password):
+			
+			if (sec.validate(conn,netid,password)):
+
 				conn.close()
 				if (check_if_answered_questions(netid)):
 					return redirect(url_for('homepage'))
@@ -106,7 +104,7 @@ def regform():
 		cur = conn.cursor()
 		try:
 			uo.new_user(conn, netid, first_name, last_name)
-			uo.new_password(conn, netid, password)
+			sec.register(conn,netid,password)
 			uo.new_contact(conn, netid, phone, email)
 			global currentNetid
 			currentNetid = netid
@@ -131,7 +129,7 @@ def survey():
 			conn = sqlite3.connect("db_related/fakedata.db")
 			cur = conn.cursor()
 			uo.new_user(conn, netid, first_name, last_name)
-			uo.new_password(conn, netid, password)
+			sec.register(conn, netid, password)
 			print("Record successfully added")
 		except:
 			conn.rollback()
