@@ -48,8 +48,8 @@ def homepage():
 	netid = currentNetid
 	conn = sqlite3.connect("db_related/fakedata.db")
 	cur = conn.cursor()
-	print("Current NetID is")
-	print(currentNetid)
+	print("NETID")
+	print(netid)
 	info = uq.get_user_info_friends(conn, netid)
 	given_name = info[1]
 	family_name = info[2]
@@ -57,8 +57,15 @@ def homepage():
 	description = info[4]
 	phone = info[6]
 	email = info[7]
-	print(given_name)
-	conn.close()
+	if (request.method == 'GET'):
+		conn.close()
+	else:
+		numQuestions = uq.num_questions(conn)
+		print("testing here")
+		for i in range(numQuestions):
+			strI = str(i)
+			answerID = request.form[strI]
+			uo.answer_question(conn, netid, i, answerID, 5)
 	return render_template("homepage.html", netid = netid,
 		given_name = given_name,
 		family_name = family_name,
@@ -67,6 +74,7 @@ def homepage():
 		phone = phone,
 		email = email
 	)
+
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -97,6 +105,9 @@ def regform():
 		try:
 			uo.new_user(conn, netid, first_name, last_name)
 			uo.new_password(conn, netid, password)
+			global currentNetid
+			currentNetid = netid
+			print(netid)
 			return redirect(url_for('displaySurvey'))
 		except:
 			conn.rollback()
@@ -136,8 +147,6 @@ def displaySurvey():
 	for i in range(numQuestions):
 		question.append(uq.get_question_text(conn,i))
 		answers.append(uq.get_all_answer_text(conn,i))
-	print(question)
-	print(answers)
 	return render_template("displayQuestion.html", answers = answers, question = question)
 
 @app.route('/questions')

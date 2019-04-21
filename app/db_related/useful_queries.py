@@ -39,7 +39,7 @@ def get_answer_text(conn, qid, answer_id): # return (answer_content)
 	return result[0][0]
 def get_all_answer_text(conn, qid):
 	tup = (qid,)
-	query = "SELECT answer_id, answer_content FROM answer_text WHERE qid = ?"
+	query = "SELECT answer_content FROM answer_text WHERE qid = ?"
 	result = execute_query(conn, query, tup)
 	return result
 
@@ -52,14 +52,12 @@ def get_questions_for_category(conn, category_number): # return (qid, question_c
 def num_questions(conn):
 	query = "SELECT count(qid) FROM questions;"
 	results = execute_query(conn,query)
-	print(results)
 	return results[0][0]
 
 def still_has_questions(conn, netid): #true if netid still has unanswered questions
 	num = num_questions(conn)
 	tup = (netid,)
 	query = "SELECT * FROM answer WHERE netid = ?"
-	print()
 	result = execute_query(conn,query,tup)
 	return num != len(result)
 

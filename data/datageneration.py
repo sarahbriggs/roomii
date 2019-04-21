@@ -318,7 +318,7 @@ for i in range(0, len(answers)):
 	answer = answers[i]
 	number = answer.split()[0]
 	numbers = number.split(".")
-	q_id = numbers[0]
+	q_id = str(int(numbers[0]) - 1)
 	a_id = numbers[1]
 	questions_list_tuples.append([q_id, a_id])
 

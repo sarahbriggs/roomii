@@ -18,62 +18,19 @@
 
 <div class="container blue lighten-4" style="height: 100%;">
 	<div class="input-field col s12">
-		<h5>Question</h5>
-<!-- 		<select id="question1">
-			<option value="" disabled selected>Choose your option</option>
-			<option value="1">1 (Strongly Disagree)</option>
-			<option value="2">2</option>
-			<option value="3">3</option>
-			<option value="4">4</option>
-			<option value="5">5 (Strongly Agree)</option>
-		</select> -->
-		<form id="demo" action = "index.html" name="myform" method="POST">
-<!-- 			are you:<br>
-			<p>
-				<label>
-					<input type="radio" id="dewey" name="drone" value="dewey" checked />
-			  		<span>Dewey</span>
-				</label>
-			</p>
-
-			<p>
-				<label>
-					<input type="radio" id="louie" name="drone" value="louie" />
-					<span>Louie</span>
-				</label>
-			</p> -->
+		<h5>Questions</h5>
+		<form id="myform" action = "/homepage" method="POST">
+			<div id="formblock">
+			</div>
+			<div class="row">
+	      		<div class="input-field col s6">
+	        		<button id="submitReg" class="btn btn-large btn-register waves-effect waves-light" type="submit" value="Submit">
+	       			Submit</button>
+	      		</div>
+	    	</div>
 		</form>
-
 	</div>
 </div>
-
-
-<!--   <form action="#">
-    <p>
-      <label>
-        <input name="group1" type="radio" checked />
-        <span>Red</span>
-      </label>
-    </p>
-    <p>
-      <label>
-        <input name="group1" type="radio" />
-        <span>Yellow</span>
-      </label>
-    </p>
-    <p>
-      <label>
-        <input class="with-gap" name="group1" type="radio"  />
-        <span>Green</span>
-      </label>
-    </p>
-    <p>
-      <label>
-        <input name="group1" type="radio" disabled="disabled" />
-        <span>Brown</span>
-      </label>
-    </p>
-  </form> -->
 
 <script>
 	var text = "";
@@ -81,28 +38,21 @@
 	var question = {{question | tojson}};
 	var answers = {{answers | tojson}};
 	for (i = 0; i < question.length; i++) {
-	  text += question[i] + "<br>";
-	  var currentName = "\""+i.toString() + "\""
+	  text += "<h5>" + question[i] + "</h5><br>";
+	  var currentName = "\"" + i.toString() + "\"";
 	  for (j = 0; j < answers[i].length; j++) {
-	  		  text += "<p>";
-	  text += "<label>"
+	  	text += "<p>";
+	  	text += "<label>"
+	  	var currentValue = "\"" + j.toString() + "\"";
 	  	if (j == 0) {
-	  		text += "<input name=" + currentName + " type=\"radio\" checked/>" + "<span>" + answers[i][j] + "</span>";
+	  		text += "<input class=\"with-gap\" name=" + currentName + " type=\"radio\" value=" + currentValue + " checked/>" + "<span>" + "<font color=\"black\">" + answers[i][j] + "</font></span>";
 	  	} else {
-	  		text += "<input name=" + currentName + " type=\"radio\" />" + "<span>" + answers[i][j] + "</span>";
+	  		text += "<input class=\"with-gap\" name=" + currentName + " type=\"radio\" value=" + currentValue + "/>" + "<span>" + "<font color=\"black\">" + answers[i][j] + "</font></span>";
 	  	}
 	  		  text += "</label>"
 	  text += "</p>"
 	  }
-
 	}
-	document.getElementById("demo").innerHTML = text;
-// 	var cars = ["BMW", "Volvo", "Saab", "Ford", "Fiat", "Audi"];
-// var text = "";
-// var i;
-// for (i = 0; i < cars.length; i++) {
-//   text += cars[i] + "<br>";
-// }
-// document.getElementById("demo").innerHTML = text;
+	document.getElementById("formblock").innerHTML = text;
 </script>
 {% endblock %}
