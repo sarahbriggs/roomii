@@ -31,8 +31,10 @@ def login():
 			print("Get password successfully")
 			if (actual_password != False and password == actual_password):
 				conn.close()
-				print("redirecting\n")
-				return redirect(url_for('homepage'))
+				if (check_if_answered_questions(netid)):
+					return redirect(url_for('homepage'))
+				else:
+					return redirect(url_for('displaySurvey'))
 			else:
 				return render_template("index.html", display_error = 1)
 		except:
@@ -129,10 +131,14 @@ def survey():
 def displaySurvey():
 	conn = sqlite3.connect("db_related/fakedata.db")
 	numQuestions = uq.num_questions(conn)
+	question = []
+	answers = []
 	for i in range(numQuestions):
-		question = uq.get_question_text(conn,i)
-		answers = uq.get_all_answer_text(conn,i)
-		return render_template("displayQuestion.html")
+		question.append(uq.get_question_text(conn,i))
+		answers.append(uq.get_all_answer_text(conn,i))
+	print(question)
+	print(answers)
+	return render_template("displayQuestion.html", answers = answers, question = question)
 
 @app.route('/questions')
 def questions():
@@ -140,6 +146,14 @@ def questions():
 	question = uq.get_question_text(conn,0)[0][0]
 	answer = uq.get_all_answer_text(conn,0)
 	return render_template("questions.html", question = question, answers = answer)
+
+def check_if_answered_questions(netid):
+	conn = sqlite3.connect("db_related/fakedata.db")
+	answers = uq.get_answer(conn, netid)
+	if (answers != False):
+		return True
+	else:
+		return False
 
 currentNetid = ""
 

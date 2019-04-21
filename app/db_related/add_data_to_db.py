@@ -104,6 +104,6 @@ for review in reviewroot.iter(tag = "review"):
 	cleanliness = review.find("cleanliness").text
 	friendliness = review.find("friendliness").text
 	conscientiousness = review.find("conscientiousness").text
-	useful_operations.new_review(conn, reviewer, reviewed, text, overall, cleanliness, friendliness, conscientiousness, "0") #0 is placeholder for self report accuray-prob shoudln't be tehre
+	useful_operations.new_review(conn, reviewer, reviewed, text, overall, cleanliness, friendliness, conscientiousness, 0) #0 is placeholder for self report accuray-prob shoudln't be tehre
 
 print("done")

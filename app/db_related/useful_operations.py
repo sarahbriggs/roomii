@@ -1,5 +1,5 @@
 import sqlite3
-from useful_queries import execute_query, still_has_questions
+# import useful_queries
 
 def weiter(conn, query, tup):
 	cursor = conn.cursor()
@@ -95,6 +95,11 @@ def recommend_user(conn, recommender_netid, recommendee_netid, recommended__neti
 
 def new_review(conn, reviewer_netid, reviewed_netid, text, overall_rating, cleanliness, 
 	friendliness, conscientiousness, self_report_accuracy):
+	overall_rating = float(overall_rating)
+	cleanliness = float(cleanliness)
+	friendliness = float(friendliness)
+	conscientiousness = float(conscientiousness)
+	self_report_accuracy = float(self_report_accuracy)
 	tup = (reviewer_netid, reviewed_netid, text, overall_rating, cleanliness, 
 	friendliness, conscientiousness, self_report_accuracy)
 	query = "INSERT INTO review VALUES (?, ?, ?, ?, ?, ?, ?, ?);"

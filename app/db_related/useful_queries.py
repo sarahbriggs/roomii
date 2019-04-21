@@ -24,7 +24,7 @@ def get_question_text(conn, qid): # return (question_content)
 	tup = (qid,)
 	query = "SELECT question_content FROM questions WHERE qid = ?"
 	result = execute_query(conn, query, tup) #execute query will return a list of matching rows
-	return result
+	return result[0][0]
 
 def get_all_qid(conn): # return a list of all qid
 	tup = (None)
@@ -36,7 +36,7 @@ def get_answer_text(conn, qid, answer_id): # return (answer_content)
 	tup = (qid, answer_id, )
 	query = "SELECT answer_content FROM answer_text WHERE qid = ? AND answer_id = ?"
 	result = execute_query(conn, query, tup)
-	return result
+	return result[0][0]
 def get_all_answer_text(conn, qid):
 	tup = (qid,)
 	query = "SELECT answer_id, answer_content FROM answer_text WHERE qid = ?"
@@ -50,12 +50,10 @@ def get_questions_for_category(conn, category_number): # return (qid, question_c
 	return result
 
 def num_questions(conn):
-	query = "SELECT qid FROM questions;"
+	query = "SELECT count(qid) FROM questions;"
 	results = execute_query(conn,query)
-	ct = 0
-	for line in results:
-		ct+=1
-	return ct
+	print(results)
+	return results[0][0]
 
 def still_has_questions(conn, netid): #true if netid still has unanswered questions
 	num = num_questions(conn)
@@ -94,6 +92,8 @@ def get_answer(conn, netid): # return (qid, answer_id, weight)
 	tup = (netid,)
 	query = "SELECT qid, answer_id, weight FROM answer WHERE netid = ?"
 	result = execute_query(conn, query, tup)
+	if (len(result) < 1):
+		return False
 	return result
 
 """
