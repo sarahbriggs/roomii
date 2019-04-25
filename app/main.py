@@ -75,6 +75,12 @@ def homepage():
 		email = email
 	)
 
+@app.route('/matches', methods=['GET', 'POST'])
+def matches():
+	conn = sqlite3.connect("db_related/fakedata.db")
+	allMatches = uo.get_matchups(conn, currentNetid)
+	conn.close()
+	return render_template("matches.html", matchups = allMatches)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -139,7 +145,6 @@ def survey():
 		finally:
 			return redirect(url_for('displaySurvey'))
 			conn.close()
-
 
 @app.route('/displaySurvey')
 def displaySurvey():

@@ -178,7 +178,7 @@ def all_matchups(conn,netid):
 	tup1 = (netid,)
 	query = "SELECT netid FROM users WHERE netid != ?;"
 	query2 = "INSERT INTO matchups VALUES (?, ?, ?);"
-	cursor = conn.cursor(); #we're going to do this one-at-a-time
+	cursor = conn.cursor() #we're going to do this one-at-a-time
 	cursor2 = conn.cursor()
 	cursor.execute(query,tup1)
 	tk = 0
@@ -193,6 +193,13 @@ def all_matchups(conn,netid):
 	conn.commit()
 	return tk
 
+def get_matchups(conn, netid):
+	numMatches = all_matchups(conn, netid)
+	tup = (netid,)
+	cursor = conn.cursor()
+	query = "SELECT * FROM matchups WHERE netid1 = ?;"
+	cursor.execute(query, tup)
+	return cursor.fetchall()
 
 '''
 -------------------------------

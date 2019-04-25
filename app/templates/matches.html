@@ -1,0 +1,45 @@
+{% extends "material/base.html" %}
+{% import "material/utils.html" as util %}
+
+{% block title %}Roomii{% endblock %}
+
+
+{% block content %}
+<nav class="yellow darken-1" role="navigation">
+	<div class = "nav-wrapper yellow darken-1">
+		<a href = "#" class = "brand-logo left">Roomii</a>
+		<ul id = "nav-mobile" class = "right hide-on-med-and-down">
+			<li><a href = "#">Nav1</a></li>
+			<li><a href = "#">Nav2</a></li>
+			<li><a href = "#">Nav3</a></li>
+		</ul>
+	</div>
+</nav>
+
+<div class="container blue lighten-4" style="height: 100%;">
+	<div class="input-field col s12">
+		<h5>Questions</h5>
+		<form id="myform" action = "/homepage" method="POST">
+			<div id="formblock">
+			</div>
+			<div class="row">
+	      		<div class="input-field col s6">
+	        		<button id="submitReg" class="btn btn-large btn-register waves-effect waves-light" type="submit" value="Submit">
+	       			Submit</button>
+	      		</div>
+	    	</div>
+		</form>
+	</div>
+</div>
+
+<script>
+	var text = "";
+	var i;
+	var matchups = {{matchups | tojson}};
+	
+	for (i = 0; i < matchups.length; i++) {
+	  text += "<h5>" + matchups[i] + "</h5><br>";
+	}
+	document.getElementById("formblock").innerHTML = text;
+</script>
+{% endblock %}
