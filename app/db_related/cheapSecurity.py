@@ -32,10 +32,5 @@ def validate(conn, netid, password):
 	phrase, salt = tup2
 	return compare(password,phrase,salt)
 
-if __name__ == '__main__':
-	conn = sqlite3.connect('./fakedata.db')
-	try:
-		register(conn,"rjf19", "password")
-	except:
-		pass
-	print(validate(conn,"rjf19","password"))
+# if __name__ == '__main__':
+

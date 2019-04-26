@@ -232,26 +232,3 @@ def answer_question(conn, netid, qid, answer_id, weight):
 
 # def 
 
-
-if __name__ == '__main__':
-	import useful_queries
-	conn = sqlite3.connect('fakedata.db')
-	conn.execute("PRAGMA foreign_keys = 1")
-	try:
-		new_user(conn, "rjf19", "Ryan", "Ferner", "lolidk.png", "i'm just tryna find a roomie lol", True)
-		# new_user(conn, "seb103", "Sarah", profpic = "same.png")
-		# report_user(conn,"rjf19","seb103","my code is sinful and i deserve to be reported")
-		new_user(conn, "zz105", "Zhiyuan", None, "haha", "haha", True)
-		new_user(conn, "dummy", "Im", "Dummy", "dum", "dum", True)
-		new_question(conn, 0, 0, "from time to time, when it's really cold outside, do you or do you not want to breathe really heavily and pretend that you're a train?")
-		new_answer_text(conn, 0, 0, "absolutely")
-		new_answer_text(conn, 0, 1, "lolno why")
-		answer_question(conn, "rjf19", 0, 1, 5)
-		answer_question(conn, "zz105", 0, 1, 5)
-		answer_question(conn, "dummy", 0, 2, 5)
-		new_review(conn, "zz105", "rjf19", "good!", 5, 5, 5, 5, 5)
-		new_review(conn, "rjf19", "zz105", "good!", 5, 5, 5, 5, 5)
-		new_review(conn, "dummy", "zz105", "bad", 0, 0, 0, 0, 0)
-	except:
-		pass
-	print(all_matchups(conn, "rjf19"))

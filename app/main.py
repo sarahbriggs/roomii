@@ -19,29 +19,29 @@ def login():
 	ip = request.environ['REMOTE_ADDR'] #maybe we can use this to only allow the correct user
 	# print(ip)
 	if (request.method == 'POST'):
-		try:
-			conn = sqlite3.connect("db_related/fakedata.db")
-			cur = conn.cursor()
-			netid = request.form['netid']
-			global currentNetid
-			currentNetid = netid
-			global loggedIn
-			# print(currentNetid)
-			password = request.form['password']
-			
-			if (sec.validate(conn,netid,password)):
-				loggedIn = True
-				conn.close()
-				if (check_if_answered_questions(netid)):
-					return redirect(url_for('homepage'))
-				else:
-					return redirect(url_for('displaySurvey'))
+		# try:
+		conn = sqlite3.connect("db_related/fakedata.db")
+		cur = conn.cursor()
+		netid = request.form['netid']
+		global currentNetid
+		currentNetid = netid
+		global loggedIn
+		# print(currentNetid)
+		password = request.form['password']
+		
+		if (sec.validate(conn,netid,password)):
+			loggedIn = True
+			conn.close()
+			if (check_if_answered_questions(netid)):
+				return redirect(url_for('homepage'))
 			else:
-				loggedIn = False
-				return render_template("index.html", display_error = 1)
-		except:
-			conn.rollback()
-			print("error in getting password")
+				return redirect(url_for('displaySurvey'))
+		else:
+			loggedIn = False
+			return render_template("index.html", display_error = 1)
+		# except:
+		# 	conn.rollback()
+		# 	print("error in getting password")
 	else:
 		return redirect(url_for('index'))
 				
