@@ -202,11 +202,11 @@ def all_matchups(conn,netid):
 	conn.commit()
 	return tk
 
-def get_matchups(conn, netid):
+def get_matchups(conn, netid, num = 20):
 	numMatches = all_matchups(conn, netid)
-	tup = (netid,)
+	tup = (num, netid,)
 	cursor = conn.cursor()
-	query = "SELECT * FROM matchups WHERE netid1 = ? ORDER BY matchRating DESC, netid2 ASC;"
+	query = "SELECT TOP ? * FROM matchups WHERE netid1 = ? ORDER BY matchRating DESC, netid2 ASC;"
 	cursor.execute(query, tup)
 	return cursor.fetchall()
 
