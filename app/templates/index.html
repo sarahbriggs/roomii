@@ -20,6 +20,9 @@
 <div id="error_message" class="container red lighten-4" style ="height: 100%; display: none;">
 	Username and password do not match!
 </div>
+<div id="need_login" class="container red lighten-4" style ="height: 100%; display: none;">
+	Please log in or create an account! 
+</div>
 
 <div class="container blue lighten-4" style="height: 100%;">
 	<div class="row">
@@ -75,7 +78,11 @@
 	window.onload = function() {
 		if (show == 1) {
 			document.getElementById("error_message").style.display = "";
-		} else {
+		}
+		if(show == 2) {
+			document.getElementById("need_login").style.display = "";
+		}
+		else {
 			document.getElementById("error_message").style.display = "hidden";
 		} // determine if the error message should be shown when page loads
 	};

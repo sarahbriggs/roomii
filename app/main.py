@@ -25,17 +25,19 @@ def login():
 			netid = request.form['netid']
 			global currentNetid
 			currentNetid = netid
+			global loggedIn
 			# print(currentNetid)
 			password = request.form['password']
 			
 			if (sec.validate(conn,netid,password)):
-
+				loggedIn = True
 				conn.close()
 				if (check_if_answered_questions(netid)):
 					return redirect(url_for('homepage'))
 				else:
 					return redirect(url_for('displaySurvey'))
 			else:
+				loggedIn = False
 				return render_template("index.html", display_error = 1)
 		except:
 			conn.rollback()
@@ -75,12 +77,37 @@ def homepage():
 		email = email
 	)
 
-@app.route('/matches', methods=['GET', 'POST'])
+@app.route('/matches', methods = ['GET', 'POST'])
 def matches():
-	conn = sqlite3.connect("db_related/fakedata.db")
-	allMatches = uo.get_matchups(conn, currentNetid)
-	conn.close()
-	return render_template("matches.html", matchups = allMatches)
+	if not loggedIn: 
+		return render_template("index.html", display_error = 2)
+	else:
+		if request.method == 'GET':
+			conn = sqlite3.connect("db_related/fakedata.db")
+			print(loggedIn)
+			print(currentNetid)
+			allMatches = uo.get_matchups(conn, currentNetid)
+			num = len(allMatches)
+			if (num > 20): 
+				num = 20
+			matchups = []
+			checkFriends = []
+			for i in range(num):
+				netid = allMatches[i][1]
+				friends = uo.check_friends(conn, currentNetid, netid)
+				checkFriends.append(friends)
+				info = uq.get_user_info_general(conn, netid)
+				tup = info[0]
+				if friends:
+					info = uq.get_user_info_friends(conn, netid)
+					tup += (friends,)
+				matchups.append(tup)
+			conn.close()
+			return render_template("matches.html", matchups = matchups, checkFriends = checkFriends)
+		else:
+			# add friends
+			# visit profile
+			return; 
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -173,8 +200,10 @@ def check_if_answered_questions(netid):
 		return False
 
 currentNetid = ""
+loggedIn = False
 
 if __name__ == '__main__':
 	currentNetids = {}
 	currentNetid = ""
+	loggedIn = False
 	app.run()

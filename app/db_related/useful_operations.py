@@ -131,6 +131,16 @@ def create_rating(conn, netid, avg_overall, avg_cleanliness, avg_friendliness, a
 	query = "INSERT INTO ratings VALUES (?, ?, ?, ?, ?, ?, ?);"
 	weiter(conn, query, tup)
 
+def check_friends(conn, sender, recipient):
+	tup = (sender, recipient, 1)
+	query = "SELECT COUNT(*) FROM friends WHERE netid1 = ? and netid2 = ? and status = ? GROUP BY netid1;"
+	val = execute_query(conn, query, tup)
+	if len(val) == 0: 
+		return False
+	elif val[-1]==1:
+		return True;
+	return False;
+
 def friend_request(conn, sender, recipient):
 	tup = (sender, recipient, 0)
 	query = "INSERT INTO friends VALUES (?,?,?);"
@@ -186,7 +196,6 @@ def all_matchups(conn,netid):
 		matchup = calculate_matchup(conn, netid, user[0])
 		tup2 = (netid, user[0], matchup)
 		cursor2.execute(query2, tup2)
-		print (tup2)
 		tk += 1
 	cursor.close()
 	cursor2.close()
@@ -197,7 +206,7 @@ def get_matchups(conn, netid):
 	numMatches = all_matchups(conn, netid)
 	tup = (netid,)
 	cursor = conn.cursor()
-	query = "SELECT * FROM matchups WHERE netid1 = ?;"
+	query = "SELECT * FROM matchups WHERE netid1 = ? ORDER BY matchRating DESC, netid2 ASC;"
 	cursor.execute(query, tup)
 	return cursor.fetchall()
 
