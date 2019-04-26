@@ -52,7 +52,7 @@ ratings_root = ET.Element("ratings")
 
 users_root = ET.Element("users")
 
-contact_root = ET.Element("contact")
+contact_root = ET.Element("contacts")
 #netids will include initials plus number so we can create list of tuples where we record current number
 netids = []
 phone_numbers = []

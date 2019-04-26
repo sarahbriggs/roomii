@@ -48,6 +48,8 @@ for answer in answersroot.iter(tag = "answer"):
 	aid = answer.find("answer_id").text
 	weight = answer.find("weight").text
 	useful_operations.answer_question(conn, netid, qid, aid, weight)
+
+
 #dont do this, ratings updated through new added reviews
 '''
 ratingstree = ET.parse('../../data/ratings.xml')
@@ -115,14 +117,14 @@ for report in reportroot.iter(tag = "report"):
 '''
 
 #contacts
-'''
+
 contacttree = ET.parse('../../data/contact.xml')
 contactroot = contacttree.getroot()
 for contact in contactroot.iter(tag = "contact"):
-	netid = contact.find("netid")
-	email = contact.find("email")
-	phone = contact.find("phone")
-	useful_operations.net_contact(conn, netid, phone, email)
+	netid = contact.find("netid").text
+	email = contact.find("email").text
+	phone = contact.find("phone").text
+	useful_operations.new_contact(conn, netid, phone, email)
 
 
 #friends
@@ -131,21 +133,21 @@ for contact in contactroot.iter(tag = "contact"):
 requeststree = ET.parse('../../data/requests.xml')
 requestsroot = requeststree.getroot()
 for request in requestsroot.iter(tag = "request"):
-	sender = request.find("sender")
-	recipient = request.find("recipient")
+	sender = request.find("sender").text
+	recipient = request.find("recipient").text
 	useful_operations.friend_request(conn, sender, recipient)
 
 friendtree = ET.parse('../../data/friends.xml')
 friendroot = friendtree.getroot()
 ctr = 0
 for friend in friendroot.iter(tag = "friend"):
-	user1 = friend.find("user1")
-	user2 = friend.find("user2")
+	user1 = friend.find("user1").text
+	user2 = friend.find("user2").text
 	useful_operations.friend_request(conn, user1, user2)
 	if (ctr%2 == 0):
 		useful_operations.request_accepted(conn, user1, user2)
 	else:
 		user_operations.request_rejected(conn, user1, user2)
-'''
+
 print("done")
 
