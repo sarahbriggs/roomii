@@ -52,8 +52,9 @@
 	  		  text += "</label>"
 	  text += "</p>"
 	  }
+	  var rangeID = "\"Range" + i.toString() + "\"";
 	  text +="<p class=\"range-field\"> \
-      <input type=\"range\" id=\"test5\" min=\"-5\" max=\"5\" /> \
+      <input type=\"range\" name=" + rangeID + "min=\"-5\" max=\"5\" /> \
       </p>";
 	}
 	document.getElementById("formblock").innerHTML = text;

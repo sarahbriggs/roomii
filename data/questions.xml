@@ -1,10 +1,14 @@
-<questions><question><qid>0</qid><category_number>1</category_number><question_content>What year would you prefer your roommate to be?
-</question_content></question><question><qid>1</qid><category_number>1</category_number><question_content>Preferred location?
-</question_content></question><question><qid>2</qid><category_number>1</category_number><question_content>Bedtime?
+<questions><question><qid>0</qid><category_number>1</category_number><question_content>Your location?
+</question_content></question><question><qid>1</qid><category_number>1</category_number><question_content>What year would you prefer your roommate to be?
+</question_content></question><question><qid>2</qid><category_number>1</category_number><question_content>Preferred Bedtime?
 </question_content></question><question><qid>3</qid><category_number>1</category_number><question_content>Preferences for alcohol use?
 </question_content></question><question><qid>4</qid><category_number>1</category_number><question_content>Smoking?
 </question_content></question><question><qid>5</qid><category_number>1</category_number><question_content>Noise tolerance?
 </question_content></question><question><qid>6</qid><category_number>1</category_number><question_content>Allergies?
 </question_content></question><question><qid>7</qid><category_number>1</category_number><question_content>Introvert/extrover?
 </question_content></question><question><qid>8</qid><category_number>1</category_number><question_content>Guest policy?
-</question_content></question><question><qid>9</qid><category_number>1</category_number><question_content>Where do you work?</question_content></question></questions>
+</question_content></question><question><qid>9</qid><category_number>1</category_number><question_content>Where do you work?
+</question_content></question><question><qid>10</qid><category_number>1</category_number><question_content>How often do you shower?
+</question_content></question><question><qid>11</qid><category_number>1</category_number><question_content>Morning person?
+</question_content></question><question><qid>12</qid><category_number>1</category_number><question_content>How close do you want to be with your roommate?
+</question_content></question><question><qid>13</qid><category_number>1</category_number><question_content>Political stance?</question_content></question></questions>
