@@ -110,9 +110,9 @@ for i in range(0, len(nameslist)):
 
 	contact_netid_element.text = netid
 	contact_email_element.text = netid + "@duke.edu"
-	number = generate_phone_number
+	number = generate_phone_number()
 	while(number in phone_numbers):
-		number = generate_phone_number
+		number = generate_phone_number()
 	phone_numbers.append(number)
 	contact_phone_element.text = number
 
@@ -176,17 +176,18 @@ contact_tree = ET.ElementTree(contact_root)
 contact_tree.write("contact.xml")
 
 
-
+#friends
 #store tuples of (sender, recipient)
 #select random tuples to have friend request accepted, and remove these from tuples of sent
+
 requests = [] #tuples of sender,recipient
 friends = [] #tuples of friend, friend
 for i in range(0, 25):
-	user1 = select_random_user()
-	user2 = select_random_user()
+	user1 = select_random_user(netids)
+	user2 = select_random_user(netids)
 	while(user1 == user2 and ((user1, user2) in requests)):
-		user1 = select_random_user()
-		user2 = select_random_user()
+		user1 = select_random_user(netids)
+		user2 = select_random_user(netids)
 	requests.append((user1, user2))
 
 for i in range(0, 10):
@@ -217,11 +218,11 @@ for i in range(0, len(requests)):
 	sender = requests[i][0]
 	recipient = requests[i][1]
 	sender_element = ET.Element("sender")
-	receiver_element = ET.Element("receiver")
+	recipient_element = ET.Element("recipient")
 	sender_element.text = sender
-	receiver_element.text = receiver
+	recipient_element.text = recipient
 	request.insert(0, sender_element)
-	request.insert(1, receiver_element)
+	request.insert(1, recipient_element)
 requests_tree = ET.ElementTree(requests_root)
 requests_tree.write("requests.xml")
 

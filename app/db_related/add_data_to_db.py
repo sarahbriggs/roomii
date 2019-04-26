@@ -115,7 +115,7 @@ for report in reportroot.iter(tag = "report"):
 '''
 
 #contacts
-
+'''
 contacttree = ET.parse('../../data/contact.xml')
 contactroot = contacttree.getroot()
 for contact in contactroot.iter(tag = "contact"):
@@ -132,20 +132,20 @@ requeststree = ET.parse('../../data/requests.xml')
 requestsroot = requeststree.getroot()
 for request in requestsroot.iter(tag = "request"):
 	sender = request.find("sender")
-	receiver = request.find("receiver")
-	useful_operations.friend_request(conn, sender, receiver)
+	recipient = request.find("recipient")
+	useful_operations.friend_request(conn, sender, recipient)
 
 friendtree = ET.parse('../../data/friends.xml')
 friendroot = friendtree.getroot()
-int ctr = 0
+ctr = 0
 for friend in friendroot.iter(tag = "friend"):
 	user1 = friend.find("user1")
 	user2 = friend.find("user2")
 	useful_operations.friend_request(conn, user1, user2)
-	if (ctr%2 = 0):
+	if (ctr%2 == 0):
 		useful_operations.request_accepted(conn, user1, user2)
 	else:
 		user_operations.request_rejected(conn, user1, user2)
-
+'''
 print("done")
 
