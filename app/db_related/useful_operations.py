@@ -115,11 +115,11 @@ def new_review(conn, reviewer_netid, reviewed_netid, text, overall_rating, clean
 			conscientiousness, self_report_accuracy, 0)
 	else:
 		current_rating = useful_queries.get_user_rating(conn, reviewed_netid)
-		new_overall = (current_rating[1] * number_of_reviews + overall_rating) / (number_of_reviews + 1)
-		new_cleanliness = (current_rating[2] * number_of_reviews + cleanliness) / (number_of_reviews + 1)
-		new_friendliness = (current_rating[3] * number_of_reviews + friendliness) / (number_of_reviews + 1)
-		new_cons = (current_rating[4] * number_of_reviews + conscientiousness) / (number_of_reviews + 1)
-		new_self_report = (current_rating[5] * number_of_reviews + self_report_accuracy) / (number_of_reviews + 1)
+		new_overall = (current_rating[1] * number_of_reviews + float(overall_rating)) / (number_of_reviews + 1)
+		new_cleanliness = (current_rating[2] * number_of_reviews + float(cleanliness)) / (number_of_reviews + 1)
+		new_friendliness = (current_rating[3] * number_of_reviews + float(friendliness)) / (number_of_reviews + 1)
+		new_cons = (current_rating[4] * number_of_reviews + float(conscientiousness)) / (number_of_reviews + 1)
+		new_self_report = (current_rating[5] * number_of_reviews + float(self_report_accuracy)) / (number_of_reviews + 1)
 		update_rating(conn, reviewed_netid, new_overall, new_cleanliness, new_friendliness,
 			new_cons, new_self_report, current_rating[6])
 
@@ -130,6 +130,16 @@ def create_rating(conn, netid, avg_overall, avg_cleanliness, avg_friendliness, a
 		avg_conscientiousness, self_report_accuracy, number_of_reports) 
 	query = "INSERT INTO ratings VALUES (?, ?, ?, ?, ?, ?, ?);"
 	weiter(conn, query, tup)
+
+def check_friends(conn, sender, recipient):
+	tup = (sender, recipient, 1)
+	query = "SELECT COUNT(*) FROM friends WHERE netid1 = ? and netid2 = ? and status = ? GROUP BY netid1;"
+	val = execute_query(conn, query, tup)
+	if len(val) == 0: 
+		return False
+	elif val[-1]==1:
+		return True;
+	return False;
 
 def friend_request(conn, sender, recipient):
 	tup = (sender, recipient, 0)
@@ -186,7 +196,6 @@ def all_matchups(conn,netid):
 		matchup = calculate_matchup(conn, netid, user[0])
 		tup2 = (netid, user[0], matchup)
 		cursor2.execute(query2, tup2)
-		print (tup2)
 		tk += 1
 	cursor.close()
 	cursor2.close()
@@ -197,7 +206,7 @@ def get_matchups(conn, netid):
 	numMatches = all_matchups(conn, netid)
 	tup = (netid,)
 	cursor = conn.cursor()
-	query = "SELECT * FROM matchups WHERE netid1 = ?;"
+	query = "SELECT * FROM matchups WHERE netid1 = ? ORDER BY matchRating DESC, netid2 ASC;"
 	cursor.execute(query, tup)
 	return cursor.fetchall()
 
