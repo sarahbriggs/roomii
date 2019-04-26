@@ -11,6 +11,18 @@ def select_random_from_file(filename):
 	myfile.close()
 	return lines[random.randint(0,len(lines)-1)]
 
+def generate_phone_number():
+	number = ""
+	for i in range(0, 10):
+		number += str(random.randint(0,9))
+	return number
+
+
+def select_random_user(netids):
+	netid = netids[random.randint(0, len(netids)-1)]
+	initials = netid[0]
+	number = random.randint(1, netid[1])
+	return str(initials) + str(number)
 ################
 #Name Generation
 ################
@@ -30,7 +42,7 @@ first.close()
 last.close()
 
 ########################
-#creating ratings relation and users
+#creating ratings relation and users and contacts
 ########################
 
 names = open("nameslist.txt", "r")
@@ -43,6 +55,7 @@ users_root = ET.Element("users")
 contact_root = ET.Element("contact")
 #netids will include initials plus number so we can create list of tuples where we record current number
 netids = []
+phone_numbers = []
 for i in range(0, len(nameslist)):
 	#generate netid 
 	name = nameslist[i]
@@ -87,9 +100,28 @@ for i in range(0, len(nameslist)):
 	user.insert(5, status_element)
 
 
+	contact = ET.Element("contact")
+	contact_root.insert(i, contact)
+
+	contact_netid_element = ET.Element("netid")
+	contact_email_element = ET.Element("email")
+	contact_phone_element = ET.Element("phone")
 
 
+	contact_netid_element.text = netid
+	contact_email_element.text = netid + "@duke.edu"
+	number = generate_phone_number
+	while(number in phone_numbers):
+		number = generate_phone_number
+	phone_numbers.append(number)
+	contact_phone_element.text = number
 
+	contact.insert(0, contact_netid_element)
+	contact.insert(1, contact_email_element)
+	contact.insert(2, contact_phone_element)
+
+
+	#
 
 	#create subelement = one for each person
 	person = ET.Element("rating")
@@ -139,6 +171,60 @@ ratings_tree.write("ratings.xml")
 
 users_tree = ET.ElementTree(users_root)
 users_tree.write("users.xml")
+
+contact_tree = ET.ElementTree(contact_root)
+contact_tree.write("contact.xml")
+
+
+
+#store tuples of (sender, recipient)
+#select random tuples to have friend request accepted, and remove these from tuples of sent
+requests = [] #tuples of sender,recipient
+friends = [] #tuples of friend, friend
+for i in range(0, 25):
+	user1 = select_random_user()
+	user2 = select_random_user()
+	while(user1 == user2 && (user1, user2) in requests):
+		user1 = select_random_user()
+		user2 = select_random_user()
+	requests.append((user1, user2))
+
+for i in range(0, 10):
+	friends.append(requests.pop())
+
+
+#even ones will be accepted, odd will rejected, see add data to db
+friends_root = ET.Element("friends")
+for i in range(0, len(friends)-1):
+	friend = ET.Element("friend")
+	friends_root.insert(i, friend)
+	user1 = friends[i][0]
+	user2 = friends[i][1]
+	user1_element = ET.Element("user1")
+	user2_element = ET.Element("user2")
+	user1_element.text = user1
+	user2_element.text = user2
+	friend.insert(0, user1_element)
+	friend.insert(1, user2_element)
+friends_tree = ET.ElementTree(friends_root)
+friends_tree.write("friends.xml")
+
+
+requests_root = ET.Element("requests")
+for i in range(0, len(requests)):
+	request = ET.Element("request")
+	requests_root.insert(i, request)
+	sender = requests[i][0]
+	recipient = requests[i][1]
+	sender_element = ET.Element("sender")
+	receiver_element = ET.Element("receiver")
+	sender_element.text = sender
+	receiver_element.text = receiver
+	request.insert(0, sender_element)
+	request.insert(1, receiver_element)
+requests_tree = ET.ElementTree(requests_root)
+requests_tree.write("requests.xml")
+
 
 ####################
 #Reviewer Generation
