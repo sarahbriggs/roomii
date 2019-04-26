@@ -50,12 +50,12 @@ def homepage():
 	netid = currentNetid
 	conn = sqlite3.connect("db_related/fakedata.db")
 	cur = conn.cursor()
-	print("NETID")
-	print(netid)
 	info = uq.get_user_info_friends(conn, netid)
 	given_name = info[1]
 	family_name = info[2]
 	profpic = info[3]
+	if profpic == "":
+		profpic = "http://friendoprod.blob.core.windows.net/missionpics/images/4846/member/f9d9c34c-d5c8-495a-bd84-45b693edf7a2.jpg" # pikachu photo
 	description = info[4]
 	phone = info[6]
 	email = info[7]
@@ -63,11 +63,12 @@ def homepage():
 		conn.close()
 	else:
 		numQuestions = uq.num_questions(conn)
-		print("testing here")
 		for i in range(numQuestions):
 			strI = str(i)
+			rangeID = "Range" + str(i);
 			answerID = request.form[strI]
-			uo.answer_question(conn, netid, i, answerID, 5)
+			value = int(request.form[rangeID])
+			uo.answer_question(conn, netid, i, answerID, value)
 	return render_template("homepage.html", netid = netid,
 		given_name = given_name,
 		family_name = family_name,
@@ -135,10 +136,15 @@ def regform():
 		password = request.form['password']
 		phone = request.form['phone']
 		email = request.form['email']
+		profile = request.form['profile photo']
+		if phone == "":
+			phone = None
+		if email == "":
+			email = None
 		conn = sqlite3.connect("db_related/fakedata.db")
 		cur = conn.cursor()
 		try:
-			uo.new_user(conn, netid, first_name, last_name)
+			uo.new_user(conn, netid, first_name, last_name, profile)
 			sec.register(conn,netid,password)
 			uo.new_contact(conn, netid, phone, email)
 			global currentNetid
@@ -155,23 +161,23 @@ def regform():
 def survey():
 	if(request.method == 'GET'):
 		return redirect(url_for('displaySurvey'))
-	if (request.method == 'POST'):
-		try:
-			first_name = request.form['first_name']
-			last_name = request.form['last_name']
-			netid = request.form['netid']
-			password = request.form['password']
-			conn = sqlite3.connect("db_related/fakedata.db")
-			cur = conn.cursor()
-			uo.new_user(conn, netid, first_name, last_name)
-			sec.register(conn, netid, password)
-			print("Record successfully added")
-		except:
-			conn.rollback()
-			print("error in insert operation")
-		finally:
-			return redirect(url_for('displaySurvey'))
-			conn.close()
+	# if (request.method == 'POST'):
+	# 	try:
+	# 		first_name = request.form['first_name']
+	# 		last_name = request.form['last_name']
+	# 		netid = request.form['netid']
+	# 		password = request.form['password']
+	# 		conn = sqlite3.connect("db_related/fakedata.db")
+	# 		cur = conn.cursor()
+	# 		uo.new_user(conn, netid, first_name, last_name)
+	# 		sec.register(conn, netid, password)
+	# 		print("Record successfully added")
+	# 	except:
+	# 		conn.rollback()
+	# 		print("error in insert operation")
+	# 	finally:
+	# 		return redirect(url_for('displaySurvey'))
+	# 		conn.close()
 
 @app.route('/displaySurvey')
 def displaySurvey():

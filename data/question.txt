@@ -1,6 +1,6 @@
+Your location?
 What year would you prefer your roommate to be?
-Preferred location?
-Bedtime?
+Preferred Bedtime?
 Preferences for alcohol use?
 Smoking?
 Noise tolerance?
@@ -8,3 +8,7 @@ Allergies?
 Introvert/extrover?
 Guest policy?
 Where do you work?
+How often do you shower?
+Morning person?
+How close do you want to be with your roommate?
+Political stance?
