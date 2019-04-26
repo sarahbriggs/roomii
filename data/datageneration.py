@@ -184,7 +184,7 @@ friends = [] #tuples of friend, friend
 for i in range(0, 25):
 	user1 = select_random_user()
 	user2 = select_random_user()
-	while(user1 == user2 && (user1, user2) in requests):
+	while(user1 == user2 and ((user1, user2) in requests)):
 		user1 = select_random_user()
 		user2 = select_random_user()
 	requests.append((user1, user2))
