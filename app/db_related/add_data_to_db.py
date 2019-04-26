@@ -51,6 +51,8 @@ for answer in answersroot.iter(tag = "answer"):
 	aid = answer.find("answer_id").text
 	weight = answer.find("weight").text
 	useful_operations.answer_question(conn, netid, qid, aid, weight)
+
+
 #dont do this, ratings updated through new added reviews
 '''
 ratingstree = ET.parse('../../data/ratings.xml')
@@ -111,7 +113,59 @@ for review in reviewroot.iter(tag = "review"):
 	conscientiousness = review.find("conscientiousness").text
 	useful_operations.new_review(conn, reviewer, reviewed, text, overall, cleanliness, friendliness, conscientiousness, "0") #0 is placeholder for self report accuray-prob shoudln't be tehre
 
+# <<<<<<< HEAD
 # import useful_queries
+
+# =======
+
+#inserting should be working, but not sure about the useful queries reference in useful_operations
+#report after review because it needs calls to get user rating
+#useful_queries return result[0] in get_user_rating out of range???
+'''
+reporttree = ET.parse('../../data/reports.xml')
+reportroot = reporttree.getroot()
+for report in reportroot.iter(tag = "report"):
+	reporter = report.find("reporter_netid").text
+	reported = report.find("reported_netid").text
+	reason = report.find("reason").text
+	useful_operations.report_user(conn, reporter, reported, reason)
+'''
+
+#contacts
+
+contacttree = ET.parse('../../data/contact.xml')
+contactroot = contacttree.getroot()
+for contact in contactroot.iter(tag = "contact"):
+	netid = contact.find("netid").text
+	email = contact.find("email").text
+	phone = contact.find("phone").text
+	useful_operations.new_contact(conn, netid, phone, email)
+
+
+#friends
+
+#requests first
+requeststree = ET.parse('../../data/requests.xml')
+requestsroot = requeststree.getroot()
+for request in requestsroot.iter(tag = "request"):
+	sender = request.find("sender").text
+	recipient = request.find("recipient").text
+	useful_operations.friend_request(conn, sender, recipient)
+
+friendtree = ET.parse('../../data/friends.xml')
+friendroot = friendtree.getroot()
+ctr = 0
+for friend in friendroot.iter(tag = "friend"):
+	user1 = friend.find("user1").text
+	user2 = friend.find("user2").text
+	useful_operations.friend_request(conn, user1, user2)
+	if (ctr%2 == 0):
+		useful_operations.request_accepted(conn, user1, user2)
+	else:
+		user_operations.request_rejected(conn, user1, user2)
+
+print("done")
+
 conn = sqlite3.connect('fakedata.db')
 conn.execute("PRAGMA foreign_keys = 1")
 try:
