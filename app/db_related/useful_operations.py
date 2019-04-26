@@ -115,11 +115,11 @@ def new_review(conn, reviewer_netid, reviewed_netid, text, overall_rating, clean
 			conscientiousness, self_report_accuracy, 0)
 	else:
 		current_rating = useful_queries.get_user_rating(conn, reviewed_netid)
-		new_overall = (current_rating[1] * number_of_reviews + overall_rating) / (number_of_reviews + 1)
-		new_cleanliness = (current_rating[2] * number_of_reviews + cleanliness) / (number_of_reviews + 1)
-		new_friendliness = (current_rating[3] * number_of_reviews + friendliness) / (number_of_reviews + 1)
-		new_cons = (current_rating[4] * number_of_reviews + conscientiousness) / (number_of_reviews + 1)
-		new_self_report = (current_rating[5] * number_of_reviews + self_report_accuracy) / (number_of_reviews + 1)
+		new_overall = (current_rating[1] * number_of_reviews + float(overall_rating)) / (number_of_reviews + 1)
+		new_cleanliness = (current_rating[2] * number_of_reviews + float(cleanliness)) / (number_of_reviews + 1)
+		new_friendliness = (current_rating[3] * number_of_reviews + float(friendliness)) / (number_of_reviews + 1)
+		new_cons = (current_rating[4] * number_of_reviews + float(conscientiousness)) / (number_of_reviews + 1)
+		new_self_report = (current_rating[5] * number_of_reviews + float(self_report_accuracy)) / (number_of_reviews + 1)
 		update_rating(conn, reviewed_netid, new_overall, new_cleanliness, new_friendliness,
 			new_cons, new_self_report, current_rating[6])
 

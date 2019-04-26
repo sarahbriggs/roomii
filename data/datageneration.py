@@ -39,6 +39,8 @@ names.close()
 ratings_root = ET.Element("ratings")
 
 users_root = ET.Element("users")
+
+contact_root = ET.Element("contact")
 #netids will include initials plus number so we can create list of tuples where we record current number
 netids = []
 for i in range(0, len(nameslist)):
@@ -83,6 +85,8 @@ for i in range(0, len(nameslist)):
 	status_element = ET.Element("status")
 	#status_element.text =  automatically set to ttrue
 	user.insert(5, status_element)
+
+
 
 
 
@@ -318,7 +322,7 @@ for i in range(0, len(answers)):
 	answer = answers[i]
 	number = answer.split()[0]
 	numbers = number.split(".")
-	q_id = str(int(numbers[0]) - 1)
+	q_id = numbers[0]
 	a_id = numbers[1]
 	questions_list_tuples.append([q_id, a_id])
 

@@ -48,7 +48,7 @@ for answer in answersroot.iter(tag = "answer"):
 	aid = answer.find("answer_id").text
 	weight = answer.find("weight").text
 	useful_operations.answer_question(conn, netid, qid, aid, weight)
-
+#dont do this, ratings updated through new added reviews
 '''
 ratingstree = ET.parse('../../data/ratings.xml')
 ratingsroot = ratingstree.getroot()2
@@ -94,6 +94,8 @@ for report in reportroot.iter(tag = "report"):
 	reason = report.find("reason").text
 	useful_operations.report_user(conn, reporter, reported, reason)
 '''
+
+#works with some of the stuff in useful operations commented out
 reviewtree = ET.parse('../../data/reviews.xml')
 reviewroot = reviewtree.getroot()
 for review in reviewroot.iter(tag = "review"):
@@ -104,6 +106,6 @@ for review in reviewroot.iter(tag = "review"):
 	cleanliness = review.find("cleanliness").text
 	friendliness = review.find("friendliness").text
 	conscientiousness = review.find("conscientiousness").text
-	useful_operations.new_review(conn, reviewer, reviewed, text, overall, cleanliness, friendliness, conscientiousness, 0) #0 is placeholder for self report accuray-prob shoudln't be tehre
+	useful_operations.new_review(conn, reviewer, reviewed, text, overall, cleanliness, friendliness, conscientiousness, "0") #0 is placeholder for self report accuray-prob shoudln't be tehre
 
 print("done")
