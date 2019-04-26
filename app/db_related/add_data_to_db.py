@@ -137,7 +137,7 @@ for request in requestsroot.iter(tag = "request"):
 
 friendtree = ET.parse('../../data/friends.xml')
 friendroot = friendtree.getroot()
-int ctr = 0
+ctr = 0
 for friend in friendroot.iter(tag = "friend"):
 	user1 = friend.find("user1")
 	user2 = friend.find("user2")
