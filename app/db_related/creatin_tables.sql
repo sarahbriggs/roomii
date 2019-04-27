@@ -5,6 +5,12 @@ CREATE TABLE users(
 	profpic text,
 	description text, 
 	status boolean);
+CREATE TABLE roommate(
+	netid1 text,
+	netid2 text,
+	PRIMARY KEY (netid1, netid2)
+	FOREIGN KEY (netid1) REFERENCES user(netid),
+	FOREIGN KEY (netid2) REFERENCES user(netid));
 CREATE TABLE password(
 	netid text PRIMARY KEY,
 	pass text,

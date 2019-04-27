@@ -137,6 +137,8 @@ def regform():
 		phone = request.form['phone']
 		email = request.form['email']
 		profile = request.form['profile photo']
+		if profpic == "":
+			profpic = "http://friendoprod.blob.core.windows.net/missionpics/images/4846/member/f9d9c34c-d5c8-495a-bd84-45b693edf7a2.jpg" # pikachu photo
 		if phone == "":
 			phone = None
 		if email == "":
@@ -196,6 +198,17 @@ def questions():
 	question = uq.get_question_text(conn,0)[0][0]
 	answer = uq.get_all_answer_text(conn,0)
 	return render_template("questions.html", question = question, answers = answer)
+
+@app.route('/searchUser', methods = ['GET', 'POST'])
+def searchUser():
+	conn = sqlite3.connect("db_related/fakedata.db")
+	searchedNetid = request.form['netid']
+	user = uq.get_user_info_friends(conn, searchedNetid)
+	print(searchedNetid)
+	if (user != False):
+		sourceNetid = currentNetid
+		areFriends = uq.are_friends(conn, searchedNetid, sourceNetid) or uq.are_friends(conn, sourceNetid, searchedNetid)
+		return render_template("searchUser.html", areFriends = areFriends, searchedNetid = searchedNetid)
 
 def check_if_answered_questions(netid):
 	conn = sqlite3.connect("db_related/fakedata.db")
