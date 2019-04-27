@@ -120,6 +120,8 @@ def get_user_rating(conn, netid): # return (netid, overall_rating, clealiness, f
 	tup = (netid, )
 	query = "SELECT * FROM ratings WHERE netid = ?"
 	result = execute_query(conn, query, tup)
+	if (len(result) < 1):
+		return False
 	return result[0]
 
 def get_user_password(conn, netid):

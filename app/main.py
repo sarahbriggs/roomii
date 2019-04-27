@@ -59,6 +59,21 @@ def homepage():
 	description = info[4]
 	phone = info[6]
 	email = info[7]
+	rating = uq.get_user_rating(conn, netid)
+	overall = None
+	clean = None
+	friendly = None
+	consc = None
+	self_accuracy = None
+	num_reports = 0
+	if (rating != False):
+		overall = rating[1]
+		clean = rating[2]
+		friendly = rating[3]
+		consc = rating[4]
+		self_accuracy = rating[5]
+		num_reports = rating[6]
+
 	if (request.method == 'GET'):
 		conn.close()
 	else:
@@ -76,7 +91,13 @@ def homepage():
 		profpic = profpic,
 		description = description,
 		phone = phone,
-		email = email
+		email = email,
+		overall = overall,
+		clean = clean,
+		friendly = friendly,
+		consc = consc,
+		self_accuracy = self_accuracy,
+		num_reports = num_reports
 	)
 
 @app.route('/matches', methods = ['GET', 'POST'])
@@ -191,6 +212,7 @@ def displaySurvey():
 	for i in range(numQuestions):
 		question.append(uq.get_question_text(conn,i))
 		answers.append(uq.get_all_answer_text(conn,i))
+	conn.close()
 	return render_template("displayQuestion.html", answers = answers, question = question)
 
 @app.route('/questions')
@@ -198,45 +220,97 @@ def questions():
 	conn = sqlite3.connect("db_related/fakedata.db")
 	question = uq.get_question_text(conn,0)[0][0]
 	answer = uq.get_all_answer_text(conn,0)
+	conn.close()
 	return render_template("questions.html", question = question, answers = answer)
 
 @app.route('/searchUser', methods = ['GET', 'POST'])
 def searchUser():
 	conn = sqlite3.connect("db_related/fakedata.db")
 	searchedNetid = request.form['netid']
-	userInfo = uq.get_user_info_friends(conn, searchedNetid)
-	given_name = info[1]
-	family_name = info[2]
-	profpic = info[3]
-	if profpic == "":
-		profpic = "http://friendoprod.blob.core.windows.net/missionpics/images/4846/member/f9d9c34c-d5c8-495a-bd84-45b693edf7a2.jpg" # pikachu photo
-	description = info[4]
-	phone = info[6]
-	email = info[7]
-	print(searchedNetid)
-	if (user != False):
+	info = uq.get_user_info_friends(conn, searchedNetid)
+	rating = uq.get_user_rating(conn, searchedNetid)
+	overall = None
+	clean = None
+	friendly = None
+	consc = None
+	self_accuracy = None
+	num_reports = 0
+	if (rating != False):
+		overall = rating[1]
+		clean = rating[2]
+		friendly = rating[3]
+		consc = rating[4]
+		self_accuracy = rating[5]
+		num_reports = rating[6]
+	if (info != False):
+		given_name = info[1]
+		family_name = info[2]
+		profpic = info[3]
+		if profpic == "":
+			profpic = "http://friendoprod.blob.core.windows.net/missionpics/images/4846/member/f9d9c34c-d5c8-495a-bd84-45b693edf7a2.jpg" # pikachu photo
+		description = info[4]
+		phone = info[6]
+		email = info[7]
 		sourceNetid = currentNetid
-		areFriends = uq.are_friends(conn, searchedNetid, sourceNetid) or uq.are_friends(conn, sourceNetid, searchedNetid)
+		areFriends = uq.are_friends(conn, searchedNetid, sourceNetid) or uq.are_friends(conn, sourceNetid, searchedNetid) or (searchedNetid == sourceNetid)
+		conn.close()
 		if areFriends:
 			return render_template("searchUser.html", 
-				areFriends = areFriends, 
 				searchedNetid = searchedNetid,
 				given_name = given_name,
 				family_name = family_name,
 				profpic = profpic,
 				description = description,
 				phone = phone,
-				email = email)
+				email = email,
+				overall = overall,
+				clean = clean,
+				friendly = friendly,
+				consc = consc,
+				self_accuracy = self_accuracy,
+				num_reports = num_reports)
 		else:
 			return render_template("searchUser.html", 
-				areFriends = areFriends, 
 				searchedNetid = searchedNetid,
 				given_name = given_name,
 				family_name = family_name,
 				profpic = profpic,
 				description = description,
 				phone = None,
-				email = None)
+				email = None,
+				overall = overall,
+				clean = clean,
+				friendly = friendly,
+				consc = consc,
+				self_accuracy = self_accuracy,
+				num_reports = num_reports)
+	else:
+		return render_template("searchUser.html", 
+			areFriends = None, 
+			searchedNetid = None,
+			given_name = None,
+			family_name = None,
+			profpic = None,
+			description = None,
+			phone = None,
+			email = None,
+			overall = overall,
+			clean = clean,
+			friendly = friendly,
+			consc = consc,
+			self_accuracy = self_accuracy,
+			num_reports = num_reports)
+
+def displayUser(areFriends, searchedNetid, given_name, family_name, profpic, description, phone, email):
+	return render_template("searchUser.html",
+		areFriends = areFriends,
+		searchedNetid = searchedNetid,
+		given_name = given_name,
+		family_name = family_name,
+		profpic = profpic,
+		description = description,
+		phone = phone,
+		email = email)
 
 def check_if_answered_questions(netid):
 	conn = sqlite3.connect("db_related/fakedata.db")

@@ -7,7 +7,7 @@
 
 <nav class="yellow darken-1" role="navigation">
 	<div class = "nav-wrapper yellow darken-1">
-		<a href = "#" class = "brand-logo left">Roomii</a>   
+		<a href = "/homepage" class = "brand-logo left">Roomii</a>   
 		<ul class="hide-on-med-and-down right">               
             <li>    
                 <div class="center row">
@@ -28,12 +28,18 @@
 <div class="container blue lighten-4" style="height: 100%;">
 	<div class="section">
 		<div class="row">	
-			<div class="col s12 m6">		
-				<div id="profile" class="section">
-					<h4>Profile</h4>
-					<img class="profile-image" src="{{profpic}}" height="200" width="200" alt="picture" />
+				<div class="col s12 m6">		
+					<div id="profile" class="section">
+						<h4>Profile</h4>
+						<img class="profile-image" src="{{profpic}}" height="200" width="200" alt="picture" />
+					</div>
+				    <div class="card blue-grey darken-1">
+				        <div class="card-content white-text">
+				        	<span class="card-title">Self Description</span>
+				        	<p>{{description}}</p>
+				        </div>
+				    </div>
 				</div>
-			</div>
 			<div class="col s12 m6">
 					<div id="profile-details" class="section">
 						<h4>
@@ -48,22 +54,44 @@
 								<th>Phone</th>
 								<td>{{phone}}</td>
 							</tr>
+							<tr>
+								<th>Overall Ratign</th>
+								<td>{{overall}}</td>
+							</tr>
+							<tr>
+								<th>Cleanliness</th>
+								<td>{{clean}}</td>
+							</tr>
+							<tr>
+								<th>Friendliness</th>
+								<td>{{friendly}}</td>
+							</tr>
+							<tr>
+								<th>Conscientiousness</th>
+								<td>{{consc}}</td>
+							</tr>
+							<tr>
+								<th>Self report accuracy</th>
+								<td>{{self_accuracy}}</td>
+							</tr>
+							<tr>
+								<th>Reports received</th>
+								<td>{{num_reports}}</td>
+							</tr>
 						</table>
 					</div>
 			</div>
 		</div>
 	</div>
-	<div class = "section">
-		<div class="row">
-			<div class="col s12 m6">
-			    <div class="card blue-grey darken-1">
-			        <div class="card-content white-text">
-			        	<span class="card-title">Self Description</span>
-			        	<p>{{description}}</p>
-			        </div>
-			    </div>
-			</div>
-		</div>
+	<div class="center">
+	<form class="col s12" id="reg-form" action="/regform" method="POST">
+	    <div class="row">
+	      	<div class="input-field col s12">
+	        	<button id="submitReg" class="btn btn-large btn-register waves-effect waves-light" type="submit" value="Submit">
+	        	Match!</button>
+	      	</div>
+	    </div>
+	</form>
 	</div>
 </div>
 {% endblock %}
