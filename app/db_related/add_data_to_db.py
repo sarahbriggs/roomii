@@ -1,6 +1,9 @@
 import sqlite3
 import xml.etree.ElementTree as ET
 import useful_operations
+import useful_queries as uq 
+import cheapSecurity as sec
+
 
 conn = sqlite3.connect('fakedata.db')
 
@@ -48,6 +51,8 @@ for answer in answersroot.iter(tag = "answer"):
 	aid = answer.find("answer_id").text
 	weight = answer.find("weight").text
 	useful_operations.answer_question(conn, netid, qid, aid, weight)
+
+
 #dont do this, ratings updated through new added reviews
 '''
 ratingstree = ET.parse('../../data/ratings.xml')
@@ -84,8 +89,16 @@ for recommend in recommendroot.iter(tag = "recommend"):
 	useful_operations.recommend_user(conn, recommender, recommendee, recommended, reason)
 
 
-
-
+#inserting should be working, but not sure about the useful queries reference in useful_operations
+'''
+reporttree = ET.parse('../../data/reports.xml')
+reportroot = reporttree.getroot()
+for report in reportroot.iter(tag = "report"):
+	reporter = report.find("reporter_netid").text
+	reported = report.find("reported_netid").text
+	reason = report.find("reason").text
+	useful_operations.report_user(conn, reporter, reported, reason)
+'''
 
 #works with some of the stuff in useful operations commented out
 reviewtree = ET.parse('../../data/reviews.xml')
@@ -100,6 +113,10 @@ for review in reviewroot.iter(tag = "review"):
 	conscientiousness = review.find("conscientiousness").text
 	useful_operations.new_review(conn, reviewer, reviewed, text, overall, cleanliness, friendliness, conscientiousness, "0") #0 is placeholder for self report accuray-prob shoudln't be tehre
 
+# <<<<<<< HEAD
+# import useful_queries
+
+# =======
 
 #inserting should be working, but not sure about the useful queries reference in useful_operations
 #report after review because it needs calls to get user rating
@@ -115,14 +132,14 @@ for report in reportroot.iter(tag = "report"):
 '''
 
 #contacts
-'''
+
 contacttree = ET.parse('../../data/contact.xml')
 contactroot = contacttree.getroot()
 for contact in contactroot.iter(tag = "contact"):
-	netid = contact.find("netid")
-	email = contact.find("email")
-	phone = contact.find("phone")
-	useful_operations.net_contact(conn, netid, phone, email)
+	netid = contact.find("netid").text
+	email = contact.find("email").text
+	phone = contact.find("phone").text
+	useful_operations.new_contact(conn, netid, phone, email)
 
 
 #friends
@@ -131,21 +148,50 @@ for contact in contactroot.iter(tag = "contact"):
 requeststree = ET.parse('../../data/requests.xml')
 requestsroot = requeststree.getroot()
 for request in requestsroot.iter(tag = "request"):
-	sender = request.find("sender")
-	recipient = request.find("recipient")
+	sender = request.find("sender").text
+	recipient = request.find("recipient").text
 	useful_operations.friend_request(conn, sender, recipient)
 
 friendtree = ET.parse('../../data/friends.xml')
 friendroot = friendtree.getroot()
 ctr = 0
 for friend in friendroot.iter(tag = "friend"):
-	user1 = friend.find("user1")
-	user2 = friend.find("user2")
+	user1 = friend.find("user1").text
+	user2 = friend.find("user2").text
 	useful_operations.friend_request(conn, user1, user2)
 	if (ctr%2 == 0):
 		useful_operations.request_accepted(conn, user1, user2)
 	else:
 		user_operations.request_rejected(conn, user1, user2)
-'''
+
 print("done")
 
+conn = sqlite3.connect('fakedata.db')
+conn.execute("PRAGMA foreign_keys = 1")
+try:
+	new_user(conn, "rjf19", "Ryan", "Ferner", "lolidk.png", "i'm just tryna find a roomie lol", True)
+	# new_user(conn, "seb103", "Sarah", profpic = "same.png")
+	# report_user(conn,"rjf19","seb103","my code is sinful and i deserve to be reported")
+	new_user(conn, "zz105", "Zhiyuan", None, "haha", "haha", True)
+	new_user(conn, "dummy", "Im", "Dummy", "dum", "dum", True)
+	new_question(conn, 0, 0, "from time to time, when it's really cold outside, do you or do you not want to breathe really heavily and pretend that you're a train?")
+	new_answer_text(conn, 0, 0, "absolutely")
+	new_answer_text(conn, 0, 1, "lolno why")
+	answer_question(conn, "rjf19", 0, 1, 5)
+	answer_question(conn, "zz105", 0, 1, 5)
+	answer_question(conn, "dummy", 0, 2, 5)
+	new_review(conn, "zz105", "rjf19", "good!", 5, 5, 5, 5, 5)
+	new_review(conn, "rjf19", "zz105", "good!", 5, 5, 5, 5, 5)
+	new_review(conn, "dummy", "zz105", "bad", 0, 0, 0, 0, 0)
+except:
+	pass
+print(all_matchups(conn, "rjf19"))
+
+conn = sqlite3.connect('./fakedata.db')
+try:
+	sec.register(conn,"rjf19", "password")
+except:
+	pass
+print(sec.validate(conn,"rjf19","password"))
+
+print("done")

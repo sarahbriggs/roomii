@@ -94,6 +94,8 @@ def get_answer(conn, netid): # return (qid, answer_id, weight)
 		return False
 	return result
 
+
+
 """
 -------------------------------
 User Information
