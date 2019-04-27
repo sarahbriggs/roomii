@@ -69,7 +69,8 @@ def homepage():
 			answerID = request.form[strI]
 			value = int(request.form[rangeID])
 			uo.answer_question(conn, netid, i, answerID, value)
-	return render_template("homepage.html", netid = netid,
+	return render_template("homepage.html", 
+		netid = netid,
 		given_name = given_name,
 		family_name = family_name,
 		profpic = profpic,
@@ -136,7 +137,7 @@ def regform():
 		password = request.form['password']
 		phone = request.form['phone']
 		email = request.form['email']
-		profile = request.form['profile photo']
+		profpic = request.form['profile photo']
 		if profpic == "":
 			profpic = "http://friendoprod.blob.core.windows.net/missionpics/images/4846/member/f9d9c34c-d5c8-495a-bd84-45b693edf7a2.jpg" # pikachu photo
 		if phone == "":
@@ -203,12 +204,39 @@ def questions():
 def searchUser():
 	conn = sqlite3.connect("db_related/fakedata.db")
 	searchedNetid = request.form['netid']
-	user = uq.get_user_info_friends(conn, searchedNetid)
+	userInfo = uq.get_user_info_friends(conn, searchedNetid)
+	given_name = info[1]
+	family_name = info[2]
+	profpic = info[3]
+	if profpic == "":
+		profpic = "http://friendoprod.blob.core.windows.net/missionpics/images/4846/member/f9d9c34c-d5c8-495a-bd84-45b693edf7a2.jpg" # pikachu photo
+	description = info[4]
+	phone = info[6]
+	email = info[7]
 	print(searchedNetid)
 	if (user != False):
 		sourceNetid = currentNetid
 		areFriends = uq.are_friends(conn, searchedNetid, sourceNetid) or uq.are_friends(conn, sourceNetid, searchedNetid)
-		return render_template("searchUser.html", areFriends = areFriends, searchedNetid = searchedNetid)
+		if areFriends:
+			return render_template("searchUser.html", 
+				areFriends = areFriends, 
+				searchedNetid = searchedNetid,
+				given_name = given_name,
+				family_name = family_name,
+				profpic = profpic,
+				description = description,
+				phone = phone,
+				email = email)
+		else:
+			return render_template("searchUser.html", 
+				areFriends = areFriends, 
+				searchedNetid = searchedNetid,
+				given_name = given_name,
+				family_name = family_name,
+				profpic = profpic,
+				description = description,
+				phone = None,
+				email = None)
 
 def check_if_answered_questions(netid):
 	conn = sqlite3.connect("db_related/fakedata.db")
