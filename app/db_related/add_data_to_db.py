@@ -133,36 +133,36 @@ for report in reportroot.iter(tag = "report"):
 
 #contacts
 
-contacttree = ET.parse('../../data/contact.xml')
-contactroot = contacttree.getroot()
-for contact in contactroot.iter(tag = "contact"):
-	netid = contact.find("netid").text
-	email = contact.find("email").text
-	phone = contact.find("phone").text
-	useful_operations.new_contact(conn, netid, phone, email)
+# contacttree = ET.parse('../../data/contact.xml')
+# contactroot = contacttree.getroot()
+# for contact in contactroot.iter(tag = "contact"):
+# 	netid = contact.find("netid").text
+# 	email = contact.find("email").text
+# 	phone = contact.find("phone").text
+# 	useful_operations.new_contact(conn, netid, phone, email)
 
 
-#friends
+# #friends
 
-#requests first
-requeststree = ET.parse('../../data/requests.xml')
-requestsroot = requeststree.getroot()
-for request in requestsroot.iter(tag = "request"):
-	sender = request.find("sender").text
-	recipient = request.find("recipient").text
-	useful_operations.friend_request(conn, sender, recipient)
+# #requests first
+# requeststree = ET.parse('../../data/requests.xml')
+# requestsroot = requeststree.getroot()
+# for request in requestsroot.iter(tag = "request"):
+# 	sender = request.find("sender").text
+# 	recipient = request.find("recipient").text
+# 	useful_operations.friend_request(conn, sender, recipient)
 
-friendtree = ET.parse('../../data/friends.xml')
-friendroot = friendtree.getroot()
-ctr = 0
-for friend in friendroot.iter(tag = "friend"):
-	user1 = friend.find("user1").text
-	user2 = friend.find("user2").text
-	useful_operations.friend_request(conn, user1, user2)
-	if (ctr%2 == 0):
-		useful_operations.request_accepted(conn, user1, user2)
-	else:
-		user_operations.request_rejected(conn, user1, user2)
+# friendtree = ET.parse('../../data/friends.xml')
+# friendroot = friendtree.getroot()
+# ctr = 0
+# for friend in friendroot.iter(tag = "friend"):
+# 	user1 = friend.find("user1").text
+# 	user2 = friend.find("user2").text
+# 	useful_operations.friend_request(conn, user1, user2)
+# 	if (ctr%2 == 0):
+# 		useful_operations.request_accepted(conn, user1, user2)
+# 	else:
+		# user_operations.request_rejected(conn, user1, user2)
 
 print("done")
 
@@ -185,7 +185,7 @@ try:
 	new_review(conn, "dummy", "zz105", "bad", 0, 0, 0, 0, 0)
 except:
 	pass
-print(all_matchups(conn, "rjf19"))
+# print(all_matchups(conn, "rjf19"))
 
 conn = sqlite3.connect('./fakedata.db')
 try:

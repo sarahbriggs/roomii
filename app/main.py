@@ -138,6 +138,7 @@ def regform():
 		phone = request.form['phone']
 		email = request.form['email']
 		profpic = request.form['profile photo']
+		description = request.form['Self Description']
 		if profpic == "":
 			profpic = "http://friendoprod.blob.core.windows.net/missionpics/images/4846/member/f9d9c34c-d5c8-495a-bd84-45b693edf7a2.jpg" # pikachu photo
 		if phone == "":
@@ -145,9 +146,8 @@ def regform():
 		if email == "":
 			email = None
 		conn = sqlite3.connect("db_related/fakedata.db")
-		cur = conn.cursor()
 		try:
-			uo.new_user(conn, netid, first_name, last_name, profile)
+			uo.new_user(conn, netid, first_name, last_name, profpic, description)
 			sec.register(conn,netid,password)
 			uo.new_contact(conn, netid, phone, email)
 			global currentNetid
