@@ -137,16 +137,6 @@ def register():
 	if (request.method == 'GET'):
 		return redirect(url_for('regform'))
 
-	#return render_template("register.html");
-	'''
-	#form is requested
-	if(request.method == 'GET'):
-		return render_template("register.html")
-	#form is submitted
-	if(request.method == 'POST'):
-		return redirect(url_for('survey'))
-		#return render_template("survey.html")
-	'''
 @app.route('/regform', methods=['GET', 'POST'])
 def regform():
 	if (request.method == 'GET'):
@@ -185,23 +175,6 @@ def regform():
 def survey():
 	if(request.method == 'GET'):
 		return redirect(url_for('displaySurvey'))
-	# if (request.method == 'POST'):
-	# 	try:
-	# 		first_name = request.form['first_name']
-	# 		last_name = request.form['last_name']
-	# 		netid = request.form['netid']
-	# 		password = request.form['password']
-	# 		conn = sqlite3.connect("db_related/fakedata.db")
-	# 		cur = conn.cursor()
-	# 		uo.new_user(conn, netid, first_name, last_name)
-	# 		sec.register(conn, netid, password)
-	# 		print("Record successfully added")
-	# 	except:
-	# 		conn.rollback()
-	# 		print("error in insert operation")
-	# 	finally:
-	# 		return redirect(url_for('displaySurvey'))
-	# 		conn.close()
 
 @app.route('/displaySurvey')
 def displaySurvey():
@@ -227,6 +200,8 @@ def questions():
 def searchUser():
 	conn = sqlite3.connect("db_related/fakedata.db")
 	searchedNetid = request.form['netid']
+	if (searchedNetid == currentNetid):
+		return redirect(url_for("homepage"))
 	info = uq.get_user_info_friends(conn, searchedNetid)
 	rating = uq.get_user_rating(conn, searchedNetid)
 	overall = None
@@ -252,7 +227,7 @@ def searchUser():
 		phone = info[6]
 		email = info[7]
 		sourceNetid = currentNetid
-		areFriends = uq.are_friends(conn, searchedNetid, sourceNetid) or uq.are_friends(conn, sourceNetid, searchedNetid) or (searchedNetid == sourceNetid)
+		areFriends = uq.are_friends(conn, searchedNetid, sourceNetid) or uq.are_friends(conn, sourceNetid, searchedNetid)
 		conn.close()
 		if areFriends:
 			return render_template("searchUser.html", 
@@ -285,32 +260,7 @@ def searchUser():
 				self_accuracy = self_accuracy,
 				num_reports = num_reports)
 	else:
-		return render_template("searchUser.html", 
-			areFriends = None, 
-			searchedNetid = None,
-			given_name = None,
-			family_name = None,
-			profpic = None,
-			description = None,
-			phone = None,
-			email = None,
-			overall = overall,
-			clean = clean,
-			friendly = friendly,
-			consc = consc,
-			self_accuracy = self_accuracy,
-			num_reports = num_reports)
-
-def displayUser(areFriends, searchedNetid, given_name, family_name, profpic, description, phone, email):
-	return render_template("searchUser.html",
-		areFriends = areFriends,
-		searchedNetid = searchedNetid,
-		given_name = given_name,
-		family_name = family_name,
-		profpic = profpic,
-		description = description,
-		phone = phone,
-		email = email)
+		return render_template("notExist.html")
 
 def check_if_answered_questions(netid):
 	conn = sqlite3.connect("db_related/fakedata.db")
