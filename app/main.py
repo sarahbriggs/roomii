@@ -14,7 +14,9 @@ Material(app)
 
 @app.route('/')
 def hello():
-    return render_template("index.html", display_error = 0) # 0 - not showing, 1 - showing
+	global currentNetid
+	currentNetid = ""
+	return render_template("index.html", display_error = 0) # 0 - not showing, 1 - showing
 
 @app.route('/login', methods = ['GET', 'POST'])
 def login():
@@ -27,11 +29,10 @@ def login():
 		netid = request.form['netid']
 		global currentNetid
 		currentNetid = netid
-		global loggedIn
 		# print(currentNetid)
 		password = request.form['password']
-		
-		if (sec.validate(conn,netid,password)):
+		global loggedIn
+		if (sec.validate(conn,netid,password)):		
 			loggedIn = True
 			conn.close()
 			if (check_if_answered_questions(netid)):
@@ -210,6 +211,7 @@ def regform():
 			uo.new_contact(conn, netid, phone, email)
 			global currentNetid
 			currentNetid = netid
+			global loggedIn
 			loggedIn = True
 			print(netid)
 			return redirect(url_for('displaySurvey'))
