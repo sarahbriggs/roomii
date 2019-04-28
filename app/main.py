@@ -163,6 +163,7 @@ def regform():
 			uo.new_contact(conn, netid, phone, email)
 			global currentNetid
 			currentNetid = netid
+			loggedIn = True
 			print(netid)
 			return redirect(url_for('displaySurvey'))
 		except:
