@@ -49,7 +49,7 @@ def login():
 				
 @app.route('/homepage', methods = ['GET', 'POST'])
 def homepage():
-	if not loggedIn and request.method=='GET': 
+	if not loggedIn: 
 		return render_template("index.html", display_error = 2)
 	netid = currentNetid
 	conn = sqlite3.connect("db_related/fakedata.db")
@@ -210,7 +210,6 @@ def regform():
 			uo.new_contact(conn, netid, phone, email)
 			global currentNetid
 			currentNetid = netid
-			global loggedIn
 			loggedIn = True
 			print(netid)
 			return redirect(url_for('displaySurvey'))
