@@ -90,7 +90,7 @@ for i in range(0, len(nameslist)):
 
 	prof_pic_element = ET.Element("prof_pic")
 	if(ctr <1100):
-		prof_pic_element.text = "https://picsum.photos/" + str(i) + "/200/300"
+		prof_pic_element.text = "https://picsum.photos/id/" + str(i) + "/200/300"
 		ctr +=1
 	else:
 		prof_pic_element.text = "placeholder"
