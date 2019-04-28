@@ -106,6 +106,8 @@ def get_user_info_friends(conn, netid): # return (netid, given_name, family_name
 	tup = (netid, )
 	query = "SELECT users.netid, given_name, family_name, profpic, description, status, phone, email FROM users LEFT OUTER JOIN contact ON users.netid = contact.netid WHERE users.netid = ?"
 	result = execute_query(conn, query, tup)
+	if (len(result) < 1):
+		return False
 	return result[0]
 
 def get_user_info_general(conn, netid): # return (netid, given_name, family_name, profpic, description, status)
@@ -118,6 +120,8 @@ def get_user_rating(conn, netid): # return (netid, overall_rating, clealiness, f
 	tup = (netid, )
 	query = "SELECT * FROM ratings WHERE netid = ?"
 	result = execute_query(conn, query, tup)
+	if (len(result) < 1):
+		return False
 	return result[0]
 
 def get_user_password(conn, netid):
@@ -128,6 +132,17 @@ def get_user_password(conn, netid):
 		return False # return false when user does not exist
 	else:
 		return result[0][0]
+
+def are_friends(conn, netid1, netid2):
+	tup = (netid1, netid2, )
+	query = "SELECT * FROM friends WHERE netid1 = ? AND netid2 = ?"
+	result = execute_query(conn, query, tup)
+	if len(result) < 1:
+		return False
+	val = result[0][2]
+	if val != 1:
+		return False
+	return True
 
 """
 -------------------------------

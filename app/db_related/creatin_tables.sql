@@ -5,6 +5,12 @@ CREATE TABLE users(
 	profpic text,
 	description text, 
 	status boolean);
+CREATE TABLE roommate(
+	netid1 text,
+	netid2 text,
+	PRIMARY KEY (netid1, netid2)
+	FOREIGN KEY (netid1) REFERENCES user(netid),
+	FOREIGN KEY (netid2) REFERENCES user(netid));
 CREATE TABLE password(
 	netid text PRIMARY KEY,
 	pass text,
@@ -56,6 +62,10 @@ CREATE TABLE report(
 	PRIMARY KEY (reporter_netid, reported_netid),
 	FOREIGN KEY (reporter_netid) REFERENCES users(netid),
 	FOREIGN KEY (reported_netid) REFERENCES users(netid));
+CREATE TABLE blocked(
+	blocker_netid text, 
+	blocked_netid text
+);
 CREATE TABLE recommend(
 	recommender_netid text, 
 	recommendee_netid text, 

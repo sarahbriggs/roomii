@@ -55,7 +55,7 @@
 								<td>{{phone}}</td>
 							</tr>
 							<tr>
-								<th>Overall Ratign</th>
+								<th>Overall Rating</th>
 								<td>{{overall}}</td>
 							</tr>
 							<tr>
@@ -83,15 +83,39 @@
 			</div>
 		</div>
 	</div>
-	<div class="center">
-	<form class="col s12" id="reg-form" action="/regform" method="POST">
-	    <div class="row">
-	      	<div class="input-field col s12">
-	        	<button id="submitReg" class="btn btn-large btn-register waves-effect waves-light" type="submit" value="Submit">
-	        	Match!</button>
-	      	</div>
+	<div class="row">
+		<div class="col s4">
+			<div class="center">
+			<form id="reg" action="" method="POST">
+			    <div class="row">
+			      	<div class="input-field col">
+		        	<button id="submitReg" class="btn btn-large btn-register waves-effect waves-light" type="submit" value="Submit">
+		        	Review</button>
+		        </div>
+		      	</div>
+		     </form>
+		 </div>
 	    </div>
-	</form>
+		<div class="col s4">
+			<form class="center" id="reg" action="" method="POST">
+			    <div class="row">
+			      	<div class="input-field col">
+		        	<button id="submitReg" class="btn btn-large btn-register waves-effect waves-light" type="submit" value="Submit">
+		        	Report</button>
+		      		</div>
+		      	</div>
+		     </form>
+	    </div>
+		<div class="col s4">
+			<form class="center" id="reg" action="" method="POST">
+			    <div class="row">
+			      	<div class="input-field col">
+		        	<button id="submitReg" class="btn btn-large btn-register waves-effect waves-light" type="submit" value="Submit">
+		        	Recommend</button>
+		        </div>
+		      	</div>
+		     </form>
+	    </div>
 	</div>
 </div>
 {% endblock %}
