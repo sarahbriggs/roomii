@@ -173,6 +173,7 @@ def regform():
 	if (request.method == 'GET'):
 		return render_template("register.html", display_error = 0)
 	else:
+		key1 = None
 		for key in request.files.keys():
 			key1 = key
 			break
@@ -185,8 +186,9 @@ def regform():
 		email = request.form['email']
 		# profpic = request.form['profile photo']
 		description = request.form['Self Description']
-
-		file = request.files[key1]
+		file = None
+		if key1:
+			file = request.files[key1]
 		profpic = ""
 		if file:
 			profpic = file.filename
@@ -194,7 +196,7 @@ def regform():
 			file.save(os.path.join(app.config['UPLOAD_FOLDER'], profpic))
 			profpic = "http://127.0.0.1:5000/uploads/"+profpic
 		else:
-			profpic = "http://friendoprod.blob.core.windows.net/missionpics/images/4846/member/f9d9c34c-d5c8-495a-bd84-45b693edf7a2.jpg" # pikachu photo
+			profpic = "http://127.0.0.1:5000/uploads/generic.jpg"
 		
 		if phone == "":
 			phone = None
