@@ -25,80 +25,24 @@
   </div>
 </nav>
 
-<!-- sign up-->
-<div id="error_message" class="container red lighten-4" style ="height: 100%; display: none;">
-  User already exists!
-</div>
-
 <div class="container" id="regForm"> 
-  <div class="row" id="sign_up">
-   <form class="col s12" id="reg-form" action="/regform" method="POST" enctype="multipart/form-data">
-    <div class="row">
-      <div class="input-field col s6">
-        <input id="first_name" name="first_name" type="text" class="validate" required>
-        <label for="first_name">First Name</label>
-      </div>
-      <div class="input-field col s6">
-        <input id="last_name" name="last_name" type="text" class="validate" required>
-        <label for="last_name">Last Name</label>
-      </div>
-    </div>
-    <div class="row">
-      <div class="input-field col s12">
-        <input id="netid" name="netid" type="text" class="validate" required>
-        <label for="netid">NetID</label>
-      </div>
-    </div>
-    <div class="row">
-      <div class="input-field col s12">
-        <input id="password" name="password" type="password" class="validate" minlength="6" required>
-        <label for="password">Password</label>
-      </div>
-    </div>
-    <div class="row">
-      <div class="input-field col s6">
-        <input id="phone" name="phone" type="tel" class="validate">
-        <label for="phone">Phone</label>
-      </div>
-      <div class="input-field col s6">
-        <input id="email" name="email" type="email" class="validate">
-        <label for="email">Email</label>
-      </div>
-      <div class="input-field col s12">
-        <input id="profile photo" name="profile photo" type="file" class="validate">
-        <label for="profile photo">Profile photo</label>
-    </div>
-    <div class="row">
+  <div class="row">
+    <form class="col s12">
+      <div class="row">
         <div class="input-field col s12">
-          <div class="input-field col s12">
-            <input name = "Self Description" id="Self Description" type="text"class="validate"></input>
-            <label for="Self Description">Self Description</label>
-          </div>
+          <textarea id="reason" class="materialize-textarea"></textarea>
+          <label for="reasonn">Reason</label>
         </div>
-    </div>
-    <div class="row">
-      <div class="input-field col s12">
-        <button id="submitReg" class="btn btn-large btn-register waves-effect waves-light" type="submit" value="Submit">
-        Register</button>
       </div>
-    </div>
-  </form>
+      <div class="row">
+        <div class="input-field col s12">
+          <button id="submit" class="btn btn-large btn-register waves-effect waves-light" type="submit" value="Submit">
+          Submit</button>
+        </div>
+      </div>
+    </form>
+  </div>
 </div>
-</div>
-
-<script type="text/javascript">
-  var show = {{display_error}}
-  // function regSubmit() {
-  //   $("html").load("/survey");
-  // }
-  window.onload = function() {
-    if (show == 1) {
-      document.getElementById("error_message").style.display = "";
-    } else {
-      document.getElementById("error_message").style.display = "hidden";
-    } // determine if the error message should be shown when page loads
-  }
-</script>
 
 {% endblock %}
 
