@@ -105,8 +105,8 @@ def matches():
 	if not loggedIn: 
 		return render_template("index.html", display_error = 2)
 	else:
+		conn = sqlite3.connect("db_related/fakedata.db")
 		if request.method == 'GET':
-			conn = sqlite3.connect("db_related/fakedata.db")
 			print(loggedIn)
 			print(currentNetid)
 			allMatches = uo.get_matchups(conn, currentNetid)
@@ -129,7 +129,16 @@ def matches():
 			return render_template("matches.html", matchups = matchups, checkFriends = checkFriends)
 		else:
 			# add friends
-			# visit profile
+			toAdd = request.form['addID']
+			check = toAdd.split(":")
+			if check[0]=="Add Friend":
+				print("Adding " + check[1])
+				added = uo.friend_request(conn, currentNetid, check[1])
+				return redirect(url_for('matches'))
+			elif check[1]=="Visit Profile":
+				# visit profile
+				print("Visiting " + check[1])
+				
 			return; 
 
 @app.route('/register', methods=['GET', 'POST'])

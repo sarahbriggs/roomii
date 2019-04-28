@@ -7,14 +7,24 @@
 {% block content %}
 <nav class="yellow darken-1" role="navigation">
 	<div class = "nav-wrapper yellow darken-1">
-		<a href = "#" class = "brand-logo left">Roomii</a>
-		<ul id = "nav-mobile" class = "right hide-on-med-and-down">
-			<li><a href = "#">Nav1</a></li>
-			<li><a href = "#">Nav2</a></li>
-			<li><a href = "#">Nav3</a></li>
-		</ul>
+		<a href = "/homepage" class = "brand-logo left">Roomii</a>   
+		<ul class="hide-on-med-and-down right">               
+            <li>    
+                <div class="center row">
+	    	      	<form class="col s12" id="reg-form" action="/searchUser" method="POST">
+                    	<div class="row" id="topbarsearch">
+                      		<div class="input-field col s6 s12 black-text">
+                        		<i class="white-text material-icons prefix">search</i>
+                        		<input type="text" placeholder="User NetID" id="netid" name="netid" class="black-text" >
+                      		</div>
+                     	</div>
+                    </form>
+                </div>         
+            </li>                     
+        </ul>
 	</div>
 </nav>
+
 
 <div class="container blue lighten-4" style="height: 100%;">
 	<div class="section">
@@ -46,17 +56,18 @@
 		var nameText = "Name: ";
 		var emailText = "Email: ";
 		var descriptionText = "Description: ";
+		var netid = matchups[i][0];
 		nameText += matchups[i][1];
 		nameText += " ";
 		nameText += matchups[i][2];
-		emailText += matchups[i][0];
+		emailText += netid;
 		emailText += "@duke.edu";
 		var nameNode = document.createTextNode(nameText);
 		var emailNode = document.createTextNode(emailText);
 		var descriptionNode = document.createTextNode(descriptionText);
-		var buttonText = '<button class="btn waves-effect waves-light" type="submit" name="action" onclick="requestFriend(sender, recipient)">Add Friend<form id="addFriend" name="addFriend" action="" method="post"></form></button>';
+		var buttonText = '<form method=\"POST\" action=\"/matches\"><input type=\"submit\" name=\"addID\" id=\"addID\" value=\"'+ "Add Friend:" + netid +'\"></form>';
 		if( checkFriends[i] ) {
-			buttonText = '<form action="" method="post"><button class="btn waves-effect waves-light" type="submit" name="action">Visit Profile</button></form>';
+			var buttonText = '<form method=\"POST\" action=\"/matches\"><input type=\"submit\" name=\"addID\" id=\"addID\" value=\"'+ "Visit Profile:" + netid +'\"></form>';
 		}
 		buttonCell.innerHTML = buttonText;
 		nameCell.append(nameNode);
@@ -64,14 +75,18 @@
 		descriptionCell.append(descriptionNode);
 	}
 
-	function requestFriend(sender, recipient) {
-		document.getElementById("addFriend").innerHTML = '';
+	function requestFriend(recipient) {
+		var reqForm = document.createElement("FORM");
+		reqForm.innerHTML ='<form action="/matches"><input type="text" name="netid" value="{{recipient}}"><input type="submit" value="Submit"></form>';
+		addFriend.appendChild(reqForm);
 	}
 	function visitPage(toVisit) {
 
 	}
 </script>
 {% endblock %}
+
+
 
 
 

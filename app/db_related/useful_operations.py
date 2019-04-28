@@ -138,13 +138,17 @@ def check_friends(conn, sender, recipient):
 	if len(val) == 0: 
 		return False
 	elif val[-1]==1:
-		return True;
-	return False;
+		return True
+	else:
+		return False
 
 def friend_request(conn, sender, recipient):
-	tup = (sender, recipient, 0)
-	query = "INSERT INTO friends VALUES (?,?,?);"
-	weiter(conn, query, tup)
+	alreadyFriends = check_friends(conn, sender, recipient)
+	if not alreadyFriends: 
+		tup = (sender, recipient, 0)
+		query = "INSERT INTO friends VALUES (?,?,?);"
+		weiter(conn, query, tup)
+		return True
 
 def request_accepted(conn, sender, recipient):
 	tup1 = (1, sender, recipient)
