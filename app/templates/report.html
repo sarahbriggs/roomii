@@ -7,7 +7,21 @@
 <!-- nav bar -->
 <nav class="yellow darken-1" role="navigation">
   <div class = "nav-wrapper yellow darken-1">
-    <a href = "#" class = "brand-logo left">Roomii</a>
+    <a href = "/homepage" class = "brand-logo left">Roomii</a>   
+    <ul class="hide-on-med-and-down right">               
+            <li>    
+                <div class="center row">
+                <form class="col s12" id="reg-form" action="/searchUser" method="POST">
+                      <div class="row" id="topbarsearch">
+                          <div class="input-field col s6 s12 black-text">
+                            <i class="white-text material-icons prefix">search</i>
+                            <input type="text" placeholder="User NetID" id="netid" name="netid" class="black-text" >
+                          </div>
+                      </div>
+                    </form>
+                </div>         
+            </li>                     
+        </ul>
   </div>
 </nav>
 
