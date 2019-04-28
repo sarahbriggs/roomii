@@ -88,7 +88,7 @@ for i in range(0, len(nameslist)):
 	user.insert(2, family_name_element)
 
 	prof_pic_element = ET.Element("prof_pic")
-	prof_pic_element.text = "placeholder"
+	prof_pic_element.text = "https://picsum.photos/" + str(i) + "/200/300"
 	user.insert(3, prof_pic_element)
 
 	description_element = ET.Element("description")
