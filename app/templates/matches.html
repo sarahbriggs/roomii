@@ -51,8 +51,8 @@
 		var nameCell = row.insertCell(1);
 		var emailCell = row.insertCell(2);
 		var descriptionCell = row.insertCell(3);
-		descriptionCell.innerHTML = '<td colspan="2"></td>';
 		var buttonCell = row.insertCell(4);
+		descriptionCell.innerHTML = '<td colspan="2"></td>';
 		var nameText = "Name: ";
 		var emailText = "Email: ";
 		var descriptionText = "Description: ";
@@ -65,11 +65,28 @@
 		var nameNode = document.createTextNode(nameText);
 		var emailNode = document.createTextNode(emailText);
 		var descriptionNode = document.createTextNode(descriptionText);
-		var buttonText = '<form method=\"POST\" action=\"/matches\"><input type=\"submit\" name=\"addID\" id=\"addID\" value=\"'+ "Add Friend:" + netid +'\"></form>';
 		if( checkFriends[i] ) {
-			var buttonText = '<form method=\"POST\" action=\"/matches\"><input type=\"submit\" name=\"addID\" id=\"addID\" value=\"'+ "Visit Profile:" + netid +'\"></form>';
+			var alreadyFriends = "Already friends!";
+			var friendsNode = document.createTextNode(alreadyFriends);
+			buttonCell.append(friendsNode);
+			var nextCell = row.insertCell(5);
+			var nextText = '<form method=\"POST\" action=\"/matches\"><input type=\"submit\" name=\"addID\" id=\"addID\" value=\"'+ "Visit Profile:" + netid +'\"></form>';
+			nextCell.innerHTML = nextText;
+
+			var blockCell = row.insertCell(6);
 		}
-		buttonCell.innerHTML = buttonText;
+		else {
+			var buttonText = '<form method=\"POST\" action=\"/matches\"><input type=\"submit\" name=\"addID\" id=\"addID\" value=\"'+ "Add Friend:" + netid +'\"></form>';
+			buttonCell.innerHTML = buttonText;
+
+			var visitCell = row.insertCell(5);
+			var visitText = '<form method=\"POST\" action=\"/matches\"><input type=\"submit\" name=\"addID\" id=\"addID\" value=\"'+ "Visit Profile:" + netid +'\"></form>';
+			visitCell.innerHTML = visitText;
+
+			var blockCell = row.insertCell(6);
+		}
+		var blocktext = '<form method=\"POST\" action=\"/matches\"><input type=\"submit\" name=\"addID\" id=\"addID\" value=\"'+ "Block:" + netid +'\"></form>';
+		blockCell.innerHTML = blocktext;
 		nameCell.append(nameNode);
 		emailCell.append(emailNode);
 		descriptionCell.append(descriptionNode);

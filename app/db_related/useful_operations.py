@@ -1,5 +1,5 @@
 import sqlite3
-# import useful_queries
+#import useful_queries
 
 def weiter(conn, query, tup):
 	cursor = conn.cursor()
@@ -91,6 +91,17 @@ def report_user(conn, reporter_netid, reported_netid, reason):
 	update_rating(conn, current_rating[0], current_rating[1], current_rating[2], current_rating[3],
 		current_rating[4], current_rating[5], current_rating[6] + 1)
 
+def block_user(conn, blocker_netid, blocked_netid):
+	tup = (blocker_netid, blocked_netid)
+	query = "INSERT INTO blocked VALUES (?, ?);"
+	weiter(conn, query, tup)
+	return True
+
+def unblock_user(conn, unblocker_netid, unblocked_netid):
+	tup = (unblocker_netid, unblocked_netid)
+	query = "DELETE FROM blocked WHERE blocker_netid = ? AND blocked_netid = ?);"
+	weiter(conn, query, tup)
+	return True
 
 def recommend_user(conn, recommender_netid, recommendee_netid, recommended__netid, reason):
 	tup = (recommender_netid, recommendee_netid, recommended__netid, reason)
@@ -207,11 +218,11 @@ def all_matchups(conn,netid):
 	return tk
 
 def get_matchups(conn, netid, num = 20):
+	allMatchups = all_matchups(conn, netid)
 	tup = (netid, num,)
 	cursor = conn.cursor()
 	query = "SELECT * FROM matchups WHERE netid1 = ? ORDER BY matchRating DESC, netid2 ASC LIMIT ?;"
-	cursor.execute(query, tup)
-	return cursor.fetchall()
+	return execute_query(conn, query, tup)
 
 '''
 -------------------------------

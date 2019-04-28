@@ -47,6 +47,8 @@ def login():
 				
 @app.route('/homepage', methods = ['GET', 'POST'])
 def homepage():
+	if not loggedIn: 
+		return render_template("index.html", display_error = 2)
 	netid = currentNetid
 	conn = sqlite3.connect("db_related/fakedata.db")
 	cur = conn.cursor()
@@ -107,8 +109,6 @@ def matches():
 	else:
 		conn = sqlite3.connect("db_related/fakedata.db")
 		if request.method == 'GET':
-			print(loggedIn)
-			print(currentNetid)
 			allMatches = uo.get_matchups(conn, currentNetid)
 			num = len(allMatches)
 			if (num > 20): 
@@ -123,19 +123,22 @@ def matches():
 				tup = info[0]
 				if friends:
 					info = uq.get_user_info_friends(conn, netid)
-					tup += (friends,)
 				matchups.append(tup)
+
 			conn.close()
+			#print(matchups)
 			return render_template("matches.html", matchups = matchups, checkFriends = checkFriends)
 		else:
 			toAdd = request.form['addID']
 			check = toAdd.split(":")
 			if check[0]=="Add Friend":
+				print("Adding friend: " + check[1])
 				added = uo.friend_request(conn, currentNetid, check[1])
-				accept = uo.request_accepted(conn, currentNetid, check[1])
-				test = uq.are_friends(conn, currentNetid, check[1]) or uo.are_friends(conn, check[1], currentNetid)
+				#accept = uo.request_accepted(conn, currentNetid, check[1])
+				test = uq.are_friends(conn, currentNetid, check[1]) or uq.are_friends(conn, check[1], currentNetid)
 				return redirect(url_for('matches'))
 			if check[0]=="Visit Profile":
+				print("Visiting profile:" + check[1])
 				info = uq.get_user_info_friends(conn, check[1])
 				rating = uq.get_user_rating(conn, check[1])
 				return render_template("searchUser.html", 
@@ -152,6 +155,11 @@ def matches():
 				consc = rating[4],
 				self_accuracy = rating[5],
 				num_reports = rating[6])
+			if check[0]=="Block":
+				print("Blocking: " + check[1])
+				blocked = uo.block_user(conn, currentNetid, check[1])
+				conn.close()
+				return redirect(url_for('matches'))
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -190,6 +198,7 @@ def regform():
 		except:
 			conn.rollback()
 			conn.close()
+			print("excepting here")
 			return render_template("register.html", display_error = 1)
 		conn.close()
 
@@ -200,6 +209,7 @@ def survey():
 
 @app.route('/displaySurvey')
 def displaySurvey():
+	loggedIn = True
 	conn = sqlite3.connect("db_related/fakedata.db")
 	numQuestions = uq.num_questions(conn)
 	question = []
@@ -220,8 +230,11 @@ def questions():
 
 @app.route('/searchUser', methods = ['GET', 'POST'])
 def searchUser():
+	if not loggedIn: 
+		return render_template("index.html", display_error = 2)
 	conn = sqlite3.connect("db_related/fakedata.db")
 	searchedNetid = request.form['netid']
+	searchedNetid = searchedNetid.upper()
 	if (searchedNetid == currentNetid):
 		return redirect(url_for("homepage"))
 	info = uq.get_user_info_friends(conn, searchedNetid)
