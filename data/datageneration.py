@@ -56,6 +56,7 @@ contact_root = ET.Element("contacts")
 #netids will include initials plus number so we can create list of tuples where we record current number
 netids = []
 phone_numbers = []
+ctr = 1
 for i in range(0, len(nameslist)):
 	#generate netid 
 	name = nameslist[i]
@@ -88,7 +89,11 @@ for i in range(0, len(nameslist)):
 	user.insert(2, family_name_element)
 
 	prof_pic_element = ET.Element("prof_pic")
-	prof_pic_element.text = "https://picsum.photos/" + str(i) + "/200/300"
+	if(ctr <1100):
+		prof_pic_element.text = "https://picsum.photos/" + str(i) + "/200/300"
+		ctr +=1
+	else:
+		prof_pic_element.text = "placeholder"
 	user.insert(3, prof_pic_element)
 
 	description_element = ET.Element("description")
