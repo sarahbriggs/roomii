@@ -1,13 +1,15 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, send_from_directory
 from flask_login import LoginManager
 from flask_materialize import Material  
 import db_related.useful_operations as uo
 import db_related.useful_queries as uq
 import db_related.cheapSecurity as sec
 import sqlite3
+import os
 
 app = Flask(__name__)
 login = LoginManager(app)
+app.config['UPLOAD_FOLDER'] = "./uploads"
 Material(app)
 
 @app.route('/')
@@ -47,6 +49,8 @@ def login():
 				
 @app.route('/homepage', methods = ['GET', 'POST'])
 def homepage():
+	if not loggedIn: 
+		return render_template("index.html", display_error = 2)
 	netid = currentNetid
 	conn = sqlite3.connect("db_related/fakedata.db")
 	cur = conn.cursor()
@@ -105,10 +109,8 @@ def matches():
 	if not loggedIn: 
 		return render_template("index.html", display_error = 2)
 	else:
+		conn = sqlite3.connect("db_related/fakedata.db")
 		if request.method == 'GET':
-			conn = sqlite3.connect("db_related/fakedata.db")
-			print(loggedIn)
-			print(currentNetid)
 			allMatches = uo.get_matchups(conn, currentNetid)
 			num = len(allMatches)
 			if (num > 20): 
@@ -117,20 +119,49 @@ def matches():
 			checkFriends = []
 			for i in range(num):
 				netid = allMatches[i][1]
-				friends = uo.check_friends(conn, currentNetid, netid)
+				friends = uq.are_friends(conn, currentNetid, netid) or uq.are_friends(conn, netid, currentNetid)
 				checkFriends.append(friends)
 				info = uq.get_user_info_general(conn, netid)
 				tup = info[0]
 				if friends:
 					info = uq.get_user_info_friends(conn, netid)
-					tup += (friends,)
 				matchups.append(tup)
+
 			conn.close()
+			#print(matchups)
 			return render_template("matches.html", matchups = matchups, checkFriends = checkFriends)
 		else:
-			# add friends
-			# visit profile
-			return; 
+			toAdd = request.form['addID']
+			check = toAdd.split(":")
+			if check[0]=="Add Friend":
+				print("Adding friend: " + check[1])
+				added = uo.friend_request(conn, currentNetid, check[1])
+				#accept = uo.request_accepted(conn, currentNetid, check[1])
+				test = uq.are_friends(conn, currentNetid, check[1]) or uq.are_friends(conn, check[1], currentNetid)
+				return redirect(url_for('matches'))
+			if check[0]=="Visit Profile":
+				print("Visiting profile:" + check[1])
+				info = uq.get_user_info_friends(conn, check[1])
+				rating = uq.get_user_rating(conn, check[1])
+				return render_template("searchUser.html", 
+				searchedNetid = check[1],
+				given_name = info[1],
+				family_name = info[2],
+				profpic = info[3],
+				description = info[4],
+				phone = info[6],
+				email = info[7],
+				overall = rating[1],
+				clean = rating[2],
+				friendly = rating[3],
+				consc = rating[4],
+				self_accuracy = rating[5],
+				num_reports = rating[6])
+			if check[0]=="Block":
+				print("Blocking: " + check[1])
+				blocked = uo.block_user(conn, currentNetid, check[1])
+				conn.close()
+				return redirect(url_for('matches'))
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -142,20 +173,36 @@ def regform():
 	if (request.method == 'GET'):
 		return render_template("register.html", display_error = 0)
 	else:
+		key1 = None
+		for key in request.files.keys():
+			key1 = key
+			break
+		
 		first_name = request.form['first_name']
 		last_name = request.form['last_name']
 		netid = request.form['netid']
 		password = request.form['password']
 		phone = request.form['phone']
 		email = request.form['email']
-		profpic = request.form['profile photo']
+		# profpic = request.form['profile photo']
 		description = request.form['Self Description']
-		if profpic == "":
-			profpic = "http://friendoprod.blob.core.windows.net/missionpics/images/4846/member/f9d9c34c-d5c8-495a-bd84-45b693edf7a2.jpg" # pikachu photo
+		file = None
+		if key1:
+			file = request.files[key1]
+		profpic = ""
+		if file:
+			profpic = file.filename
+			profpic = str(hash(profpic))[:16]+".jpg"
+			file.save(os.path.join(app.config['UPLOAD_FOLDER'], profpic))
+			profpic = "http://127.0.0.1:5000/uploads/"+profpic
+		else:
+			profpic = "http://127.0.0.1:5000/uploads/generic.jpg"
+		
 		if phone == "":
 			phone = None
 		if email == "":
 			email = None
+
 		conn = sqlite3.connect("db_related/fakedata.db")
 		try:
 			uo.new_user(conn, netid, first_name, last_name, profpic, description)
@@ -163,13 +210,21 @@ def regform():
 			uo.new_contact(conn, netid, phone, email)
 			global currentNetid
 			currentNetid = netid
+			loggedIn = True
 			print(netid)
 			return redirect(url_for('displaySurvey'))
 		except:
 			conn.rollback()
 			conn.close()
+			print("excepting here")
 			return render_template("register.html", display_error = 1)
 		conn.close()
+
+@app.route('/uploads/<filename>', methods = ['GET'])
+def profpicGet(filename):
+	return send_from_directory("uploads", filename)
+
+
 
 @app.route('/survey', methods=['GET', 'POST'])
 def survey():
@@ -178,6 +233,7 @@ def survey():
 
 @app.route('/displaySurvey')
 def displaySurvey():
+	loggedIn = True
 	conn = sqlite3.connect("db_related/fakedata.db")
 	numQuestions = uq.num_questions(conn)
 	question = []
@@ -198,8 +254,11 @@ def questions():
 
 @app.route('/searchUser', methods = ['GET', 'POST'])
 def searchUser():
+	if not loggedIn: 
+		return render_template("index.html", display_error = 2)
 	conn = sqlite3.connect("db_related/fakedata.db")
 	searchedNetid = request.form['netid']
+	searchedNetid = searchedNetid.upper()
 	if (searchedNetid == currentNetid):
 		return redirect(url_for("homepage"))
 	info = uq.get_user_info_friends(conn, searchedNetid)

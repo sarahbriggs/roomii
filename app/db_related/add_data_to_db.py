@@ -111,7 +111,7 @@ for review in reviewroot.iter(tag = "review"):
 	cleanliness = review.find("cleanliness").text
 	friendliness = review.find("friendliness").text
 	conscientiousness = review.find("conscientiousness").text
-	useful_operations.new_review(conn, reviewer, reviewed, text, overall, cleanliness, friendliness, conscientiousness, "0") #0 is placeholder for self report accuray-prob shoudln't be tehre
+	useful_operations.new_review(conn, reviewer, reviewed, text, overall, cleanliness, friendliness, conscientiousness, 0)
 
 # <<<<<<< HEAD
 # import useful_queries
@@ -166,7 +166,7 @@ for report in reportroot.iter(tag = "report"):
 
 print("done")
 
-conn = sqlite3.connect('fakedata.db')
+# conn = sqlite3.connect('fakedata.db')
 conn.execute("PRAGMA foreign_keys = 1")
 try:
 	new_user(conn, "rjf19", "Ryan", "Ferner", "lolidk.png", "i'm just tryna find a roomie lol", True)
@@ -187,7 +187,7 @@ except:
 	pass
 # print(all_matchups(conn, "rjf19"))
 
-conn = sqlite3.connect('./fakedata.db')
+# conn = sqlite3.connect('./fakedata.db')
 try:
 	sec.register(conn,"rjf19", "password")
 except:
