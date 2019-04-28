@@ -206,7 +206,7 @@ def regform():
 		conn = sqlite3.connect("db_related/fakedata.db")
 		try:
 			uo.new_user(conn, netid, first_name, last_name, profpic, description)
-			sec.register(conn,netid,password)
+			sec.register(conn, netid, password)
 			uo.new_contact(conn, netid, phone, email)
 			global currentNetid
 			currentNetid = netid
@@ -252,6 +252,10 @@ def questions():
 	answer = uq.get_all_answer_text(conn,0)
 	conn.close()
 	return render_template("questions.html", question = question, answers = answer)
+
+@app.route('/report')
+def report():
+	return render_template("report.html")
 
 @app.route('/searchUser', methods = ['GET', 'POST'])
 def searchUser():
@@ -321,6 +325,7 @@ def searchUser():
 				num_reports = num_reports)
 	else:
 		return render_template("notExist.html")
+
 
 def check_if_answered_questions(netid):
 	conn = sqlite3.connect("db_related/fakedata.db")
