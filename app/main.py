@@ -31,9 +31,8 @@ def login():
 		currentNetid = netid
 		# print(currentNetid)
 		password = request.form['password']
-		
-		if (sec.validate(conn,netid,password)):
-			global loggedIn
+		global loggedIn
+		if (sec.validate(conn,netid,password)):		
 			loggedIn = True
 			conn.close()
 			if (check_if_answered_questions(netid)):
@@ -41,7 +40,6 @@ def login():
 			else:
 				return redirect(url_for('displaySurvey'))
 		else:
-			global loggedIn
 			loggedIn = False
 			return render_template("index.html", display_error = 1)
 		# except:
