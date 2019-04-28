@@ -117,7 +117,7 @@ def matches():
 			checkFriends = []
 			for i in range(num):
 				netid = allMatches[i][1]
-				friends = uo.check_friends(conn, currentNetid, netid)
+				friends = uq.are_friends(conn, currentNetid, netid) or uq.are_friends(conn, netid, currentNetid)
 				checkFriends.append(friends)
 				info = uq.get_user_info_general(conn, netid)
 				tup = info[0]
@@ -128,18 +128,30 @@ def matches():
 			conn.close()
 			return render_template("matches.html", matchups = matchups, checkFriends = checkFriends)
 		else:
-			# add friends
 			toAdd = request.form['addID']
 			check = toAdd.split(":")
 			if check[0]=="Add Friend":
-				print("Adding " + check[1])
 				added = uo.friend_request(conn, currentNetid, check[1])
+				accept = uo.request_accepted(conn, currentNetid, check[1])
+				test = uq.are_friends(conn, currentNetid, check[1]) or uo.are_friends(conn, check[1], currentNetid)
 				return redirect(url_for('matches'))
-			elif check[1]=="Visit Profile":
-				# visit profile
-				print("Visiting " + check[1])
-				
-			return; 
+			if check[0]=="Visit Profile":
+				info = uq.get_user_info_friends(conn, check[1])
+				rating = uq.get_user_rating(conn, check[1])
+				return render_template("searchUser.html", 
+				searchedNetid = check[1],
+				given_name = info[1],
+				family_name = info[2],
+				profpic = info[3],
+				description = info[4],
+				phone = info[6],
+				email = info[7],
+				overall = rating[1],
+				clean = rating[2],
+				friendly = rating[3],
+				consc = rating[4],
+				self_accuracy = rating[5],
+				num_reports = rating[6])
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
