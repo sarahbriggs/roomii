@@ -244,5 +244,9 @@ def answer_question(conn, netid, qid, answer_id, weight):
 	query = "INSERT INTO answer VALUES (?, ?, ?, ?);"
 	weiter(conn, query, tup)
 
-# def 
+
+def change_pic(conn,netid,pic):
+	tup = (pic, netid)
+	query = "UPDATE user SET profpic = ? WHERE netid = ?;"
+	weiter(conn, query, tup)
 

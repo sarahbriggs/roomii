@@ -170,3 +170,10 @@ Questions and answers -user-specific
 """
 
 
+
+def pic_name(conn, netid):
+	tup = (netid,)
+	query = "SELECT profpic FROM user WHERE netid = ?"
+	result = execute_query(conn,query,tup)
+	return result[0][0]
+

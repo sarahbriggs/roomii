@@ -1,13 +1,15 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, send_from_directory
 from flask_login import LoginManager
 from flask_materialize import Material  
 import db_related.useful_operations as uo
 import db_related.useful_queries as uq
 import db_related.cheapSecurity as sec
 import sqlite3
+import os
 
 app = Flask(__name__)
 login = LoginManager(app)
+app.config['UPLOAD_FOLDER'] = "./uploads"
 Material(app)
 
 @app.route('/')
@@ -171,20 +173,35 @@ def regform():
 	if (request.method == 'GET'):
 		return render_template("register.html", display_error = 0)
 	else:
+		for key in request.files.keys():
+			key1 = key
+			break
+
+		
 		first_name = request.form['first_name']
 		last_name = request.form['last_name']
 		netid = request.form['netid']
 		password = request.form['password']
 		phone = request.form['phone']
 		email = request.form['email']
-		profpic = request.form['profile photo']
+		# profpic = request.form['profile photo']
 		description = request.form['Self Description']
-		if profpic == "":
+
+		file = request.files[key1]
+		profpic = ""
+		if file:
+			profpic = file.filename
+			profpic = str(hash(profpic))[:16]+".jpg"
+			file.save(os.path.join(app.config['UPLOAD_FOLDER'], profpic))
+			profpic = "http://127.0.0.1:5000/uploads/"+profpic
+		else:
 			profpic = "http://friendoprod.blob.core.windows.net/missionpics/images/4846/member/f9d9c34c-d5c8-495a-bd84-45b693edf7a2.jpg" # pikachu photo
+		
 		if phone == "":
 			phone = None
 		if email == "":
 			email = None
+
 		conn = sqlite3.connect("db_related/fakedata.db")
 		try:
 			uo.new_user(conn, netid, first_name, last_name, profpic, description)
@@ -201,6 +218,12 @@ def regform():
 			print("excepting here")
 			return render_template("register.html", display_error = 1)
 		conn.close()
+
+@app.route('/uploads/<filename>', methods = ['GET'])
+def profpicGet(filename):
+	return send_from_directory("uploads", filename)
+
+
 
 @app.route('/survey', methods=['GET', 'POST'])
 def survey():

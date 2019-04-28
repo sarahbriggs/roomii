@@ -23,7 +23,7 @@
 
 <div class="container" id="regForm"> 
   <div class="row" id="sign_up">
-   <form class="col s12" id="reg-form" action="/regform" method="POST">
+   <form class="col s12" id="reg-form" action="/regform" method="POST" enctype="multipart/form-data">
     <div class="row">
       <div class="input-field col s6">
         <input id="first_name" name="first_name" type="text" class="validate" required>
@@ -56,7 +56,7 @@
         <label for="email">Email</label>
       </div>
       <div class="input-field col s12">
-        <input id="profile photo" name="profile photo" type="text" class="validate">
+        <input id="profile photo" name="profile photo" type="file" class="validate">
         <label for="profile photo">Profile photo</label>
     </div>
     <div class="row">
