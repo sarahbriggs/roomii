@@ -154,13 +154,4 @@ Questions and answers -user-specific
 -------------------------------
 """
 
-if __name__ == '__main__':
-	conn = sqlite3.connect('fakedata.db')
-	conn.execute("PRAGMA foreign_keys = 1")
-	get_similarities(conn, "rjf19", "zz105")
-	get_differences(conn, "dummy", "rjf19")
-	get_answer(conn, "dummy")
-	get_questions_for_category(conn,0)
-	print(num_questions(conn))
-	print(still_has_questions(conn,"rjf19"))
 

@@ -166,7 +166,7 @@ for friend in friendroot.iter(tag = "friend"):
 
 print("done")
 
-conn = sqlite3.connect('fakedata.db')
+# conn = sqlite3.connect('fakedata.db')
 conn.execute("PRAGMA foreign_keys = 1")
 try:
 	new_user(conn, "rjf19", "Ryan", "Ferner", "lolidk.png", "i'm just tryna find a roomie lol", True)
@@ -187,7 +187,7 @@ except:
 	pass
 print(all_matchups(conn, "rjf19"))
 
-conn = sqlite3.connect('./fakedata.db')
+# conn = sqlite3.connect('./fakedata.db')
 try:
 	sec.register(conn,"rjf19", "password")
 except:
