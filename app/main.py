@@ -330,6 +330,10 @@ def searchUser():
 		return render_template("notExist.html")
 
 
+@app.route('/review')
+def review():
+	return render_template("review.html")
+
 def check_if_answered_questions(netid):
 	conn = sqlite3.connect("db_related/fakedata.db")
 	answers = uq.get_answer(conn, netid)

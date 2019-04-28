@@ -1,0 +1,92 @@
+{% extends "material/base.html" %}
+{% import "material/utils.html" as util %}
+
+{% block title %}Roomii{% endblock %}
+
+{% block content %}
+<!-- nav bar -->
+<nav class="yellow darken-1" role="navigation">
+  <div class = "nav-wrapper yellow darken-1">
+    <a href = "/homepage" class = "brand-logo left">Roomii</a>   
+    <ul class="hide-on-med-and-down right">               
+            <li>    
+                <div class="center row">
+                <form class="col s12" id="reg-form" action="/searchUser" method="POST">
+                      <div class="row" id="topbarsearch">
+                          <div class="input-field col s6 s12 black-text">
+                            <i class="white-text material-icons prefix">search</i>
+                            <input type="text" placeholder="User NetID" id="netid" name="netid" class="black-text" >
+                          </div>
+                      </div>
+                    </form>
+                </div>         
+            </li>                     
+        </ul>
+  </div>
+</nav>
+
+<!-- sign up-->
+<!--
+<div id="error_message" class="container red lighten-4" style ="height: 100%; display: none;">
+  User already exists!
+</div>
+-->
+
+<div class="container" id="reviewForm"> 
+  <div class="row" id="sign_up">
+   <form class="col s12" id="reg-form" action="/regform" method="POST" enctype="multipart/form-data">
+    <div class="row">
+      <div class="input-field col s6">
+        <input id="reviewee" name="reviewee" type="text" class="validate" required>
+        <label for="reviewee">Netid of person you are reviewing</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="input-field col s4">
+        <input id="cleanliness" name="cleanliness" type="number" class="validate" required>
+        <label for="cleanliness">Cleanliness</label>
+      </div>
+      <div class="input-field col s4">
+        <input id="friendliness" name="friendliness" type="number" class="validate" required>
+        <label for="friendliness">Friendliness</label>
+      </div>
+      <div class="input-field col s4">
+        <input id="conscientiousness" name="conscientiousness" type="number" class="validate" required>
+        <label for="conscientiousness">Conscientiousness</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="input-field col s12">
+        <textarea id="reviewtext" name="reveiwtext" class="validate"></textarea>
+        <label for="reviewtext">Review Text</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="input-field col s12">
+        <button id="submitReview" class="btn btn-large btn-register waves-effect waves-light" type="submit" value="Submit">
+        Submit Review</button>
+      </div>
+    </div>
+  </form>
+</div>
+</div>
+<!--
+<script type="text/javascript">
+  var show = {{display_error}}
+  // function regSubmit() {
+  //   $("html").load("/survey");
+  // }
+  window.onload = function() {
+    if (show == 1) {
+      document.getElementById("error_message").style.display = "";
+    } else {
+      document.getElementById("error_message").style.display = "hidden";
+    } // determine if the error message should be shown when page loads
+  }
+</script>
+-->
+
+{% endblock %}
+
+</html>
+
