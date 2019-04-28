@@ -176,7 +176,6 @@ def regform():
 		for key in request.files.keys():
 			key1 = key
 			break
-
 		
 		first_name = request.form['first_name']
 		last_name = request.form['last_name']
