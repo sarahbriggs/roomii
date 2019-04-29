@@ -277,6 +277,8 @@ def report():
 	reportedNetid = request.args.get('netid')
 	return render_template("report.html", netid = reportedNetid)
 
+
+
 @app.route('/searchUser', methods = ['GET', 'POST'])
 def searchUser():
 	if not loggedIn: 
@@ -354,6 +356,26 @@ def searchUser():
 @app.route('/review')
 def review():
 	return render_template("review.html")
+
+@app.route('/reviewform')
+def reviewform():
+	reviewee = request.form["reviewee"]
+	cleanliness = request.form["cleanliness"]
+	friendliness = request.form["friendliness"]
+	conscientiousness = request.form["conscientiousness"]
+	overall_rating =  round((cleanliness + friendliness + conscientiousness)/3, 2)
+	text = request.form["reviewtext"]
+	conn = sqlite3.connect("db_related/fakedata.db")
+	try:
+		uo.new_review(conn, reviewer, reviewee, text, overall_rating, friendliness, cleanliness, conscientiousness, 0)
+		return redirect(url_for('homepage'))
+	except:
+		conn.rollback()
+		conn.close()
+		print("excepting here")
+		return render_template("review.html", display_error = 1)
+	conn.close()
+
 
 def check_if_answered_questions(netid):
 	conn = sqlite3.connect("db_related/fakedata.db")
