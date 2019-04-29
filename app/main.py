@@ -240,11 +240,18 @@ def survey():
 	if(request.method == 'GET'):
 		return redirect(url_for('displaySurvey'))
 	if(request.method == 'POST'):
+		conn = sqlite3.connect("db_related/fakedata.db")
 		numQuestions = uq.num_questions(conn)
+		print(numQuestions)
+		netid = currentNetid
 		for i in range(numQuestions):
 			strI = str(i)
-			rangeID = "Range" + str(i);
-			answerID = request.form[strI]
+			rangeID = "Range" + str(i)
+			answerID = 0
+			try:
+				answerID = request.form[strI]
+			except:
+				pass
 			value = int(request.form[rangeID])
 			uo.answer_question(conn, netid, i, answerID, value)
 		return redirect(url_for('homepage'))
