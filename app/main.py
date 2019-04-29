@@ -52,6 +52,7 @@ def login():
 def homepage():
 	if not loggedIn: 
 		return render_template("index.html", display_error = 2)
+
 	netid = currentNetid
 	conn = sqlite3.connect("db_related/fakedata.db")
 	cur = conn.cursor()
@@ -79,16 +80,8 @@ def homepage():
 		self_accuracy = rating[5]
 		num_reports = rating[6]
 
-	if (request.method == 'GET'):
-		conn.close()
-	else:
-		numQuestions = uq.num_questions(conn)
-		for i in range(numQuestions):
-			strI = str(i)
-			rangeID = "Range" + str(i);
-			answerID = request.form[strI]
-			value = int(request.form[rangeID])
-			uo.answer_question(conn, netid, i, answerID, value)
+	# if (request.method == 'GET'):
+	conn.close()
 	return render_template("homepage.html", 
 		given_name = given_name,
 		family_name = family_name,
@@ -246,6 +239,16 @@ def profpicGet(filename):
 def survey():
 	if(request.method == 'GET'):
 		return redirect(url_for('displaySurvey'))
+	if(request.method == 'POST'):
+		numQuestions = uq.num_questions(conn)
+		for i in range(numQuestions):
+			strI = str(i)
+			rangeID = "Range" + str(i);
+			answerID = request.form[strI]
+			value = int(request.form[rangeID])
+			uo.answer_question(conn, netid, i, answerID, value)
+		return redirect(url_for('homepage'))
+
 
 @app.route('/displaySurvey')
 def displaySurvey():
