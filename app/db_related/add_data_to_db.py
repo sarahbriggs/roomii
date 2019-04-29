@@ -46,8 +46,8 @@ for user in usersroot.iter(tag = "user"):
 sup_netid = "sup123"
 for user in usersroot.iter(tag = "user"):
 	netid = user.find("netid").text
-	useful_operations.add_roommates(sup_netid, netid)
-	useful_operations.add_roommates(netid, sup_netid)
+	useful_operations.add_roommates(conn, sup_netid, netid)
+	useful_operations.add_roommates(conn, netid, sup_netid)
 
 sec.register(conn, netid, "mypassword")
 
