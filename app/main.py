@@ -321,6 +321,7 @@ def searchUser():
 			email = info[7]
 			sourceNetid = currentNetid
 			areFriends = uq.are_friends(conn, searchedNetid, sourceNetid) or uq.are_friends(conn, sourceNetid, searchedNetid)
+			wereRoommates = uq.were_roommates(conn, searchedNetid, sourceNetid)
 			conn.close()
 			if areFriends:
 				return render_template("searchUser.html", 
@@ -336,7 +337,8 @@ def searchUser():
 					friendly = friendly,
 					consc = consc,
 					self_accuracy = self_accuracy,
-					num_reports = num_reports)
+					num_reports = num_reports,
+					wereRoommates = wereRoommates)
 			else:
 				return render_template("searchUser.html", 
 					searchedNetid = searchedNetid,
@@ -351,7 +353,8 @@ def searchUser():
 					friendly = friendly,
 					consc = consc,
 					self_accuracy = self_accuracy,
-					num_reports = num_reports)
+					num_reports = num_reports,
+					wereRoommates = wereRoommates)
 		else:
 			return render_template("notExist.html")
 	else:

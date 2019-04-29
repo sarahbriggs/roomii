@@ -235,6 +235,14 @@ def add_roommates(conn, netid1, netid2):
 	weiter(conn, query, tup)
 	return True
 
+def were_roommates(connn, netid1, netid2):
+	tup = (netid1, netid2)
+	query = "SELECT * FROM roommate WHERE netid1 = ? AND netid2 = ?"
+	result = execute_query(conn, query, tup)
+	if len(result) < 1:
+		return False
+	return True
+
 
 '''
 -------------------------------

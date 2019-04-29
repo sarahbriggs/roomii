@@ -50,7 +50,7 @@ for user in usersroot.iter(tag = "user"):
 	useful_operations.add_roommates(conn, sup_netid, netid)
 	useful_operations.add_roommates(conn, netid, sup_netid)
 
-sec.register(conn, netid, "mypassword")
+sec.register(conn, sup_netid, "mypassword")
 
 #all answers are 1???
 answerstree = ET.parse('../../data/user_answers.xml')
