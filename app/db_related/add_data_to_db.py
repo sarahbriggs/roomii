@@ -42,6 +42,16 @@ for user in usersroot.iter(tag = "user"):
 	#no status since just set to true
 	useful_operations.new_user(conn, netid, given_name, family_name, prof_pic, description)
 
+#a super user that is friends with everyone else
+sup_netid = "sup123"
+useful_operations.new_user(conn, sup_netid, "super", "user", "", "placeholder")
+for user in usersroot.iter(tag = "user"):
+	netid = user.find("netid").text
+	useful_operations.add_roommates(conn, sup_netid, netid)
+	useful_operations.add_roommates(conn, netid, sup_netid)
+
+sec.register(conn, netid, "mypassword")
+
 #all answers are 1???
 answerstree = ET.parse('../../data/user_answers.xml')
 answersroot = answerstree.getroot()
