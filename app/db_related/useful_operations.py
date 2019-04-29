@@ -118,13 +118,13 @@ def new_review(conn, reviewer_netid, reviewed_netid, text, overall_rating, clean
 	tup = (reviewer_netid, reviewed_netid, text, overall_rating, cleanliness, 
 	friendliness, conscientiousness, self_report_accuracy)
 	query = "INSERT INTO review VALUES (?, ?, ?, ?, ?, ?, ?, ?);"
-	number_of_reviews = useful_queries.get_number_of_reviews_of_user(conn, reviewed_netid)
+	number_of_reviews = get_number_of_reviews_of_user(conn, reviewed_netid)
 	weiter(conn, query, tup)
 	if number_of_reviews == 0:
 		create_rating(conn, reviewed_netid, overall_rating, cleanliness, friendliness, 
 			conscientiousness, self_report_accuracy, 0)
 	else:
-		current_rating = useful_queries.get_user_rating(conn, reviewed_netid)
+		current_rating = get_user_rating(conn, reviewed_netid)
 		new_overall = (current_rating[1] * number_of_reviews + float(overall_rating)) / (number_of_reviews + 1)
 		new_cleanliness = (current_rating[2] * number_of_reviews + float(cleanliness)) / (number_of_reviews + 1)
 		new_friendliness = (current_rating[3] * number_of_reviews + float(friendliness)) / (number_of_reviews + 1)

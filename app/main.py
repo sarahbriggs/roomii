@@ -199,7 +199,7 @@ def regform():
 		
 		first_name = request.form['first_name']
 		last_name = request.form['last_name']
-		netid = request.form['netid']
+		netid = request.form['netid'].upper()
 		password = request.form['password']
 		phone = request.form['phone']
 		email = request.form['email']
@@ -243,7 +243,6 @@ def regform():
 @app.route('/uploads/<filename>', methods = ['GET'])
 def profpicGet(filename):
 	return send_from_directory("uploads", filename)
-
 
 
 @app.route('/survey', methods=['GET', 'POST'])
