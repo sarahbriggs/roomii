@@ -90,7 +90,6 @@ def homepage():
 			value = int(request.form[rangeID])
 			uo.answer_question(conn, netid, i, answerID, value)
 	return render_template("homepage.html", 
-		netid = netid,
 		given_name = given_name,
 		family_name = family_name,
 		profpic = profpic,
@@ -172,14 +171,14 @@ def matches():
 
 @app.route('/processReport', methods = ['GET', 'POST'])
 def processReport():
-	print("here - 1 ")
+	return render_template("index.html", display_error = 2)
 	reporter = currentNetid;
 	reported = request.form['netid'].upper()
+	if reported == None:
+		return redirect(url_for('homepage'))
 	conn = sqlite3.connect("db_related/fakedata.db")
 	reason = request.form['reason']
-	print("here - 2 ")
 	uo.report_user(conn, reporter, reported, reason)
-	print("here - 3 ")
 	return redirect(url_for('homepage'))
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -231,7 +230,6 @@ def regform():
 			currentNetid = netid
 			global loggedIn
 			loggedIn = True
-			print(netid)
 			return redirect(url_for('displaySurvey'))
 		else:
 			conn.rollback()
@@ -251,7 +249,8 @@ def survey():
 
 @app.route('/displaySurvey')
 def displaySurvey():
-	loggedIn = True
+	if not loggedIn: 
+		return render_template("index.html", display_error = 2)
 	conn = sqlite3.connect("db_related/fakedata.db")
 	numQuestions = uq.num_questions(conn)
 	question = []
@@ -273,9 +272,17 @@ def questions():
 @app.route('/report')
 def report():
 	reportedNetid = request.args.get('netid').upper()
+	if reportedNetid == None:
+		return redirect(url_for("homepage"))
 	return render_template("report.html", netid = reportedNetid)
 
-
+@app.route('/redoSurvey', methods = ['GET'])
+def redoSurvey():
+	if not loggedIn:
+		return render_template("index.html", display_error = 2)
+	conn = sqlite3.connect("db_related/fakedata.db")
+	uo.remove_answers(conn, currentNetid)
+	return redirect(url_for("displaySurvey"))
 
 @app.route('/searchUser', methods = ['GET', 'POST'])
 def searchUser():
@@ -314,6 +321,7 @@ def searchUser():
 			email = info[7]
 			sourceNetid = currentNetid
 			areFriends = uq.are_friends(conn, searchedNetid, sourceNetid) or uq.are_friends(conn, sourceNetid, searchedNetid)
+			wereRoommates = uq.were_roommates(conn, searchedNetid, sourceNetid)
 			conn.close()
 			if areFriends:
 				return render_template("searchUser.html", 
@@ -329,7 +337,8 @@ def searchUser():
 					friendly = friendly,
 					consc = consc,
 					self_accuracy = self_accuracy,
-					num_reports = num_reports)
+					num_reports = num_reports,
+					wereRoommates = wereRoommates)
 			else:
 				return render_template("searchUser.html", 
 					searchedNetid = searchedNetid,
@@ -344,28 +353,37 @@ def searchUser():
 					friendly = friendly,
 					consc = consc,
 					self_accuracy = self_accuracy,
-					num_reports = num_reports)
+					num_reports = num_reports,
+					wereRoommates = wereRoommates)
 		else:
 			return render_template("notExist.html")
 	else:
 		return render_template("notExist.html")
 
 
-@app.route('/review')
+@app.route('/review', methods=['GET', 'POST'])
 def review():
-	return render_template("review.html")
+	reviewed = request.args.get('netid')
+	if reviewed == None:
+		return redirect(url_for("homepage"))
+	return render_template("review.html", netid = reviewed)
 
-@app.route('/reviewform')
+@app.route('/reviewform', methods=['GET', 'POST'])
 def reviewform():
-	reviewee = request.form["reviewee"]
-	cleanliness = request.form["cleanliness"]
-	friendliness = request.form["friendliness"]
-	conscientiousness = request.form["conscientiousness"]
+	if not loggedIn: 
+		return render_template("index.html", display_error = 2)
+	reviewed = request.form["netid"]
+	if reviewed == None:
+		return redirect(url_for("homepage"))
+	cleanliness = float(request.form["cleanliness"])
+	friendliness = float(request.form["friendliness"])
+	conscientiousness = float(request.form["conscientiousness"])
 	overall_rating =  round((cleanliness + friendliness + conscientiousness)/3, 2)
 	text = request.form["reviewtext"]
+	self_accuracy = request.form['self-report accuracy']
 	conn = sqlite3.connect("db_related/fakedata.db")
 	try:
-		uo.new_review(conn, reviewer, reviewee, text, overall_rating, friendliness, cleanliness, conscientiousness, 0)
+		uo.new_review(conn, currentNetid, reviewed, text, overall_rating, friendliness, cleanliness, conscientiousness, self_accuracy)
 		return redirect(url_for('homepage'))
 	except:
 		conn.rollback()

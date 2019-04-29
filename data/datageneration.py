@@ -441,19 +441,18 @@ answers_tree.write("answers.xml")
 #answer generation
 ########################
 user_answers_root = ET.Element("answers")
-
 #each netid needs a set of answers
 for id_initials in netids:
 	id_initial = id_initials[0]
-	highest = id_initials[1]
+	highest = id_initials[1] #highest number associated with a netid
 	for i in range(1, highest+1): #iterate through all netids
 		current_netid = id_initial + str(i)
 		for j in range(0, len(questions)): #iterates through all qids
 			max_a_id = 0
 			for element in questions_list_tuples:
-				if element[0] == j and element[1] > max_a_id:
-					print(max_a_id)
-					max_a_id = element[1]
+				if int(element[0]) == int(j) and int(element[1]) > max_a_id:
+					#print(max_a_id)
+					max_a_id = int(element[1])
 			user_answer_element = ET.Element("answer")
 			user_answers_root.append(user_answer_element)
 

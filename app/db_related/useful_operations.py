@@ -228,6 +228,22 @@ def get_matchups(conn, netid, num = 20):
 	query = "SELECT DISTINCT * FROM matchups WHERE netid1 = ? ORDER BY matchRating DESC, netid2 ASC LIMIT ?;"
 	return execute_query(conn, query, tup)
 
+
+def add_roommates(conn, netid1, netid2):
+	tup = (netid1, netid2)
+	query = "INSERT INTO roommate VALUES (?, ?);"
+	weiter(conn, query, tup)
+	return True
+
+def were_roommates(connn, netid1, netid2):
+	tup = (netid1, netid2)
+	query = "SELECT * FROM roommate WHERE netid1 = ? AND netid2 = ?"
+	result = execute_query(conn, query, tup)
+	if len(result) < 1:
+		return False
+	return True
+
+
 '''
 -------------------------------
 Questions and answers
@@ -246,6 +262,11 @@ def new_answer_text(conn, qid, answer_id, text):
 def answer_question(conn, netid, qid, answer_id, weight):
 	tup = (netid, qid, answer_id, weight)
 	query = "INSERT INTO answer VALUES (?, ?, ?, ?);"
+	weiter(conn, query, tup)
+
+def remove_answers(conn, netid):
+	tup = (netid, )
+	query = "DELETE FROM answer WHERE netid = ?"
 	weiter(conn, query, tup)
 
 
@@ -313,7 +334,6 @@ def still_has_questions(conn, netid): #true if netid still has unanswered questi
 	query = "SELECT * FROM answer WHERE netid = ?"
 	result = execute_query(conn,query,tup)
 	return num != len(result)
-
 
 """
 -------------------------------

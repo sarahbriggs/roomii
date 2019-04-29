@@ -177,3 +177,18 @@ def pic_name(conn, netid):
 	result = execute_query(conn,query,tup)
 	return result[0][0]
 
+
+"""
+-------------------------------
+Other
+-------------------------------
+"""
+
+def were_roommates(conn, netid1, netid2):
+	tup = (netid1, netid2)
+	query = "SELECT * FROM roommate WHERE netid1 = ? AND netid2 = ?"
+	result = execute_query(conn, query, tup)
+	if len(result) < 1:
+		return False
+	return True
+

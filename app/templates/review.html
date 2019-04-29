@@ -35,29 +35,31 @@
 <div class="container" id="reviewForm"> 
   <div class="row" id="sign_up">
    <form class="col s12" id="review-form" action="/reviewform" method="POST" enctype="multipart/form-data">
+    <p>
+      You are reviewing user {{netid}}.
+      <input id="hidden" type = "text" name = "netid" value = "{{netid}}"/></p>
+    </p>
     <div class="row">
-      <div class="input-field col s6">
-        <input id="reviewee" name="reviewee" type="text" class="validate" required>
-        <label for="reviewee">Netid of person you are reviewing</label>
+      <div class="input-field col s3">
+        <input id="cleanliness" name="cleanliness" type="range" min="1" max="5" class="validate" required>
+        <p>Cleanliness<p>
       </div>
-    </div>
-    <div class="row">
-      <div class="input-field col s4">
-        <input id="cleanliness" name="cleanliness" type="number" class="validate" required>
-        <label for="cleanliness">Cleanliness</label>
+      <div class="input-field col s3">
+        <input id="friendliness" name="friendliness" type="range" min="1" max="5" class="validate" required>
+        <p>Friendliness</p>
       </div>
-      <div class="input-field col s4">
-        <input id="friendliness" name="friendliness" type="number" class="validate" required>
-        <label for="friendliness">Friendliness</label>
+      <div class="input-field col s3">
+        <input id="conscientiousness" name="conscientiousness" type="range" min="1" max="5" class="validate" required>
+        <p>>Conscientiousness</p>
       </div>
-      <div class="input-field col s4">
-        <input id="conscientiousness" name="conscientiousness" type="number" class="validate" required>
-        <label for="conscientiousness">Conscientiousness</label>
+      <div class="input-field col s3">
+        <input id="self-report accuracy" name="self-report accuracy" type="range" min="1" max="5" class="validate" required>
+        <p>Self-report accuracy</p>
       </div>
     </div>
     <div class="row">
       <div class="input-field col s12">
-        <textarea id="reviewtext" name="reveiwtext" class="validate"></textarea>
+        <textarea id="reviewtext" name="reviewtext" class="validate"></textarea>
         <label for="reviewtext">Review Text</label>
       </div>
     </div>
@@ -70,22 +72,12 @@
   </form>
 </div>
 </div>
-<!--
-<script type="text/javascript">
-  var show = {{display_error}}
-  // function regSubmit() {
-  //   $("html").load("/survey");
-  // }
+
+<script>
   window.onload = function() {
-    if (show == 1) {
-      document.getElementById("error_message").style.display = "";
-    } else {
-      document.getElementById("error_message").style.display = "hidden";
-    } // determine if the error message should be shown when page loads
+    document.getElementById("hidden").style.display = "none";
   }
 </script>
--->
-
 {% endblock %}
 
 </html>
