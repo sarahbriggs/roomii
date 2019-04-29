@@ -1,41 +1,41 @@
-1.1 East
-1.2 West
-1.3 Central
-1.4 Off Campus
-2.1 Freshman
-2.2 Soph
-2.3 Junior
-2.4 Senior
-3.1 Before 9
-3.2 9-11
-3.3 11-1
-3.4 After 1
-4.1 Not in room
-4.2 Sure
-4.3 No preference
-5.1 I smoke
-5.2 I don't smoke
-6.1 Room will be a quiet place
-6.2 Just don't blast it too loudly
-6.3 I can't think if I can hear
-7.1 Peanuts
-7.2 Fish
-7.3 Gluten
-8.1 Introvert
-8.2 Extrovert
-9.1 I'll invite lots of guests
-9.2 Occasionally
-9.3 No
-10.1 In the room
-10.2 Outside the room
-11.1 More than once a day
-11.2 Once a day
-11.3 Less thann ocne a day
-12.1 Yes
-12.2 No
-13.1 Very close
-13.2 Normal friends
-13.3 No preference
-14.1 Democratic
-14.2 Republican
-14.3 No preferennce
+0.1 East
+0.2 West
+0.3 Central
+0.4 Off Campus
+1.1 Freshman
+1.2 Soph
+1.3 Junior
+1.4 Senior
+2.1 Before 9
+2.2 9-11
+2.3 11-1
+2.4 After 1
+3.1 Not in room
+3.2 Sure
+3.3 No preference
+4.1 I smoke
+4.2 I don't smoke
+5.1 Room will be a quiet place
+5.2 Just don't blast it too loudly
+5.3 I can't think if I can hear
+6.1 Peanuts
+6.2 Fish
+6.3 Gluten
+7.1 Introvert
+7.2 Extrovert
+8.1 I'll invite lots of guests
+8.2 Occasionally
+8.3 No
+9.1 In the room
+9.2 Outside the room
+10.1 More than once a day
+10.2 Once a day
+10.3 Less thann ocne a day
+11.1 Yes
+11.2 No
+12.1 Very close
+12.2 Normal friends
+12.3 No preference
+13.1 Democratic
+13.2 Republican
+13.3 No preferennce
