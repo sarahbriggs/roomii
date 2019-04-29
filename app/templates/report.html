@@ -11,7 +11,7 @@
     <ul class="hide-on-med-and-down right">               
             <li>    
                 <div class="center row">
-                <form class="col s12" id="reg-form" action="/searchUser" method="POST">
+                <form class="col s12" id="reg-form" action="/searchUser" method="GET">
                       <div class="row" id="topbarsearch">
                           <div class="input-field col s6 s12 black-text">
                             <i class="white-text material-icons prefix">search</i>
@@ -27,11 +27,17 @@
 
 <div class="container" id="regForm"> 
   <div class="row">
-    <form class="col s12">
+    <form class="col s12" id="reg-form" action="/processReport" class="col s12" method = "POST">
       <div class="row">
         <div class="input-field col s12">
-          <textarea id="reason" class="materialize-textarea"></textarea>
+          <textarea name="reason" id="reason" class="materialize-textarea"></textarea>
           <label for="reason">Reason</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s12">
+          <p>You are reporting user {{netid}}.
+            <input id="hidden" type = "text" name = "netid" value = "{{netid}}"/></p>
         </div>
       </div>
       <div class="row">
@@ -43,6 +49,12 @@
     </form>
   </div>
 </div>
+
+<script>
+  window.onload = function() {
+    document.getElementById("hidden").style.display = "none";
+  }
+</script>
 
 {% endblock %}
 

@@ -164,6 +164,18 @@ def matches():
 				conn.close()
 				return redirect(url_for('matches'))
 
+@app.route('/processReport', methods = ['GET', 'POST'])
+def processReport():
+	print("here - 1 ")
+	reporter = currentNetid;
+	reported = request.form['netid']
+	conn = sqlite3.connect("db_related/fakedata.db")
+	reason = request.form['reason']
+	print("here - 2 ")
+	uo.report_user(conn, reporter, reported, reason)
+	print("here - 3 ")
+	return redirect(url_for('homepage'))
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
 	if (request.method == 'GET'):
@@ -256,7 +268,8 @@ def questions():
 
 @app.route('/report')
 def report():
-	return render_template("report.html")
+	reportedNetid = request.args.get('netid')
+	return render_template("report.html", netid = reportedNetid)
 
 @app.route('/searchUser', methods = ['GET', 'POST'])
 def searchUser():
