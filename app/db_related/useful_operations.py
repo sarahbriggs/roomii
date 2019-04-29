@@ -231,7 +231,7 @@ def get_matchups(conn, netid, num = 20):
 
 def add_roommates(conn, netid1, netid2):
 	tup = (netid1, netid2)
-	query = "INSERT INTO roommate VALUES (?, ?, ?);"
+	query = "INSERT INTO roommate VALUES (?, ?);"
 	weiter(conn, query, tup)
 	return True
 
