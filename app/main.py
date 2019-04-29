@@ -26,7 +26,7 @@ def login():
 		# try:
 		conn = sqlite3.connect("db_related/fakedata.db")
 		cur = conn.cursor()
-		netid = request.form['netid']
+		netid = request.form['netid'].upper()
 		global currentNetid
 		currentNetid = netid
 		# print(currentNetid)
@@ -124,7 +124,7 @@ def matches():
 			checkFriends = []
 			scores = []
 			for i in range(num):
-				netid = allMatches[i][1]
+				netid = allMatches[i][1].upper()
 				score = allMatches[i][2]
 				scores.append(score)
 				friends = uq.are_friends(conn, currentNetid, netid) or uq.are_friends(conn, netid, currentNetid)
@@ -174,7 +174,7 @@ def matches():
 def processReport():
 	print("here - 1 ")
 	reporter = currentNetid;
-	reported = request.form['netid']
+	reported = request.form['netid'].upper()
 	conn = sqlite3.connect("db_related/fakedata.db")
 	reason = request.form['reason']
 	print("here - 2 ")
@@ -213,9 +213,9 @@ def regform():
 			profpic = file.filename
 			profpic = str(hash(profpic))[:16]+".jpg"
 			file.save(os.path.join(app.config['UPLOAD_FOLDER'], profpic))
-			profpic = "http://127.0.0.1:5000/uploads/"+profpic
+			profpic = "/uploads/"+profpic
 		else:
-			profpic = "http://127.0.0.1:5000/uploads/generic.jpg"
+			profpic = "/uploads/generic.jpg"
 		
 		if phone == "":
 			phone = None
@@ -272,7 +272,7 @@ def questions():
 
 @app.route('/report')
 def report():
-	reportedNetid = request.args.get('netid')
+	reportedNetid = request.args.get('netid').upper()
 	return render_template("report.html", netid = reportedNetid)
 
 
@@ -283,7 +283,7 @@ def searchUser():
 		return render_template("index.html", display_error = 2)
 	if (request.method == 'GET'):
 		conn = sqlite3.connect("db_related/fakedata.db")
-		searchedNetid = request.args.get('netid')
+		searchedNetid = request.args.get('netid').upper()
 		print(searchedNetid)
 		searchedNetid = searchedNetid.upper()
 		if (searchedNetid == currentNetid.upper()):
