@@ -113,13 +113,20 @@ def matches():
 		conn = sqlite3.connect("db_related/fakedata.db")
 		if request.method == 'GET':
 			allMatches = uo.get_matchups(conn, currentNetid)
+			print("---------------")
+			print(allMatches)
+			print("---------------")
 			num = len(allMatches)
+			print(num)
 			if (num > 20): 
 				num = 20
 			matchups = []
 			checkFriends = []
+			scores = []
 			for i in range(num):
 				netid = allMatches[i][1]
+				score = allMatches[i][2]
+				scores.append(score)
 				friends = uq.are_friends(conn, currentNetid, netid) or uq.are_friends(conn, netid, currentNetid)
 				checkFriends.append(friends)
 				info = uq.get_user_info_general(conn, netid)
@@ -127,10 +134,9 @@ def matches():
 				if friends:
 					info = uq.get_user_info_friends(conn, netid)
 				matchups.append(tup)
-
 			conn.close()
-			#print(matchups)
-			return render_template("matches.html", matchups = matchups, checkFriends = checkFriends)
+			print(matchups)
+			return render_template("matches.html", matchups = matchups, checkFriends = checkFriends, scores = scores)
 		else:
 			toAdd = request.form['addID']
 			check = toAdd.split(":")
@@ -163,6 +169,18 @@ def matches():
 				blocked = uo.block_user(conn, currentNetid, check[1])
 				conn.close()
 				return redirect(url_for('matches'))
+
+@app.route('/processReport', methods = ['GET', 'POST'])
+def processReport():
+	print("here - 1 ")
+	reporter = currentNetid;
+	reported = request.form['netid']
+	conn = sqlite3.connect("db_related/fakedata.db")
+	reason = request.form['reason']
+	print("here - 2 ")
+	uo.report_user(conn, reporter, reported, reason)
+	print("here - 3 ")
+	return redirect(url_for('homepage'))
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -256,7 +274,8 @@ def questions():
 
 @app.route('/report')
 def report():
-	return render_template("report.html")
+	reportedNetid = request.args.get('netid')
+	return render_template("report.html", netid = reportedNetid)
 
 
 
