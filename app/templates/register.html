@@ -8,11 +8,6 @@
 <nav class="yellow darken-1" role="navigation">
   <div class = "nav-wrapper yellow darken-1">
     <a href = "#" class = "brand-logo left">Roomii</a>
-    <ul id = "nav-mobile" class = "right hide-on-med-and-down">
-      <li><a href = "#">Nav1</a></li>
-      <li><a href = "#">Nav2</a></li>
-      <li><a href = "#">Nav3</a></li>
-    </ul>
   </div>
 </nav>
 
@@ -55,10 +50,18 @@
         <input id="email" name="email" type="email" class="validate">
         <label for="email">Email</label>
       </div>
-      <div class="input-field col s12">
-        <input id="profile photo" name="profile photo" type="file" class="validate">
-        <label for="profile photo">Profile photo</label>
+
+    <div class="file-field input-field col s12">
+
+        <div class="btn">
+          <span>Upload Profile Photo</span>
+          <input id="profile photo" name="profile photo" type="file" class="validate">
+        </div>
+        <div class="file-path-wrapper">
+        <input class="file-path validate" type="text">
+        </div>
     </div>
+
     <div class="row">
         <div class="input-field col s12">
           <div class="input-field col s12">
