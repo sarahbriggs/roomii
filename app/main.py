@@ -353,24 +353,38 @@ def searchUser():
 		return render_template("notExist.html")
 
 
-@app.route('/review')
+@app.route('/review', methods=['GET', 'POST'])
 def review():
+	print("in review")
 	return render_template("review.html")
 
-@app.route('/reviewform')
+@app.route('/reviewform', methods=['GET', 'POST'])
 def reviewform():
+	print("hi0")
 	reviewee = request.form["reviewee"]
-	cleanliness = request.form["cleanliness"]
-	friendliness = request.form["friendliness"]
-	conscientiousness = request.form["conscientiousness"]
+	print("hi")
+	cleanliness = float(request.form["cleanliness"])
+	#return redirect(url_for('homepage'))
+	print("hi2")
+	friendliness = float(request.form["friendliness"])
+	print("hi3")
+	conscientiousness = float(request.form["conscientiousness"])
+	print("hi4")
 	overall_rating =  round((cleanliness + friendliness + conscientiousness)/3, 2)
+	print("hi5")
 	text = request.form["reviewtext"]
+	print("hi6")
+
 	conn = sqlite3.connect("db_related/fakedata.db")
+	print("hi7")
+
 	try:
-		uo.new_review(conn, reviewer, reviewee, text, overall_rating, friendliness, cleanliness, conscientiousness, 0)
+		uo.new_review(conn, currentNetid, reviewee, text, overall_rating, friendliness, cleanliness, conscientiousness, 0)
+		print("hi8")
 		return redirect(url_for('homepage'))
 	except:
 		conn.rollback()
+		print("hi9")
 		conn.close()
 		print("excepting here")
 		return render_template("review.html", display_error = 1)
