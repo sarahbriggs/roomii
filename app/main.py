@@ -203,7 +203,7 @@ def regform():
 		profpic = ""
 		if file:
 			profpic = file.filename
-			profpic = str(hash(profpic))[:16]+".jpg"
+			profpic = str(hash(profpic+netid))[:16]+".jpg"
 			file.save(os.path.join(app.config['UPLOAD_FOLDER'], profpic))
 			profpic = "/uploads/"+profpic
 		else:
