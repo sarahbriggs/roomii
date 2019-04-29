@@ -243,6 +243,11 @@ def answer_question(conn, netid, qid, answer_id, weight):
 	query = "INSERT INTO answer VALUES (?, ?, ?, ?);"
 	weiter(conn, query, tup)
 
+def remove_answers(conn, netid):
+	tup = (netid, )
+	query = "DELETE FROM answer WHERE netid = ?"
+	weiter(conn, query, tup)
+
 
 def change_pic(conn,netid,pic):
 	tup = (pic, netid)

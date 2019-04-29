@@ -26,7 +26,7 @@ def login():
 		# try:
 		conn = sqlite3.connect("db_related/fakedata.db")
 		cur = conn.cursor()
-		netid = request.form['netid']
+		netid = request.form['netid'].upper()
 		global currentNetid
 		currentNetid = netid
 		# print(currentNetid)
@@ -174,7 +174,7 @@ def matches():
 def processReport():
 	print("here - 1 ")
 	reporter = currentNetid;
-	reported = request.form['netid']
+	reported = request.form['netid'].upper()
 	conn = sqlite3.connect("db_related/fakedata.db")
 	reason = request.form['reason']
 	print("here - 2 ")
@@ -252,7 +252,8 @@ def survey():
 
 @app.route('/displaySurvey')
 def displaySurvey():
-	loggedIn = True
+	if not loggedIn: 
+		return render_template("index.html", display_error = 2)
 	conn = sqlite3.connect("db_related/fakedata.db")
 	numQuestions = uq.num_questions(conn)
 	question = []
@@ -276,7 +277,11 @@ def report():
 	reportedNetid = request.args.get('netid')
 	return render_template("report.html", netid = reportedNetid)
 
-
+@app.route('/redoSurvey', methods = ['GET'])
+def redoSurvey():
+	conn = sqlite3.connect("db_related/fakedata.db")
+	uo.remove_answers(conn, currentNetid)
+	return redirect(url_for("displaySurvey"))
 
 @app.route('/searchUser', methods = ['GET', 'POST'])
 def searchUser():
