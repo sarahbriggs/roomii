@@ -50,7 +50,6 @@ def login():
 				
 @app.route('/homepage', methods = ['GET', 'POST'])
 def homepage():
-	print(loggedIn)
 	if not loggedIn: 
 		return render_template("index.html", display_error = 2)
 	netid = currentNetid
@@ -172,14 +171,14 @@ def matches():
 
 @app.route('/processReport', methods = ['GET', 'POST'])
 def processReport():
-	print("here - 1 ")
+	return render_template("index.html", display_error = 2)
 	reporter = currentNetid;
 	reported = request.form['netid'].upper()
+	if reported == None:
+		return redirect(url_for('homepage'))
 	conn = sqlite3.connect("db_related/fakedata.db")
 	reason = request.form['reason']
-	print("here - 2 ")
 	uo.report_user(conn, reporter, reported, reason)
-	print("here - 3 ")
 	return redirect(url_for('homepage'))
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -273,10 +272,14 @@ def questions():
 @app.route('/report')
 def report():
 	reportedNetid = request.args.get('netid')
+	if reportedNetid == None:
+		return redirect(url_for("homepage"))
 	return render_template("report.html", netid = reportedNetid)
 
 @app.route('/redoSurvey', methods = ['GET'])
 def redoSurvey():
+	if not loggedIn:
+		return render_template("index.html", display_error = 2)
 	conn = sqlite3.connect("db_related/fakedata.db")
 	uo.remove_answers(conn, currentNetid)
 	return redirect(url_for("displaySurvey"))
@@ -356,26 +359,31 @@ def searchUser():
 
 
 @app.route('/review', methods=['GET', 'POST'])
-def review():s
-	return render_template("review.html")
+def review():
+	reviewed = request.args.get('netid')
+	if reviewed == None:
+		return redirect(url_for("homepage"))
+	return render_template("review.html", netid = reviewed)
 
 @app.route('/reviewform', methods=['GET', 'POST'])
 def reviewform():
-	reviewee = request.form["reviewee"]
+	if not loggedIn: 
+		return render_template("index.html", display_error = 2)
+	reviewed = request.form["netid"]
+	if reviewed == None:
+		return redirect(url_for("homepage"))
 	cleanliness = float(request.form["cleanliness"])
 	friendliness = float(request.form["friendliness"])
 	conscientiousness = float(request.form["conscientiousness"])
 	overall_rating =  round((cleanliness + friendliness + conscientiousness)/3, 2)
 	text = request.form["reviewtext"]
+	self_accuracy = request.form['self-report accuracy']
 	conn = sqlite3.connect("db_related/fakedata.db")
-
 	try:
-		uo.new_review(conn, currentNetid, reviewee, text, overall_rating, friendliness, cleanliness, conscientiousness, 0)
-		print("hi8")
+		uo.new_review(conn, currentNetid, reviewed, text, overall_rating, friendliness, cleanliness, conscientiousness, self_accuracy)
 		return redirect(url_for('homepage'))
 	except:
 		conn.rollback()
-		print("hi9")
 		conn.close()
 		print("excepting here")
 		return render_template("review.html", display_error = 1)
