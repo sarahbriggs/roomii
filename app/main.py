@@ -356,29 +356,18 @@ def searchUser():
 
 
 @app.route('/review', methods=['GET', 'POST'])
-def review():
-	print("in review")
+def review():s
 	return render_template("review.html")
 
 @app.route('/reviewform', methods=['GET', 'POST'])
 def reviewform():
-	print("hi0")
 	reviewee = request.form["reviewee"]
-	print("hi")
 	cleanliness = float(request.form["cleanliness"])
-	#return redirect(url_for('homepage'))
-	print("hi2")
 	friendliness = float(request.form["friendliness"])
-	print("hi3")
 	conscientiousness = float(request.form["conscientiousness"])
-	print("hi4")
 	overall_rating =  round((cleanliness + friendliness + conscientiousness)/3, 2)
-	print("hi5")
 	text = request.form["reviewtext"]
-	print("hi6")
-
 	conn = sqlite3.connect("db_related/fakedata.db")
-	print("hi7")
 
 	try:
 		uo.new_review(conn, currentNetid, reviewee, text, overall_rating, friendliness, cleanliness, conscientiousness, 0)
