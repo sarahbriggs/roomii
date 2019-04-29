@@ -199,7 +199,7 @@ def regform():
 		
 		first_name = request.form['first_name']
 		last_name = request.form['last_name']
-		netid = request.form['netid']
+		netid = request.form['netid'].upper()
 		password = request.form['password']
 		phone = request.form['phone']
 		email = request.form['email']
@@ -223,8 +223,8 @@ def regform():
 			email = None
 
 		conn = sqlite3.connect("db_related/fakedata.db")
-		try:
-			uo.new_user(conn, netid, first_name, last_name, profpic, description)
+		
+		if (uo.new_user(conn, netid, first_name, last_name, profpic, description)):
 			sec.register(conn, netid, password)
 			uo.new_contact(conn, netid, phone, email)
 			global currentNetid
@@ -233,17 +233,15 @@ def regform():
 			loggedIn = True
 			print(netid)
 			return redirect(url_for('displaySurvey'))
-		except:
+		else:
 			conn.rollback()
 			conn.close()
-			print("excepting here")
 			return render_template("register.html", display_error = 1)
 		conn.close()
 
 @app.route('/uploads/<filename>', methods = ['GET'])
 def profpicGet(filename):
 	return send_from_directory("uploads", filename)
-
 
 
 @app.route('/survey', methods=['GET', 'POST'])
