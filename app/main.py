@@ -50,6 +50,7 @@ def login():
 				
 @app.route('/homepage', methods = ['GET', 'POST'])
 def homepage():
+	print(loggedIn)
 	if not loggedIn: 
 		return render_template("index.html", display_error = 2)
 	netid = currentNetid
@@ -90,7 +91,6 @@ def homepage():
 			value = int(request.form[rangeID])
 			uo.answer_question(conn, netid, i, answerID, value)
 	return render_template("homepage.html", 
-		netid = netid,
 		given_name = given_name,
 		family_name = family_name,
 		profpic = profpic,
@@ -231,7 +231,6 @@ def regform():
 			currentNetid = netid
 			global loggedIn
 			loggedIn = True
-			print(netid)
 			return redirect(url_for('displaySurvey'))
 		else:
 			conn.rollback()
