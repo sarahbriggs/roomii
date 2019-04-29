@@ -31,8 +31,8 @@
 		<div class="row">	
 			<div class="col s12 m12 l12">
 				<div id="profile-details" class="section" style="width: 100%;">
-					<table id="myTable" class="striped" style="width: 100%;">
-					</table>
+					<!---<table id="myTable" class="striped" style="width: 100%;">
+					</table> -->
 				</div>
 			</div>
 		</div>
@@ -40,56 +40,85 @@
 </div>
 
 <script>
-	var table = document.getElementById("myTable");
+	var delNode = document.getElementById("profile-details");
+	while(delNode.hasChildNodes()) {
+		delNode.removeChild(delNode.firstChild);
+	}
+
+	var table = document.createElement("TABLE");
+	table.setAttribute("id", "myTable");
+	document.getElementById("profile-details").appendChild(table);
+
+	var delTable = document.getElementById("myTable");
+	while(delTable.hasChildNodes()) {
+		delTable.removeChild(delTable.firstChild);
+	}
+
 	var i;
 	var matchups = {{matchups | tojson}};
 	var checkFriends = {{checkFriends | tojson}};
+	var scores = {{scores | tojson }};
+
+	var numRows = document.getElementById("myTable").rows.length;
+	if(numRows > 20) {
+		for(i = 0; i < numRows; i++) {
+			document.getElementById("myTable").deleteRow(0);
+		}
+	}
 	for (i = 0; i < 20; i++) {
-		var row = table.insertRow(table.rows.length);
+		if(numRows < 20) {
+			var addRow = table.insertRow(i);
+		}
+		var row = document.getElementById("myTable").rows[i];
 		row.innerHTML = '<tr style="height: 100"></tr>';
 		var blank = row.insertCell(0);
 		var nameCell = row.insertCell(1);
 		var emailCell = row.insertCell(2);
 		var descriptionCell = row.insertCell(3);
-		var buttonCell = row.insertCell(4);
+		var scoreCell = row.insertCell(4);
+		var buttonCell = row.insertCell(5);
 		descriptionCell.innerHTML = '<td colspan="2"></td>';
-		var nameText = "Name: ";
-		var emailText = "Email: ";
-		var descriptionText = "Description: ";
+		var nameText = "";
+		var emailText = "";
+		var descriptionText = "";
+		var scoreText = "";
 		var netid = matchups[i][0];
 		nameText += matchups[i][1];
 		nameText += " ";
 		nameText += matchups[i][2];
 		emailText += netid;
 		emailText += "@duke.edu";
+		descriptionText += matchups[i][4];
+		scoreText += scores[i];
 		var nameNode = document.createTextNode(nameText);
 		var emailNode = document.createTextNode(emailText);
 		var descriptionNode = document.createTextNode(descriptionText);
+		var scoreNode = document.createTextNode(scoreText);
 		if( checkFriends[i] ) {
 			var alreadyFriends = "Already friends!";
 			var friendsNode = document.createTextNode(alreadyFriends);
 			buttonCell.append(friendsNode);
-			var nextCell = row.insertCell(5);
+			var nextCell = row.insertCell(6);
 			var nextText = '<form method=\"POST\" action=\"/matches\"><input type=\"submit\" name=\"addID\" id=\"addID\" value=\"'+ "Visit Profile:" + netid +'\"></form>';
 			nextCell.innerHTML = nextText;
-
-			var blockCell = row.insertCell(6);
+			var blockCell = row.insertCell(7);
 		}
 		else {
 			var buttonText = '<form method=\"POST\" action=\"/matches\"><input type=\"submit\" name=\"addID\" id=\"addID\" value=\"'+ "Add Friend:" + netid +'\"></form>';
 			buttonCell.innerHTML = buttonText;
 
-			var visitCell = row.insertCell(5);
+			var visitCell = row.insertCell(6);
 			var visitText = '<form method=\"POST\" action=\"/matches\"><input type=\"submit\" name=\"addID\" id=\"addID\" value=\"'+ "Visit Profile:" + netid +'\"></form>';
 			visitCell.innerHTML = visitText;
 
-			var blockCell = row.insertCell(6);
+			var blockCell = row.insertCell(7);
 		}
 		var blocktext = '<form method=\"POST\" action=\"/matches\"><input type=\"submit\" name=\"addID\" id=\"addID\" value=\"'+ "Block:" + netid +'\"></form>';
 		blockCell.innerHTML = blocktext;
 		nameCell.append(nameNode);
 		emailCell.append(emailNode);
 		descriptionCell.append(descriptionNode);
+		scoreCell.append(scoreNode);
 	}
 
 	function requestFriend(recipient) {

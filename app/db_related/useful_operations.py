@@ -221,7 +221,7 @@ def get_matchups(conn, netid, num = 20):
 	allMatchups = all_matchups(conn, netid)
 	tup = (netid, num,)
 	cursor = conn.cursor()
-	query = "SELECT * FROM matchups WHERE netid1 = ? ORDER BY matchRating DESC, netid2 ASC LIMIT ?;"
+	query = "SELECT DISTINCT * FROM matchups WHERE netid1 = ? ORDER BY matchRating DESC, netid2 ASC LIMIT ?;"
 	return execute_query(conn, query, tup)
 
 '''

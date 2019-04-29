@@ -112,13 +112,20 @@ def matches():
 		conn = sqlite3.connect("db_related/fakedata.db")
 		if request.method == 'GET':
 			allMatches = uo.get_matchups(conn, currentNetid)
+			print("---------------")
+			print(allMatches)
+			print("---------------")
 			num = len(allMatches)
+			print(num)
 			if (num > 20): 
 				num = 20
 			matchups = []
 			checkFriends = []
+			scores = []
 			for i in range(num):
 				netid = allMatches[i][1]
+				score = allMatches[i][2]
+				scores.append(score)
 				friends = uq.are_friends(conn, currentNetid, netid) or uq.are_friends(conn, netid, currentNetid)
 				checkFriends.append(friends)
 				info = uq.get_user_info_general(conn, netid)
@@ -126,10 +133,9 @@ def matches():
 				if friends:
 					info = uq.get_user_info_friends(conn, netid)
 				matchups.append(tup)
-
 			conn.close()
-			#print(matchups)
-			return render_template("matches.html", matchups = matchups, checkFriends = checkFriends)
+			print(matchups)
+			return render_template("matches.html", matchups = matchups, checkFriends = checkFriends, scores = scores)
 		else:
 			toAdd = request.form['addID']
 			check = toAdd.split(":")
