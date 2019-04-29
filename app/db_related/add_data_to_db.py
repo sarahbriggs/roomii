@@ -44,6 +44,7 @@ for user in usersroot.iter(tag = "user"):
 
 #a super user that is friends with everyone else
 sup_netid = "sup123"
+useful_operations.new_user(conn, sup_netid, "super", "user", "", "placeholder")
 for user in usersroot.iter(tag = "user"):
 	netid = user.find("netid").text
 	useful_operations.add_roommates(conn, sup_netid, netid)
