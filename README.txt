@@ -1,3 +1,19 @@
+FINAL INSTRUCTIONS:
+You need to install a few packages, namely flask, flask-materialize, and flask-login.
+Then, you need to go to roomii/data/ and run datageneration.py.  Shouldn't take too long.
+Then, navigate to roomii/app/db_related and run first creatin_tables.py then add_data_to_db.py. (this might take a minute)
+At which point, you can run the app on your local machine by running main.py from the app folder.
+
+At the page index, you get a login screen.  None of the fake users have passwords, so you can't get in there, you'll have to register an account.
+Registering an account is the same as you'd expect.
+Once you register, you're brought to a survey.  Follow the instructions.
+Once you do the survey, submitting will take a sec.  That's ok, it just takes some time to compute your matches.
+You can visit other people's accounts and write reviews and stuff.
+
+
+
+
+
 Milestone 1:
 You can initialize (or reset) the tables by running creatin_tables.py in either python 2 or 3.
 You can insert a few fake datapoints by running useful_operations.py in either python 2 or 3.

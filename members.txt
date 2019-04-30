@@ -27,3 +27,13 @@ Work as of MS2:
 		Adapted his fake data generator to work with sqlite (more work than it sounds)
 	Steven Zhou
 		Honestly loads, did most of useful_queries and quite a bit of _operations, as well as working on testing both
+
+Work as of the final:
+	Sarah Briggs
+		Did a lot of the html
+	Ryan Ferner
+		Added support for profile pictures, fiddled with the backend
+	Eric Fu
+		Did some HTML, kept changing the fake data thing to meet our changing needs
+	Steven Zhou
+		did a bit of everything, def gets the MVP award for this project
