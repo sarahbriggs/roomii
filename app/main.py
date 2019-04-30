@@ -52,6 +52,7 @@ def login():
 def homepage():
 	if not loggedIn: 
 		return render_template("index.html", display_error = 2)
+
 	netid = currentNetid
 	conn = sqlite3.connect("db_related/fakedata.db")
 	cur = conn.cursor()
@@ -79,16 +80,8 @@ def homepage():
 		self_accuracy = rating[5]
 		num_reports = rating[6]
 
-	if (request.method == 'GET'):
-		conn.close()
-	else:
-		numQuestions = uq.num_questions(conn)
-		for i in range(numQuestions):
-			strI = str(i)
-			rangeID = "Range" + str(i);
-			answerID = request.form[strI]
-			value = int(request.form[rangeID])
-			uo.answer_question(conn, netid, i, answerID, value)
+	# if (request.method == 'GET'):
+	conn.close()
 	return render_template("homepage.html", 
 		given_name = given_name,
 		family_name = family_name,
@@ -123,7 +116,7 @@ def matches():
 			checkFriends = []
 			scores = []
 			for i in range(num):
-				netid = allMatches[i][1]
+				netid = allMatches[i][1].upper()
 				score = allMatches[i][2]
 				scores.append(score)
 				friends = uq.are_friends(conn, currentNetid, netid) or uq.are_friends(conn, netid, currentNetid)
@@ -210,11 +203,11 @@ def regform():
 		profpic = ""
 		if file:
 			profpic = file.filename
-			profpic = str(hash(profpic))[:16]+".jpg"
+			profpic = str(hash(profpic+netid))[:16]+".jpg"
 			file.save(os.path.join(app.config['UPLOAD_FOLDER'], profpic))
-			profpic = "http://127.0.0.1:5000/uploads/"+profpic
+			profpic = "/uploads/"+profpic
 		else:
-			profpic = "http://127.0.0.1:5000/uploads/generic.jpg"
+			profpic = "/uploads/generic.jpg"
 		
 		if phone == "":
 			phone = None
@@ -246,6 +239,23 @@ def profpicGet(filename):
 def survey():
 	if(request.method == 'GET'):
 		return redirect(url_for('displaySurvey'))
+	if(request.method == 'POST'):
+		conn = sqlite3.connect("db_related/fakedata.db")
+		numQuestions = uq.num_questions(conn)
+		print(numQuestions)
+		netid = currentNetid
+		for i in range(numQuestions):
+			strI = str(i)
+			rangeID = "Range" + str(i)
+			answerID = 0
+			try:
+				answerID = request.form[strI]
+			except:
+				pass
+			value = int(request.form[rangeID])
+			uo.answer_question(conn, netid, i, answerID, value)
+		return redirect(url_for('homepage'))
+
 
 @app.route('/displaySurvey')
 def displaySurvey():
@@ -271,7 +281,7 @@ def questions():
 
 @app.route('/report')
 def report():
-	reportedNetid = request.args.get('netid')
+	reportedNetid = request.args.get('netid').upper()
 	if reportedNetid == None:
 		return redirect(url_for("homepage"))
 	return render_template("report.html", netid = reportedNetid)
@@ -290,7 +300,7 @@ def searchUser():
 		return render_template("index.html", display_error = 2)
 	if (request.method == 'GET'):
 		conn = sqlite3.connect("db_related/fakedata.db")
-		searchedNetid = request.args.get('netid')
+		searchedNetid = request.args.get('netid').upper()
 		print(searchedNetid)
 		searchedNetid = searchedNetid.upper()
 		if (searchedNetid == currentNetid.upper()):
