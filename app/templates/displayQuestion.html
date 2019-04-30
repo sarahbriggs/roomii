@@ -25,7 +25,7 @@
 			<div class="row">
 	      		<div class="input-field col s6">
 	        		<button id="submitReg" class="btn btn-large btn-register waves-effect waves-light" type="submit" value="Submit">
-	       			Submit</button>
+	       			Submit and Match!</button>
 	      		</div>
 	    	</div>
 		</form>
@@ -37,6 +37,8 @@
 	var i;
 	var question = {{question | tojson}};
 	var answers = {{answers | tojson}};
+	// console.log(question);
+	// console.log(answers);
 	for (i = 0; i < question.length; i++) {
 	  text += "<h5>" + question[i] + "</h5><br>";
 	  var currentName = "\"" + i.toString() + "\"";

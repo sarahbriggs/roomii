@@ -3,6 +3,7 @@ import xml.etree.ElementTree as ET
 import useful_operations
 import useful_queries as uq 
 import cheapSecurity as sec
+import random
 
 
 conn = sqlite3.connect('fakedata.db')
@@ -60,7 +61,7 @@ for answer in answersroot.iter(tag = "answer"):
 	qid = answer.find("qid").text
 	aid = answer.find("answer_id").text
 	weight = answer.find("weight").text
-	useful_operations.answer_question(conn, netid, qid, aid, weight)
+	useful_operations.answer_question(conn, netid, qid, random.choice([0,1,2]), weight)
 
 
 #dont do this, ratings updated through new added reviews
