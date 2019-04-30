@@ -189,8 +189,11 @@ def calculate_matchup(conn, matcher, matchee):
 	res1 = execute_query(conn,query,tup1)
 	res2 = execute_query(conn,query,tup2)
 	if still_has_questions(conn,matchee):
-		return None
+		return -100
 	total = 0
+	if res1[0][0]!=res2[0][0]:
+		return -100
+
 	for i in range(len(res1)):
 		ans1 = res1[i][0]
 		ans2 = res2[i][0]
