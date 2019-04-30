@@ -64,8 +64,10 @@ CREATE TABLE report(
 	FOREIGN KEY (reported_netid) REFERENCES users(netid));
 CREATE TABLE blocked(
 	blocker_netid text, 
-	blocked_netid text
-);
+	blocked_netid text,
+	PRIMARY KEY(blocker_netid, blocked_netid),
+	FOREIGN KEY(blocked_netid) REFERENCES users(netid),
+	FOREIGN KEY(blocker_netid) REFERENCES users(netid));
 CREATE TABLE recommend(
 	recommender_netid text, 
 	recommendee_netid text, 

@@ -105,10 +105,12 @@ def matches():
 		conn = sqlite3.connect("db_related/fakedata.db")
 		if request.method == 'GET':
 			allMatches = uo.get_matchups(conn, currentNetid)
-			print("---------------")
-			print(allMatches)
-			print("---------------")
-			num = len(allMatches)
+			blocked = uq.get_blocked_by_user(conn, currentNetid)
+			print(blocked)
+			if blocked == False:
+				num = len(allMatches)
+			else:
+				num = len(allMatches) - len(blocked)
 			print(num)
 			if (num > 20): 
 				num = 20
@@ -117,17 +119,23 @@ def matches():
 			scores = []
 			for i in range(num):
 				netid = allMatches[i][1].upper()
-				score = allMatches[i][2]
-				scores.append(score)
-				friends = uq.are_friends(conn, currentNetid, netid) or uq.are_friends(conn, netid, currentNetid)
-				checkFriends.append(friends)
-				info = uq.get_user_info_general(conn, netid)
-				tup = info[0]
-				if friends:
-					info = uq.get_user_info_friends(conn, netid)
-				matchups.append(tup)
+				flag = True
+				if (blocked != False):
+					for j in range(len(blocked)):
+						if netid == blocked[j][0]:
+							flag = False
+							break
+				if flag == True :
+					score = allMatches[i][2]
+					scores.append(score)
+					friends = uq.are_friends(conn, currentNetid, netid) or uq.are_friends(conn, netid, currentNetid)
+					checkFriends.append(friends)
+					info = uq.get_user_info_general(conn, netid)
+					tup = info[0]
+					if friends:
+						info = uq.get_user_info_friends(conn, netid)
+					matchups.append(tup)
 			conn.close()
-			print(matchups)
 			return render_template("matches.html", matchups = matchups, checkFriends = checkFriends, scores = scores)
 		else:
 			toAdd = request.form['addID']
@@ -138,26 +146,6 @@ def matches():
 				#accept = uo.request_accepted(conn, currentNetid, check[1])
 				test = uq.are_friends(conn, currentNetid, check[1]) or uq.are_friends(conn, check[1], currentNetid)
 				return redirect(url_for('matches'))
-			if check[0]=="Visit Profile":
-				print("Visiting profile:" + check[1])
-				info = sanit(uq.get_user_info_friends(conn, check[1]))
-				rating = sanit(uq.get_user_rating(conn, check[1]))
-				print(rating, info, check)
-
-				return render_template("searchUser.html", 
-				searchedNetid = check[1],
-				given_name = info[1],
-				family_name = info[2],
-				profpic = info[3],
-				description = info[4],
-				phone = info[6],
-				email = info[7],
-				overall = rating[1],
-				clean = rating[2],
-				friendly = rating[3],
-				consc = rating[4],
-				self_accuracy = rating[5],
-				num_reports = rating[6])
 			if check[0]=="Block":
 				print("Blocking: " + check[1])
 				blocked = uo.block_user(conn, currentNetid, check[1])
@@ -347,7 +335,7 @@ def searchUser():
 			phone = info[6]
 			email = info[7]
 			sourceNetid = currentNetid
-			areFriends = uq.are_friends(conn, searchedNetid, sourceNetid) or uq.are_friends(conn, sourceNetid, searchedNetid)
+			areFriends = True
 			wereRoommates = uq.were_roommates(conn, searchedNetid, sourceNetid)
 			num_reviews = uq.get_number_of_reviews_of_user(conn, searchedNetid)
 			reviews = None

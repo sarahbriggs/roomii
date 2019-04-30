@@ -199,3 +199,11 @@ def were_roommates(conn, netid1, netid2):
 		return False
 	return True
 
+def get_blocked_by_user(conn, netid):
+	tup = (netid,)
+	query = "SELECT blocked_netid FROM blocked where blocker_netid = ?"
+	result = execute_query(conn, query, tup)
+	if (len(result) < 1):
+		return False
+	return result
+

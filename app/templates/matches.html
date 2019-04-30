@@ -74,10 +74,9 @@
 		var blank = row.insertCell(0);
 		var nameCell = row.insertCell(1);
 		var emailCell = row.insertCell(2);
-		var descriptionCell = row.insertCell(3);
-		var scoreCell = row.insertCell(4);
-		var buttonCell = row.insertCell(5);
-		descriptionCell.innerHTML = '<td colspan="2"></td>';
+		// var descriptionCell = row.insertCell(3);
+		var scoreCell = row.insertCell(3);
+		// descriptionCell.innerHTML = '<td colspan="2"></td>';
 		var nameText = "";
 		var emailText = "";
 		var descriptionText = "";
@@ -88,37 +87,22 @@
 		nameText += matchups[i][2];
 		emailText += netid;
 		emailText += "@duke.edu";
-		descriptionText += matchups[i][4];
+		// descriptionText += matchups[i][4];
 		scoreText += "Match Score: ";
 		scoreText += scores[i];
 		var nameNode = document.createTextNode(nameText);
 		var emailNode = document.createTextNode(emailText);
-		var descriptionNode = document.createTextNode(descriptionText);
 		var scoreNode = document.createTextNode(scoreText);
-		if( checkFriends[i] ) {
-			var alreadyFriends = "Already friends!";
-			var friendsNode = document.createTextNode(alreadyFriends);
-			buttonCell.append(friendsNode);
-			var nextCell = row.insertCell(6);
-			var nextText = '<form method=\"POST\" action=\"/matches\"><input type=\"submit\" name=\"addID\" id=\"addID\" value=\"'+ "Visit Profile:" + netid +'\"></form>';
-			nextCell.innerHTML = nextText;
-			var blockCell = row.insertCell(7);
-		}
-		else {
-			var buttonText = '<form method=\"POST\" action=\"/matches\"><input type=\"submit\" name=\"addID\" id=\"addID\" value=\"'+ "Add Friend:" + netid +'\"></form>';
-			buttonCell.innerHTML = buttonText;
 
-			var visitCell = row.insertCell(6);
-			var visitText = '<form method=\"POST\" action=\"/matches\"><input type=\"submit\" name=\"addID\" id=\"addID\" value=\"'+ "Visit Profile:" + netid +'\"></form>';
-			visitCell.innerHTML = visitText;
+		var visitCell = row.insertCell(4);
+		var visitText = '<form method=\"GET\" action=\"/searchUser\"><input type=\"submit\" name=\"netid\" id=\"netid\" value=\"' + netid +'\"></form>';
+		visitCell.innerHTML = visitText;
 
-			var blockCell = row.insertCell(7);
-		}
+		var blockCell = row.insertCell(5);
 		var blocktext = '<form method=\"POST\" action=\"/matches\"><input type=\"submit\" name=\"addID\" id=\"addID\" value=\"'+ "Block:" + netid +'\"></form>';
 		blockCell.innerHTML = blocktext;
 		nameCell.append(nameNode);
 		emailCell.append(emailNode);
-		descriptionCell.append(descriptionNode);
 		scoreCell.append(scoreNode);
 	}
 
