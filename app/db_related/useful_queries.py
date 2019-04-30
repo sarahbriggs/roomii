@@ -149,6 +149,13 @@ def are_friends(conn, netid1, netid2):
 Review
 -------------------------------
 """
+def get_review_of_user(conn, netid2): # return (reviewer_netid, reviewed_netid, review_text, overall_rating, cleanliness, friendliness, conscientiousness)
+	tup = (netid2, )
+	query = "SELECT * FROM review WHERE reviewed_netid = ?"
+	result = execute_query(conn, query, tup)
+	if (len(result) < 1):
+		return False
+	return result
 
 def get_review(conn, netid1, netid2): # return (reviewer_netid, reviewed_netid, review_text, overall_rating, cleanliness, friendliness, conscientiousness)
 	tup = (netid1, netid2, )

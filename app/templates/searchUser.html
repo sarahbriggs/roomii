@@ -120,10 +120,15 @@
 		    </form>
 	    </div>
 	</div>
+	<div class = "row">
+		<h4>Reviews</h4>
+		<p id = "reviewText"><p>
+	</div>	
 </div>
 <script>
 	var netid = {{searchedNetid | tojson}}
 	var showButtons = {{wereRoommates | tojson}}
+	var reviews = {{reviews | tojson}}
 	window.onload = function() {
 		document.getElementById("hidden-1").style.display = "none";
 		document.getElementById("hidden-2").style.display = "none";
@@ -136,6 +141,11 @@
 			document.getElementById("Report").style.display = "none";
 			document.getElementById("Review").style.display = "none";
 		}
+		text = ""
+		for (i = 0; i < reviews.length; i++){
+			text += "<p> From User " + reviews[i][0] + ": "+ reviews[i][2] + "</p>"
+		}
+		document.getElementById("reviewText").innerHTML = text;
 	}	
 </script>
 {% endblock %}

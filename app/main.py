@@ -73,11 +73,11 @@ def homepage():
 	self_accuracy = None
 	num_reports = 0
 	if (rating != False):
-		overall = rating[1]
-		clean = rating[2]
-		friendly = rating[3]
-		consc = rating[4]
-		self_accuracy = rating[5]
+		overall = round(rating[1], 1)
+		clean = round(rating[2], 1)
+		friendly = round(rating[3], 1)
+		consc = round(rating[4], 1)
+		self_accuracy = round(rating[5], 1)
 		num_reports = rating[6]
 
 	# if (request.method == 'GET'):
@@ -164,15 +164,17 @@ def matches():
 
 @app.route('/processReport', methods = ['GET', 'POST'])
 def processReport():
-	return render_template("index.html", display_error = 2)
 	reporter = currentNetid;
 	reported = request.form['netid'].upper()
 	if reported == None:
 		return redirect(url_for('homepage'))
 	conn = sqlite3.connect("db_related/fakedata.db")
 	reason = request.form['reason']
-	uo.report_user(conn, reporter, reported, reason)
-	return redirect(url_for('homepage'))
+	try:
+		uo.report_user(conn, reporter, reported, reason)
+		return redirect(url_for('homepage'))
+	except:
+		return redirect(url_for('homepage'))
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -314,11 +316,11 @@ def searchUser():
 		self_accuracy = None
 		num_reports = 0
 		if (rating != False):
-			overall = rating[1]
-			clean = rating[2]
-			friendly = rating[3]
-			consc = rating[4]
-			self_accuracy = rating[5]
+			overall = round(rating[1], 1)
+			clean = round(rating[2], 1)
+			friendly = round(rating[3], 1)
+			consc = round(rating[4], 1)
+			self_accuracy = round(rating[5], 1)
 			num_reports = rating[6]
 		if (info != False):
 			given_name = info[1]
@@ -332,6 +334,11 @@ def searchUser():
 			sourceNetid = currentNetid
 			areFriends = uq.are_friends(conn, searchedNetid, sourceNetid) or uq.are_friends(conn, sourceNetid, searchedNetid)
 			wereRoommates = uq.were_roommates(conn, searchedNetid, sourceNetid)
+			num_reviews = uq.get_number_of_reviews_of_user(conn, searchedNetid)
+			reviews = None
+			if num_reviews != 0:
+				reviews = uq.get_review_of_user(conn, searchedNetid)
+
 			conn.close()
 			if areFriends:
 				return render_template("searchUser.html", 
@@ -348,7 +355,8 @@ def searchUser():
 					consc = consc,
 					self_accuracy = self_accuracy,
 					num_reports = num_reports,
-					wereRoommates = wereRoommates)
+					wereRoommates = True,
+					reviews = reviews)
 			else:
 				return render_template("searchUser.html", 
 					searchedNetid = searchedNetid,
@@ -364,7 +372,8 @@ def searchUser():
 					consc = consc,
 					self_accuracy = self_accuracy,
 					num_reports = num_reports,
-					wereRoommates = wereRoommates)
+					wereRoommates = True,
+					reviews = reviews)
 		else:
 			return render_template("notExist.html")
 	else:
