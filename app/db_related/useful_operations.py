@@ -205,10 +205,12 @@ def calculate_matchup(conn, matcher, matchee):
 
 def all_matchups(conn,netid):
 	tup1 = (netid,)
+	query0 = "DELETE FROM matchups WHERE netid = ?;"
 	query = "SELECT netid FROM users WHERE netid != ?;"
 	query2 = "INSERT INTO matchups VALUES (?, ?, ?);"
 	cursor = conn.cursor() #we're going to do this one-at-a-time
 	cursor2 = conn.cursor()
+	cursor.execute(query0,tup1)
 	cursor.execute(query,tup1)
 	tk = 0
 	for user in cursor:
