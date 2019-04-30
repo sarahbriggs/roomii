@@ -140,8 +140,10 @@ def matches():
 				return redirect(url_for('matches'))
 			if check[0]=="Visit Profile":
 				print("Visiting profile:" + check[1])
-				info = uq.get_user_info_friends(conn, check[1])
-				rating = uq.get_user_rating(conn, check[1])
+				info = sanit(uq.get_user_info_friends(conn, check[1]))
+				rating = sanit(uq.get_user_rating(conn, check[1]))
+				print(rating, info, check)
+
 				return render_template("searchUser.html", 
 				searchedNetid = check[1],
 				given_name = info[1],
@@ -161,6 +163,18 @@ def matches():
 				blocked = uo.block_user(conn, currentNetid, check[1])
 				conn.close()
 				return redirect(url_for('matches'))
+
+def sanit(tup):
+	tup = list(tup)
+	new = []
+	for thing in tup:
+		if thing == None:
+			new.append("")
+		else:
+			new.append(thing)
+	return tuple(new)
+
+
 
 @app.route('/processReport', methods = ['GET', 'POST'])
 def processReport():
