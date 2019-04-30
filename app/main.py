@@ -254,6 +254,7 @@ def survey():
 				pass
 			value = int(request.form[rangeID])
 			uo.answer_question(conn, netid, i, answerID, value)
+		uo.all_matchups(conn,netid)
 		return redirect(url_for('homepage'))
 
 

@@ -222,7 +222,7 @@ def all_matchups(conn,netid):
 	return tk
 
 def get_matchups(conn, netid, num = 20):
-	allMatchups = all_matchups(conn, netid)
+	# allMatchups = all_matchups(conn, netid)
 	tup = (netid, num,)
 	cursor = conn.cursor()
 	query = "SELECT DISTINCT * FROM matchups WHERE netid1 = ? ORDER BY matchRating DESC, netid2 ASC LIMIT ?;"

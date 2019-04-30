@@ -37,6 +37,8 @@
 	var i;
 	var question = {{question | tojson}};
 	var answers = {{answers | tojson}};
+	// console.log(question);
+	// console.log(answers);
 	for (i = 0; i < question.length; i++) {
 	  text += "<h5>" + question[i] + "</h5><br>";
 	  var currentName = "\"" + i.toString() + "\"";
